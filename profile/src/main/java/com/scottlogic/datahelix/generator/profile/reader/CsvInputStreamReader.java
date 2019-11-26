@@ -31,7 +31,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public final class CsvInputStreamReader {
-
     private CsvInputStreamReader() {
         throw new UnsupportedOperationException("No instantiation of static class");
     }

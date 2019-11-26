@@ -56,13 +56,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 
 public class JsonProfileReaderTests {
-
     private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
-    private class MockFromFileReader extends FileReader
-    {
-
+    private class MockFromFileReader extends FileReader {
         MockFromFileReader() {
             super("");
         }
@@ -78,10 +75,8 @@ public class JsonProfileReaderTests {
         {
             return fromFileReaderReturnValue;
         }
-
     }
 
-    private final String schemaVersion = "\"0.7\"";
     private String json;
 
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
@@ -154,7 +149,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseSingleField() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
                         "    \"constraints\": []" +
                         "}");
@@ -166,7 +160,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseMultipleFields() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ " +
                         "       { \"name\": \"f1\", \"type\": \"string\" }," +
                         "       { \"name\": \"f2\", \"type\": \"string\" } ]," +
@@ -182,7 +175,6 @@ public class JsonProfileReaderTests {
     public void shouldNotThrowIsNullWithValueNull() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
                 "    \"constraints\": [" +
                 "               { \"field\": \"foo\", \"isNull\": true }" +
@@ -196,7 +188,6 @@ public class JsonProfileReaderTests {
     public void shouldNotThrowIsNullWithValuesNull() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\" } ]," +
                 "    \"constraints\": [" +
                 "               { \"field\": \"foo\", \"isNull\": true }" +
@@ -210,7 +201,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIsOfTypeConstraint() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                 "    \"constraints\": []" +
                 "}");
@@ -227,7 +217,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIsOfTypeConstraint_whenInteger() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\", \"nullable\": true } ]," +
                 "    \"constraints\": []" +
                 "}");
@@ -244,7 +233,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIsEqualToConstraint() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"equalTo\": \"equal\" }" +
@@ -262,7 +250,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseFormatConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { " +
                         "           \"name\": \"foo\"," +
                         "           \"formatting\": \"%.5s\"," +
@@ -283,7 +270,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIsOfLengthConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"id\", \"type\": \"string\" , \"nullable\": true} ]," +
                         "    \"constraints\": [" +
                         "        { \"field\": \"id\",  \"ofLength\": 5 }" +
@@ -299,7 +285,6 @@ public class JsonProfileReaderTests {
         // Arrange
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"constraints\": [" +
                         "        { \"not\": { \"field\": \"foo\",  \"equalTo\": \"string\" } }" +
@@ -314,7 +299,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseOrConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                         "    \"constraints\": [" +
                         "          {" +
@@ -334,7 +318,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseAndConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                         "    \"constraints\": [" +
                         "          {" +
@@ -354,7 +337,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIfConstraint() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"constraints\": [" +
                         "          {" +
@@ -385,7 +367,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseIfConstraintWithoutElse() throws IOException {
         givenJson(
                 "{" +
-                        "    \"schemaVersion\": " + schemaVersion + "," +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
                         "    \"constraints\": [" +
                         "          {" +
@@ -415,7 +396,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException {
         givenJson(
             "{" +
-            "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
             "    \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 1 }" +
@@ -430,7 +410,6 @@ public class JsonProfileReaderTests {
     public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"granularTo\": 0.1 }" +
@@ -445,7 +424,6 @@ public class JsonProfileReaderTests {
     public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"granularTo\": 0.100000000 }" +
@@ -460,7 +438,6 @@ public class JsonProfileReaderTests {
     public void shouldAllowValidISO8601DateTime() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\", \"nullable\": true } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"afterOrAt\": \"2019-01-01T00:00:00.000\" }," +
@@ -480,7 +457,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectGreaterThanOneNumericGranularityConstraint() {
         givenJson(
             "{" +
-            "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
             "    \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 2 }" +
@@ -494,7 +470,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectNonPowerOfTenNumericGranularityConstraint() {
         givenJson(
             "{" +
-            "    \"schemaVersion\": " + schemaVersion + "," +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\" } ]," +
             "   \"constraints\": [" +
             "        { \"field\": \"foo\",  \"granularTo\": 0.15 }" +
@@ -508,7 +483,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectEqualToWithNullValue() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"equalTo\": null }" +
@@ -522,7 +496,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectLessThanWithNullValue() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"lessThan\": null }" +
@@ -536,7 +509,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectInSetWithANullValue() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"inSet\": [ null ] }" +
@@ -550,7 +522,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectInSetSetToNull() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"inSet\": null }" +
@@ -564,7 +535,6 @@ public class JsonProfileReaderTests {
     public void shouldRejectIsConstraintSetToNullForNot() {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"not\": { \"field\": \"foo\", \"is\": null } }" +
@@ -578,7 +548,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToTrue_whenSetToTrue() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"," +
@@ -599,7 +568,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToFalse_whenOmitted() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"" +
@@ -618,7 +586,6 @@ public class JsonProfileReaderTests {
     public void unique_setsFieldPropertyToFalse_whenSetToFalse() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "           \"name\": \"foo\"," +
                 "           \"type\": \"integer\"," +
@@ -639,7 +606,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForField_whenSetToFalse() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -658,7 +624,6 @@ public class JsonProfileReaderTests {
     {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -674,7 +639,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForFields_whenSetToFalse() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -699,7 +663,6 @@ public class JsonProfileReaderTests {
     public void nullable_addsConstraintForFields_whenOneSetToFalse() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\"," +
@@ -721,7 +684,6 @@ public class JsonProfileReaderTests {
     public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"decimal\" ," +
@@ -745,7 +707,6 @@ public class JsonProfileReaderTests {
     void parser_createsInternalField_whenProfileHasAnInMapConstraint() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"" +
@@ -779,7 +740,6 @@ public class JsonProfileReaderTests {
     void parser_createsInternalField_whenProfileHasANestedInMapConstraint() throws IOException {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"" +
@@ -829,7 +789,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateType_shouldSetCorrectGranularity() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"," +
@@ -846,7 +805,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateType_shouldSetCorrectFormatting() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"" +
@@ -861,7 +819,6 @@ public class JsonProfileReaderTests {
     public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"date\"," +
@@ -877,7 +834,6 @@ public class JsonProfileReaderTests {
     public void addsConstraintForGenerator() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"," +
@@ -897,7 +853,6 @@ public class JsonProfileReaderTests {
     public void exceptionWhenGeneratorDoesNotExist() throws IOException  {
         givenJson(
             "{" +
-                "    \"schemaVersion\": " + schemaVersion + "," +
                 "    \"fields\": [ { " +
                 "       \"name\": \"foo\" ," +
                 "       \"type\": \"string\"," +
@@ -909,5 +864,4 @@ public class JsonProfileReaderTests {
 
         expectValidationException("Custom generator INCORRECT does not exist it needs to be created and added to the CustomGeneratorList class");
     }
-
 }

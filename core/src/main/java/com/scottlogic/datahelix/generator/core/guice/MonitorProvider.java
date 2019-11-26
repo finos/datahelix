@@ -26,9 +26,7 @@ public class MonitorProvider implements Provider<AbstractDataGeneratorMonitor>  
     private GenerationConfigSource commandLine;
 
     @Inject
-    MonitorProvider(
-        GenerationConfigSource commandLine) {
-
+    MonitorProvider(GenerationConfigSource commandLine) {
         this.commandLine = commandLine;
     }
 

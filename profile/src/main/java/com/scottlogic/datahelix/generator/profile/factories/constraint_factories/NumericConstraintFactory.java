@@ -35,7 +35,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textua
 
 public class NumericConstraintFactory extends AtomicConstraintFactory
 {
-
     @Override
     Object parseValue(Object value)
     {

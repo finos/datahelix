@@ -26,7 +26,6 @@ import com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults;
 import java.time.LocalTime;
 
 public class AfterConstantTimeConstraint implements AtomicConstraint {
-
     public final Field field;
     public final LocalTime referenceValue;
 

@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.CoreMatchers.is;
 
 class ConstraintTypeTest{
-
     @Test
     void fromText() {
         String greaterThanString = ConstraintType.GREATER_THAN_OR_EQUAL_TO.propertyName;

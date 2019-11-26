@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProfileViolator {
-
     private final ConstraintViolator constraintViolator;
 
     @Inject

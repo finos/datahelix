@@ -36,7 +36,6 @@ import static org.mockito.Mockito.when;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class RowSpecGrouperTest {
-
     @Test
     void createGroups_withTwoRelatedFields_givesOneGroupOfSizeOne() {
         Field first = createField("first");

@@ -36,7 +36,6 @@ import java.util.stream.Stream;
 import static com.scottlogic.datahelix.generator.common.util.FlatMappingSpliterator.flatMap;
 
 public class FieldSpecGroupValueGenerator {
-
     private final CombinationStrategyType combinationStrategy;
     private final FieldSpecValueGenerator underlyingGenerator;
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();

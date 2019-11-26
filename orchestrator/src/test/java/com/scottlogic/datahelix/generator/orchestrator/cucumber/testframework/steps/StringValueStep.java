@@ -27,7 +27,6 @@ import java.util.function.Function;
 import static java.lang.Integer.parseInt;
 
 public class StringValueStep {
-
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 

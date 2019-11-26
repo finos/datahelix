@@ -26,7 +26,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class FinancialCodeUtilsTests {
-
     private static final List<String> VALID_ISINS = Arrays.asList(
             "US0378331005", "US5949181045", "US38259P5089",
             "GB0000566504", "GB0001411924", "GB0002162385", "GB0002374006", "GB0002634946"

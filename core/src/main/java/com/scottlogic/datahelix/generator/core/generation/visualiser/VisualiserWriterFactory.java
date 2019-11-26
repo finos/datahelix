@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 public class VisualiserWriterFactory {
-
     private final Path outputFolder;
 
     public VisualiserWriterFactory(Path outputFolder) {

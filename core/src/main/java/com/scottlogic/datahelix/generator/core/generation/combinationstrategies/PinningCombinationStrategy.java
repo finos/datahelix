@@ -25,7 +25,6 @@ import java.util.function.Supplier;
 import java.util.stream.*;
 
 public class PinningCombinationStrategy implements CombinationStrategy {
-
     @Override
     public Stream<DataBag> permute(Stream<Supplier<Stream<DataBag>>> dataBagSequences) {
         Iterable<DataBag> iterable = new PinningCombinationStrategy

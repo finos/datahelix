@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 public class ContainsRegexConstraintTests {
-
     @Test
     public void testConstraintIsEqual() {
         Field field1 = createField("TestField");

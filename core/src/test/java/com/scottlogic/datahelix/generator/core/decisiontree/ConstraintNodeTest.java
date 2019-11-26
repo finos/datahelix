@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class ConstraintNodeTest {
-
     private static final Field A = createField("A");
     private static final Field B = createField("B");
 

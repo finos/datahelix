@@ -34,7 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ProfileSchemaImmutabilityTests {
-
     public static class SupportedVersionsGetter {
         private final static String RESOURCES_PATH = "profileschema/datahelix.schema.json";
 
@@ -142,6 +141,13 @@ public class ProfileSchemaImmutabilityTests {
             versionToHash().stream().map(VersionHash::version).collect(Collectors.toSet()).containsAll(existingSchemas),
             "At least one version is either missing or erroneously present in this test's list of checksums. " +
             "The new checksum must be added to the map of checksum hashes in this test file.");
+    }
+
+    @Test
+    public void schemaConstantMustBeUpdatedWithSchema() {
+        assertTrue(
+            versionToHash().stream().anyMatch(v -> v.version.equals(ProfileConfiguration.PROFILE_SCHEMA_VERSION)),
+            "ProfileConfiguration.PROFILE_SCHEMA_VERSION must be present in the list of checksums");
     }
 
     @Test

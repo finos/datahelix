@@ -26,7 +26,6 @@ import com.scottlogic.datahelix.generator.profile.serialisation.ProfileSerialise
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 
 public class CucumberProfileReader extends JsonProfileReader {
-
     private final CucumberTestState state;
 
     @Inject
@@ -42,7 +41,6 @@ public class CucumberProfileReader extends JsonProfileReader {
 
     private String createJson() {
         ProfileDTO profileDTO = new ProfileDTO();
-        profileDTO.schemaVersion = "0.10";
         profileDTO.fields = state.profileFields;
         profileDTO.constraints = state.constraints;
         return new ProfileSerialiser().serialise(profileDTO);

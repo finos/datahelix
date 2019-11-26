@@ -30,7 +30,6 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
 
 class GranularityTest {
-
     @Test
     public void numericRestrictions_nextCorrectlyGetsNextValidValue(){
         NumericGranularity granularity = new NumericGranularity(0);

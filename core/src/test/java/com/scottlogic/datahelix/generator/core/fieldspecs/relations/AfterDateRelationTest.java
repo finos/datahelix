@@ -32,7 +32,6 @@ import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DA
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AfterDateRelationTest {
-
     private final Field a = new Field("a", SpecificFieldType.DATETIME, false, "", false, false, null);
     private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false, null);
 

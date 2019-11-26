@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 
 public final class FieldWithFieldSpec {
-
     private final Field field;
 
     private final FieldSpec fieldSpec;

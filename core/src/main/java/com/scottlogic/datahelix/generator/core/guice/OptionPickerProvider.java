@@ -24,7 +24,6 @@ import com.scottlogic.datahelix.generator.core.walker.decisionbased.RandomOption
 import com.scottlogic.datahelix.generator.core.walker.decisionbased.SequentialOptionPicker;
 
 public class OptionPickerProvider implements Provider<OptionPicker> {
-
     private final GenerationConfigSource config;
     private final RandomOptionPicker randomOptionPicker;
     private final SequentialOptionPicker sequentialOptionPicker;

@@ -1,6 +1,5 @@
 {
-  "schemaVersion": "0.18",
-  "description": "Testing Profile",
+    "description": "Testing Profile",
   "fields": [
     {
       "name": "foo",

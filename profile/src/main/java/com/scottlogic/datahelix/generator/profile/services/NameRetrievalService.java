@@ -30,7 +30,6 @@ import static com.scottlogic.datahelix.generator.core.profile.constraints.atomic
 
 public final class NameRetrievalService
 {
-
     private NameRetrievalService() {
         throw new UnsupportedOperationException("No static class instantiation");
     }

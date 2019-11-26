@@ -25,7 +25,6 @@ import java.util.function.Consumer;
  * This would be nicer if it extended optional, but optional is final
  */
 public class Merged<T> {
-
     private final T value;
 
 

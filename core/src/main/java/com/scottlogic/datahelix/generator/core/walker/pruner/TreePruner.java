@@ -30,7 +30,6 @@ import com.scottlogic.datahelix.generator.core.reducer.ConstraintReducer;
 import java.util.*;
 
 public class TreePruner {
-
     private final FieldSpecMerger merger;
     private final ConstraintReducer constraintReducer;
     private final FieldSpecHelper fieldSpecHelper;
@@ -62,7 +61,6 @@ public class TreePruner {
 
         PrunedConstraintState state = new PrunedConstraintState(constraintNode);
         for (DecisionNode decision : constraintNode.getDecisions()) {
-
             Merged<DecisionNode> prunedDecisionNode = pruneDecisionNode(decision, newFieldSpecs.get());
             if (prunedDecisionNode.isContradictory()) {
                 return Merged.contradictory();
@@ -117,9 +115,8 @@ public class TreePruner {
     private Merged<Map<Field, FieldSpec>> createFieldSpecMap(Map<Field, Collection<AtomicConstraint>> relevantConstraints){
         Map<Field, FieldSpec> newFieldSpecs = new HashMap<>();
         for (Map.Entry<Field, Collection<AtomicConstraint>> fieldToConstraints : relevantConstraints.entrySet()) {
-
             Optional<FieldSpec> fieldSpec = constraintReducer.reduceConstraintsToFieldSpec(fieldToConstraints.getKey(), fieldToConstraints.getValue());
-            if (!fieldSpec.isPresent()){
+            if (!fieldSpec.isPresent()) {
                 return Merged.contradictory();
             }
             newFieldSpecs.put(fieldToConstraints.getKey(), fieldSpec.get());

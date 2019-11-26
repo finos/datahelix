@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import java.util.stream.Stream;
 
 public class PrefixingStringGenerator implements StringGenerator {
-
     private final String prefix;
     private final StringGenerator innerGenerator;
 

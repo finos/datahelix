@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.core.generation.string;
 
 public final class StringUtils {
-
     private StringUtils() {
         throw new UnsupportedOperationException("No instantiation of static class");
     }

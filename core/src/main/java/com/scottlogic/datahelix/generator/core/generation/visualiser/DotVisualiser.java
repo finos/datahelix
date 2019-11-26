@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.core.decisiontree.visualisation.Decisi
 import java.io.IOException;
 
 public class DotVisualiser implements Visualiser {
-
     private final DecisionTreeVisualisationWriter decisionTreeVisualisationWriter;
 
     DotVisualiser(DecisionTreeVisualisationWriter decisionTreeVisualisationWriter) {

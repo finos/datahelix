@@ -34,7 +34,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TypeRegistryConfiguration implements TypeRegistryConfigurer {
-
     private final Set<ConstraintType> allOperators = new HashSet<>(Arrays.asList(ConstraintType.values()));
 
     @Override

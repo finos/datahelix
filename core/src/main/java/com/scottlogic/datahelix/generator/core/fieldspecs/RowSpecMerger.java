@@ -35,7 +35,6 @@ public class RowSpecMerger {
      * @param left must have all the fields represented
      */
     public Optional<RowSpec> merge(RowSpec left, RowSpec right) {
-
         Map<Field, FieldSpec> newMap = new HashMap<>();
 
         for (Field field : left.getFields()) {

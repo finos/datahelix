@@ -31,7 +31,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 public class NumericRestrictionsTests {
-
     @Test
     void equals_whenNumericRestrictionsAreEqual_returnsTrue() {
         LinearRestrictions<BigDecimal> restriction1 = LinearRestrictionsFactory.createNumericRestrictions(

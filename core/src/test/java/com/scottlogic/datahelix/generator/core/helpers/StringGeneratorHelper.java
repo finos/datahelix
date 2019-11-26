@@ -24,7 +24,6 @@ import java.util.Iterator;
 import static org.hamcrest.Matchers.*;
 
 public class StringGeneratorHelper {
-
     private StringGeneratorHelper() {
     }
 

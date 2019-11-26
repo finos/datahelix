@@ -26,7 +26,6 @@ import java.util.Objects;
  * @param <E>
  */
 public class WeightedElement<E> {
-
     private static final double DEFAULT_WEIGHT = 1.0D;
 
     private static final WeightedElement<?> NULL = withDefaultWeight(null);

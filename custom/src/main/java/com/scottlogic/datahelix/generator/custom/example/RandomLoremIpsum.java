@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.custom.example;
 import java.util.Random;
 
 public class RandomLoremIpsum {
-
     private Random random = new Random();
 
     public String generateString(){

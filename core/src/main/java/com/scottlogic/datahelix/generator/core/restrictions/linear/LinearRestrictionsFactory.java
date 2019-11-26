@@ -28,7 +28,6 @@ import java.time.OffsetDateTime;
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.*;
 
 public class LinearRestrictionsFactory {
-
     public static LinearRestrictions<OffsetDateTime> createDefaultDateTimeRestrictions() {
         return createDateTimeRestrictions(DATETIME_MIN_LIMIT, DATETIME_MAX_LIMIT);
     }

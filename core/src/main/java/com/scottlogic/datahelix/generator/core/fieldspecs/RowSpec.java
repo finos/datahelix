@@ -36,7 +36,6 @@ public class RowSpec {
     public RowSpec(Fields fields,
                    Map<Field, FieldSpec> fieldToFieldSpec,
                    List<FieldSpecRelation> relations) {
-
         this.fields = fields;
         this.fieldToFieldSpec = fieldToFieldSpec;
         this.relations = relations;

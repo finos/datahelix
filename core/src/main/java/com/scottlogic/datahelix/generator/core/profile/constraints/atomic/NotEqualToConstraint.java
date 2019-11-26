@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Objects;
 
 public class NotEqualToConstraint implements AtomicConstraint {
-
     private final Field field;
     public final Object value;
 

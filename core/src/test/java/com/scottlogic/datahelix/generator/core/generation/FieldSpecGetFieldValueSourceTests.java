@@ -41,7 +41,6 @@ import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NU
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
 
 public class FieldSpecGetFieldValueSourceTests {
-
     @Test
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
         FieldSpec fieldSpecMustBeNull = FieldSpecFactory.nullOnly();

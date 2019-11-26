@@ -34,7 +34,6 @@ import java.util.List;
     optionListHeading = "%nOptions:%n",
     abbreviateSynopsis = true)
 public class ViolateCommandLine extends GenerateCommandLine implements ViolateConfigSource {
-
     @Override
     public Integer call() throws IOException {
         printAlphaFeatureWarning("VIOLATE command");

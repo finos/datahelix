@@ -25,7 +25,6 @@ import java.text.ParsePosition;
 import java.util.function.BiPredicate;
 
 public class NumberUtils {
-
     //Copied from: Stack Overflow: https://stackoverflow.com/questions/1078953/check-if-bigdecimal-is-integer-value
     //Author: Joachim Sauer: https://stackoverflow.com/users/40342/joachim-sauer
     public static boolean isInteger(BigDecimal decimalValue) {

@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO
 import java.util.List;
 
 public class ProfileDTO {
-    public String schemaVersion;
     public String description;
     public List<FieldDTO> fields;
     public List<ConstraintDTO> constraints;

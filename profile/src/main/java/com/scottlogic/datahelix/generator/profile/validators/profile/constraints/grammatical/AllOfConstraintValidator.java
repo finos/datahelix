@@ -24,7 +24,6 @@ import java.util.List;
 
 public class AllOfConstraintValidator extends GrammaticalConstraintValidator<AllOfConstraintDTO>
 {
-
     public AllOfConstraintValidator(List<FieldDTO> fields)
     {
         super(fields);

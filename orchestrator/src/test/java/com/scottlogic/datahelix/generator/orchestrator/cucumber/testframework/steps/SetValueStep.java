@@ -23,7 +23,6 @@ import cucumber.api.java.en.When;
 import java.util.List;
 
 public class SetValueStep {
-
     private final CucumberTestState state;
 
     public SetValueStep(CucumberTestState state) {

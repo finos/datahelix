@@ -25,7 +25,6 @@ import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.cre
 
 public class InSetConstraintTests
 {
-
     @Test
     public void testConstraintThrowsIfGivenEmptySet(){
         Field field1 = createField("TestField");

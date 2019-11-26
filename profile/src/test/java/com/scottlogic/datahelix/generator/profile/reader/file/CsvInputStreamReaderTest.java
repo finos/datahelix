@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CsvInputStreamReaderTest {
-
     @Test
     public void testReadingLinesFromNames() {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();

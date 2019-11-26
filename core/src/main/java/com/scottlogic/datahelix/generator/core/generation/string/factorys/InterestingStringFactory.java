@@ -24,7 +24,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class InterestingStringFactory {
-
     private static final char printableChar = ' ';
 
     public Iterable<String> generateInterestingValues(Automaton automaton) {
@@ -53,8 +52,7 @@ public class InterestingStringFactory {
             String currentOutput = stateToOutput.get(currentState);
 
             if (currentState.isAccept()) {
-
-                if (currentBest == null
+    if (currentBest == null
                     || currentOutput.length() < currentBest.length()
                     || (currentOutput.length() == currentBest.length() && currentOutput.compareTo(currentBest) < 0)) {
                     currentBest = currentOutput;

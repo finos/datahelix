@@ -41,7 +41,6 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 
 public class DateTimeFieldValueSourceTests {
-
     // Approximately one, but not definitively proven to be the closest possible float to one
     // This is used due to the random range being [0,1), not [0,1]
     private static final double ALMOST_ONE = 0.9999999996504378;

@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.Assert.assertEquals;
 
 class FieldSpecHelperTests {
-
     private FieldSpecHelper fieldSpecHelper = new FieldSpecHelper();
     private Field field = FieldBuilder.createField("test");
 

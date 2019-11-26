@@ -30,7 +30,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 class JsonDataSetWriter implements DataSetWriter {
-
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private final SequenceWriter writer;

@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.core.restrictions.linear;
+package com.scottlogic.datahelix.generator.profile;
 
-public class Limit<T extends Comparable<? super T>> {
-    private final T limit;
-    private final boolean isInclusive;
+public class ProfileConfiguration
+{
+    public static final String PROFILE_SCHEMA_VERSION = "0.18";
 
-    public Limit(T limit, boolean isInclusive) {
-        this.limit = limit;
-        this.isInclusive = isInclusive;
-    }
-
-    public T getValue() {
-        return limit;
-    }
-
-    public boolean isInclusive() {
-        return isInclusive;
-    }
+    public static final String PROFILE_SCHEMA_VERSION_TEXT = "Profile Schema Version " +
+        PROFILE_SCHEMA_VERSION;
 }

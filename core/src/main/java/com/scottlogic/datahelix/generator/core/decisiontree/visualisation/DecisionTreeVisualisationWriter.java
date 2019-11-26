@@ -193,7 +193,6 @@ public class DecisionTreeVisualisationWriter implements AutoCloseable {
 }
 
 class NodeVisualiser {
-
     private final int MAX_LENGTH_FOR_LABEL = 16816;
 
     String renderNode(String id, DecisionNode node){

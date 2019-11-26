@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ProfileValidationTests {
-
     @TestFactory
     Collection<DynamicTest> shouldAllValidateWithoutErrors() throws IOException {
         Collection<DynamicTest> dynamicTests = new ArrayList<>();

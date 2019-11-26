@@ -22,7 +22,6 @@ import com.scottlogic.datahelix.generator.custom.CustomGenerator;
 import java.util.stream.Stream;
 
 public class LoremIpsumGeneratorCreator {
-
     public static CustomGenerator create(){
         RandomLoremIpsum randomLoremIpsum = new RandomLoremIpsum();
 

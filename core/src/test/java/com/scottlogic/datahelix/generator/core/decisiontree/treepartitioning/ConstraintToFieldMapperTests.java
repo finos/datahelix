@@ -37,7 +37,6 @@ import java.util.stream.Collectors;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class ConstraintToFieldMapperTests {
-
     private DistributedList<Object> whitelistOf(Object element) {
         return new DistributedList<>(Collections.singletonList(new WeightedElement<>(element, 1.0F)));
     }

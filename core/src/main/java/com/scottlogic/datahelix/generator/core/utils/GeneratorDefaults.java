@@ -25,7 +25,6 @@ import java.time.OffsetDateTime;
 
 
 public class GeneratorDefaults {
-
     public static final Limit<BigDecimal> NUMERIC_MAX_LIMIT = new Limit<>(Defaults.NUMERIC_MAX, true);
     public static final Limit<BigDecimal> NUMERIC_MIN_LIMIT= new Limit<>(Defaults.NUMERIC_MIN, true);
 

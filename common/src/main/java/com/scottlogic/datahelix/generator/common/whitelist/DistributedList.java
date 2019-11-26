@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DistributedList<T> {
-
     private static final DistributedList<?> EMPTY = new DistributedList<>(Collections.emptyList());
 
     private final List<WeightedElement<T>> underlyingWeights;

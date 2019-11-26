@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 public class BuiltCustomGenerator<T> implements CustomGenerator<T>
 {
-
     private final CustomGeneratorFieldType fieldType;
     private final String name;
     private final Function<T, Boolean> matchingFunction;

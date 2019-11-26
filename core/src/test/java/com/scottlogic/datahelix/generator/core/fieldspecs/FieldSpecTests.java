@@ -42,7 +42,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class FieldSpecTests {
-
     @Test
     void equals_objTypeIsNotFieldSpec_returnsFalse() {
         FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);

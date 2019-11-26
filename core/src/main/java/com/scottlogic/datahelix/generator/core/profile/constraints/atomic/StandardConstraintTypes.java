@@ -25,7 +25,6 @@ public enum StandardConstraintTypes{
     private final String regex;
 
     StandardConstraintTypes(String regex) {
-
         this.regex = regex;
     }
 

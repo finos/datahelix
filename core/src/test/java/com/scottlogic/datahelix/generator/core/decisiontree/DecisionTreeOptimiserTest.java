@@ -28,7 +28,6 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class DecisionTreeOptimiserTest {
-
     DecisionTreeOptimiser optimiser = new DecisionTreeOptimiser();
     Field A = createField("A");
     Field B = createField("B");
@@ -38,8 +37,7 @@ class DecisionTreeOptimiserTest {
     Field F = createField("F");
 
     @Test
-    public void optimise_circularDependency(){
-
+    public void optimise_circularDependency() {
         ConstraintNode original = constraintNode()
             .withDecision(
                 constraintNode()

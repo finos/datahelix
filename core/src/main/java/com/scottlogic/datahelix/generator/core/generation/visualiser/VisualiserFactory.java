@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.Writer;
 
 public class VisualiserFactory {
-
     private final VisualiserLevel minimumLevel;
     private final VisualiserWriterFactory writerFactory;
 

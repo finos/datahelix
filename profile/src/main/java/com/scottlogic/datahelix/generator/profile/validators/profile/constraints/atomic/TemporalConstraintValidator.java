@@ -29,7 +29,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public class TemporalConstraintValidator extends AtomicConstraintValidator<TemporalConstraintDTO> {
-
     public TemporalConstraintValidator(List<FieldDTO> fields) {
         super(fields);
     }
@@ -78,7 +77,6 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
     }
 
     private ValidationResult timeMustBeValid(TemporalConstraintDTO dto) {
-
         String time = dto.getDate();
         if (time == null || time.isEmpty()) {
             return ValidationResult.failure("Time must be specified" + getErrorInfo(dto));

@@ -33,7 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class IsinStringGeneratorTests {
-
     @Test
     public void shouldEndAllIsinsWithValidCheckDigit() {
         StringGenerator target = createIsinGenerator();

@@ -30,7 +30,6 @@ import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 class EqualToDateRelationTest {
-
     private final Field a = new Field("a", SpecificFieldType.DATETIME, false ,"", false, false, null);
     private final Field b = new Field("b", SpecificFieldType.DATETIME, false, "", false, false, null);
     private final FieldSpecRelation equalToDateRelations = new EqualToRelation(a, b);

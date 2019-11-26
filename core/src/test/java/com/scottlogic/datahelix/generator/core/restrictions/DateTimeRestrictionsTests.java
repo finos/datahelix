@@ -34,7 +34,6 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 class DateTimeRestrictionsTests {
-
     private static final OffsetDateTime MIN = granularToMillis(Defaults.ISO_MIN_DATE);
 
     private static final OffsetDateTime MAX = granularToMillis(Defaults.ISO_MAX_DATE);
@@ -125,8 +124,7 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenDateIsAfterMax(){
-
+    public void matchShouldReturnFalseIfGivenDateIsAfterMax() {
         OffsetDateTime limit = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             DATETIME_MAX_LIMIT,
@@ -153,8 +151,7 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnTrueIfGivenDateIsEqualToMinAndMaxInclusive(){
-
+    public void matchShouldReturnTrueIfGivenDateIsEqualToMinAndMaxInclusive() {
         OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(min, true),
@@ -167,8 +164,7 @@ class DateTimeRestrictionsTests {
     }
 
     @Test
-    public void matchShouldReturnFalseIfGivenDateIsEqualToMinAndMaxExclusive(){
-
+    public void matchShouldReturnFalseIfGivenDateIsEqualToMinAndMaxExclusive() {
         OffsetDateTime min = OffsetDateTime.of(2001, 02, 03, 04, 05, 06, 0, ZoneOffset.UTC);
         LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(
             new Limit<>(min, false),
@@ -233,8 +229,7 @@ class DateTimeRestrictionsTests {
         return LinearRestrictionsFactory.createDateTimeRestrictions(min, max);
     }
 
-    private class MockDateTimeLimit extends Limit<OffsetDateTime>{
-
+    private class MockDateTimeLimit extends Limit<OffsetDateTime> {
         private final boolean equalToOther;
 
         public MockDateTimeLimit(boolean equalToOther) {

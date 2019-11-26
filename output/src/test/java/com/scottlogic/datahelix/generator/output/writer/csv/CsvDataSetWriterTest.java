@@ -39,7 +39,6 @@ import static junit.framework.TestCase.fail;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CsvDataSetWriterTest {
-
     private ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
     private Field fieldOne = new Field("one", SpecificFieldType.STRING,false,null,false, false, null);

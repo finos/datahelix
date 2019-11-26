@@ -28,7 +28,6 @@ import java.time.OffsetDateTime;
 import java.util.function.Function;
 
 public class DateTimeValueStep {
-
     public static final String DATETIME_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
     private final CucumberTestState state;
     private final CucumberTestHelper helper;

@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.Fiel
 import java.util.Set;
 
 public interface TypedRestrictions<T> {
-
     boolean match(T o);
 
     FieldValueSource<T> createFieldValueSource(Set<T> blacklist);

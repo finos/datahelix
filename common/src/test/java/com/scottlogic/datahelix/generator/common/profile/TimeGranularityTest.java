@@ -29,7 +29,6 @@ import java.time.temporal.ChronoUnit;
 
 
 class TimeGranularityTest {
-
     @Test
     void isCorrectScale_returnsTrue_WithCorrectScale() {
         TimeGranularity granularity = new TimeGranularity(ChronoUnit.MINUTES);

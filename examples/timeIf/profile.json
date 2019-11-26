@@ -1,6 +1,5 @@
 {
-  "schemaVersion": "0.18",
-  "description": "Time Profile",
+    "description": "Time Profile",
   "fields": [
     {
       "name": "a",

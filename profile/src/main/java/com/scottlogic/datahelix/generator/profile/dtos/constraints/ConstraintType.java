@@ -81,7 +81,6 @@ public enum ConstraintType {
     public final Class<? extends ConstraintDTO> clazz;
 
     ConstraintType(String propertyName, Class<? extends ConstraintDTO> clazz) {
-
         this.propertyName = propertyName;
         this.clazz = clazz;
     }

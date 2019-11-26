@@ -45,7 +45,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class TreePrunerTests {
-
     private Field field = createField("foo");
     private final FieldSpec notNull = FieldSpecFactory.fromType(field.getType())
         .withNotNull();

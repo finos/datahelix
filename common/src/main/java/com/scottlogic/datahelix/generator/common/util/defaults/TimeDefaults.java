@@ -23,7 +23,6 @@ import java.time.LocalTime;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.*;
 
 public class TimeDefaults implements LinearDefaults {
-
     private static TimeDefaults singleton;
 
     private TimeDefaults() {

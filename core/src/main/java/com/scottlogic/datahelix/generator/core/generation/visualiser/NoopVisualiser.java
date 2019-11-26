@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.generation.visualiser;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 
 public class NoopVisualiser implements Visualiser {
-
     @Override
     public void printTree(String title, DecisionTree decisionTree) {
         // Does nothing

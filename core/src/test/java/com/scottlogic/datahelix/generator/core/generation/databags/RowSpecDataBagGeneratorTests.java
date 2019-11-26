@@ -36,7 +36,6 @@ import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class RowSpecDataBagGeneratorTests {
-
     private CombinationStrategy exhaustiveCombinationStrategy = new ExhaustiveCombinationStrategy();
     private FieldSpecGroupValueGenerator mockGeneratorFactory = mock(FieldSpecGroupValueGenerator.class);
     private CombinationStrategy mockCombinationStrategy = mock(CombinationStrategy.class);

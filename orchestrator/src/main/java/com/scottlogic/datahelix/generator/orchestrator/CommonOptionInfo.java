@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.core.restrictions.linear;
+package com.scottlogic.datahelix.generator.orchestrator;
 
-public class Limit<T extends Comparable<? super T>> {
-    private final T limit;
-    private final boolean isInclusive;
+public class CommonOptionInfo {
+    public static final String VERSION_SHORT_OPTION = "-V";
 
-    public Limit(T limit, boolean isInclusive) {
-        this.limit = limit;
-        this.isInclusive = isInclusive;
-    }
+    public static final String VERSION_LONG_OPTION = "--version";
 
-    public T getValue() {
-        return limit;
-    }
+    public static final String VERSION_DESCRIPTION = "Print version information and exit.";
 
-    public boolean isInclusive() {
-        return isInclusive;
-    }
+    public static final String HELP_SHORT_OPTION = "-h";
+
+    public static final String HELP_LONG_OPTION = "--help";
+
+    public static final String HELP_DESCRIPTION = "Display available command line options.";
 }

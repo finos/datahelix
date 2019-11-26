@@ -18,12 +18,27 @@ package com.scottlogic.datahelix.generator.orchestrator;
 
 import com.scottlogic.datahelix.generator.orchestrator.generate.GenerateCommandLine;
 import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateCommandLine;
+import com.scottlogic.datahelix.generator.profile.ProfileConfiguration;
 import picocli.CommandLine;
 
 import java.util.stream.Collectors;
 
-@CommandLine.Command(name = "datahelix")
+@CommandLine.Command(
+    name = "datahelix",
+    version = { ProfileConfiguration.PROFILE_SCHEMA_VERSION_TEXT })
 public class App implements Runnable {
+    @CommandLine.Option(
+        names = { CommonOptionInfo.VERSION_SHORT_OPTION, CommonOptionInfo.VERSION_LONG_OPTION },
+        versionHelp = true,
+        description = CommonOptionInfo.VERSION_DESCRIPTION)
+    boolean versionRequested;
+
+    @CommandLine.Option(
+        names = { CommonOptionInfo.HELP_SHORT_OPTION, CommonOptionInfo.HELP_LONG_OPTION },
+        usageHelp = true,
+        description = CommonOptionInfo.HELP_DESCRIPTION)
+    private boolean help;
+
     private static final CommandLine picoCliCommandLine = new CommandLine(new App())
         .addSubcommand("generate", new GenerateCommandLine())
         .addSubcommand("violate", new ViolateCommandLine())

@@ -28,7 +28,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class VisualiserFactoryTests {
-
     private VisualiserFactory factory;
     private VisualiserWriterFactory writerFactory;
 

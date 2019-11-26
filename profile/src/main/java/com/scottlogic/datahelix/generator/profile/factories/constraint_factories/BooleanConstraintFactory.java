@@ -35,7 +35,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textua
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 
 public class BooleanConstraintFactory extends AtomicConstraintFactory {
-
     @Override
     Object parseValue(Object value)
     {

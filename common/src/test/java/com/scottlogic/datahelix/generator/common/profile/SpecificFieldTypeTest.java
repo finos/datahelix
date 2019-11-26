@@ -22,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpecificFieldTypeTest {
-
     @Test
     void getDefaultFormatting_returnsNull_WhenPassedISINConstraint() {
         String result = SpecificFieldType.ISIN.getDefaultFormatting();

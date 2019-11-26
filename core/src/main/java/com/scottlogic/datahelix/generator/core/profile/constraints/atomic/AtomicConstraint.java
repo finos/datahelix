@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
 public interface AtomicConstraint extends Constraint {
-
     Field getField();
 
     AtomicConstraint negate();

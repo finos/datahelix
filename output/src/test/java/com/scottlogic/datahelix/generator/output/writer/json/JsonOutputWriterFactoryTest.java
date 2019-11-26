@@ -37,7 +37,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class JsonOutputWriterFactoryTest {
-
     @Test
     void writer_withNDJSONTrue__shouldOutputNewLineDelimiterRows() throws IOException {
         Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));

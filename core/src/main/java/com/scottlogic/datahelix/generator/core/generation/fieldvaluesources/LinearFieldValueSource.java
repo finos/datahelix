@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import static com.scottlogic.datahelix.generator.common.SetUtils.stream;
 
 public class LinearFieldValueSource<T extends Comparable<T>> implements FieldValueSource {
-
     private final LinearRestrictions<T> restrictions;
     private final Set<T> blacklist;
 

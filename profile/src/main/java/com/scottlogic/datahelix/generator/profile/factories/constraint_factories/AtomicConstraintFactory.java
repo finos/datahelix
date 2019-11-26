@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AtomicConstraintFactory {
-
     public AtomicConstraint createAtomicConstraint(AtomicConstraintDTO dto, Fields fields) {
         Field field = fields.getByName(dto.field);
         switch (dto.getType()) {

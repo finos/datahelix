@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class NameRetrievalServiceTest
 {
-
     @Test
     public void testLoadingFirstNames() {
         DistributedList<Object> names = NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST);

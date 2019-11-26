@@ -1,6 +1,5 @@
 {
-  "schemaVersion": "0.18",
-  "constraints": [
+    "constraints": [
     {
       "field": "field1",
       "afterOrAt": "2000-01-01T09:00:00.000"

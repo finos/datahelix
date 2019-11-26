@@ -25,7 +25,6 @@ import cucumber.api.java.en.When;
 import java.util.Objects;
 
 public class NullValueStep {
-
     private final CucumberTestState state;
     private final CucumberTestHelper helper;
 

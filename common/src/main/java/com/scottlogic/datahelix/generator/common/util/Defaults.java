@@ -25,7 +25,6 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 public class Defaults {
-
     public static final long DEFAULT_MAX_ROWS = 1000;
 
     public static final BigDecimal NUMERIC_MAX = new BigDecimal("1e20");
