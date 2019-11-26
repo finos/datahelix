@@ -123,7 +123,7 @@ The generator supports many different data types including:
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
-A full list of the supported data types can be found in the [user guide](UserGuide.md#type).
+A full list of the supported data types can be found [here](UserGuide.md#type).
 
 We are going to use the `firstname` type to produce realistic looking first names. Change the type of the firstname field from `string` to `firstname` and remove the `matchingRegex` constraint.
 
@@ -131,7 +131,6 @@ The profile should look something like:
 
 ```JSON
 {
-    "schemaVersion": "0.18",
     "fields": [{ "name": "firstName", "type": "firstname" }],
     "constraints": []
 }
