@@ -18,13 +18,11 @@ For more comprehensive documentation please refer to the [user guide](UserGuide.
 
 ## Downloading the JAR file
 
-The datahelix is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). The project is currently in beta and under active development. You can expect breaking changes in future releases, and new features too!
-
- You will need Java v1.8 installed to run the datahelix (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+The datahelix is distributed as a JAR file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). You will need Java v1.8 installed to run the datahelix (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
 
 You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md#Building).
 
-Your feedback on the beta would be greatly appreciated. If you have any issues, feature requests, or ideas, please share them via the [GitHub issues page](https://github.com/finos/datahelix/issues).
+Datahelix is under active development so expect new features and bug fixes. Please feel free to share any issues, feature requests, or ideas via the [GitHub issues page](https://github.com/finos/datahelix/issues).
 
 ## Creating your first profile
 
