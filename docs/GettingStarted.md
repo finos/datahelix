@@ -2,7 +2,7 @@
 
 The following guide give a short introduction to the datahelix via a practical example.
 
-For more comprehensive documentation please refer to the [User Guide](UserGuide.md).
+For more comprehensive documentation please refer to the [user guide](UserGuide.md).
 
 # Contents
 
@@ -28,7 +28,7 @@ Your feedback on the beta would be greatly appreciated. If you have any issues, 
 
 ## Creating your first profile
 
-We are going to work thro-ugh creating a profile to generate random personal data about some test users.
+We are going to work through creating a profile to generate random personal data about some test users.
 
 Profiles are JSON files that describe the data you want to generate. They are composed of:
 
@@ -56,6 +56,14 @@ $ java -jar generator.jar generate --max-rows=100 --replace --profile-file=profi
 
 The generator is a command line tool which reads a profile, and outputs data in CSV or JSON format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The compulsory `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to. In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied. By default the generator outputs progress, in rows per second, to the standard error output. This can be useful when generating large volumes of data.
 
+Use
+
+```
+$ java -jar generator.jar --help
+```
+
+or click [here](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
+
 If you open up `output.csv` you'll see something like the following:
 
 ```
@@ -80,7 +88,7 @@ The datahelix supports two different types of constraint:
 -   [**Predicates**](UserGuide.md#predicate-constraints) - boolean-valued functions that define whether a given value is valid or invalid.
 -   [**Grammatical**](UserGuide.md#grammatical-constraints) - combine or modify other constraints including other grammatical constraints.
 
-We are going to use the `matchingRegex` constraint to restrict the strings produced by the `firstName` field. The `matchingRegex` constraint is an example of a predicate constraint.
+We are going to use the [`matchingRegex`](UserGuide.md#predicate-matchingregex) constraint to restrict the strings produced by the `firstName` field. The `matchingRegex` constraint is an example of a predicate constraint.
 
 Update the JSON profile to the following:
 
@@ -110,14 +118,14 @@ There are a few different approaches we could use to try to make the data more r
 
 ## Data types
 
-The generator supports several different data types including:
+The generator supports many different data types including:
 
 -   **integer** - any integer number between -1E20 and 1E20 inclusive
 -   **decimal** - any real number between -1E20 and 1E20 inclusive, with an optional granularity / precision (a power of ten between 1 and 1E-20) that can be defined via a `granularTo` constraint.
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
-A full list of the supported data types can be found in the [user guide](UserGuide.md#Data-Types).
+A full list of the supported data types can be found in the [user guide](UserGuide.md#type).
 
 We are going to use the `firstname` type to produce realistic looking first names. Change the type of the firstname field from `string` to `firstname` and remove the `matchingRegex` constraint.
 
