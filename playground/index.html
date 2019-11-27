@@ -1,8 +1,9 @@
 <html>
 
 <head>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://unpkg.com/codemirror@5.45.0/lib/codemirror.css" />
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>
+
   <style>
     nav .btn {
       margin-right: 10px;
@@ -15,6 +16,7 @@
       bottom: 0;
       left: 0;
       right: 0;
+      border-top: 1px solid gray;
     }
 
     #editor-panel {
@@ -24,6 +26,7 @@
     #output-panel {
       flex: 1;
       overflow: scroll;
+      border-left: 1px solid gray;
     }
 
     #error {
@@ -50,17 +53,11 @@
 
   <script src="https://unpkg.com/codemirror@5.45.0/lib/codemirror.js"></script>
   <script src="https://unpkg.com/codemirror@5.45.0/mode/javascript/javascript.js"></script>
-
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://unpkg.com/codemirror@5.45.0/lib/codemirror.css" />
+  <script src="https://unpkg.com/clipboard@2.0.4/dist/clipboard.min.js"></script>
+  <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+  <script src="https://unpkg.com/whatwg-fetch@3.0.0/dist/fetch.umd.js"></script>
+  <script src="https://unpkg.com/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/bootstrap@4.4.0/dist/js/bootstrap.min.js"></script>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
@@ -93,7 +90,6 @@
     <div id="codearea-container">
       <textarea rows="20" class="form-control" id="profile" wrap="off">
 {
-  "schemaVersion": "0.18",
   "fields": [
     { "name": "name", "type": "string" },
     { "name": "age", "type": "integer" }
@@ -136,7 +132,8 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="shareUrl">
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" id="copyUrl">Copy</button>
+              <button id="copyButton" class="btn btn-outline-secondary" type="button"
+                data-clipboard-target="#shareUrl">Copy</button>
             </div>
           </div>
         </form>

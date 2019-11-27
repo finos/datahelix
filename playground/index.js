@@ -3,8 +3,10 @@ const runButton = document.getElementById("run");
 const generatorOutput = document.getElementById("output");
 const profileArea = document.getElementById("profile");
 const editorPanel = document.getElementById("editor-panel");
-const copyUrl = document.getElementById("copyUrl");
 const spinner = document.getElementById("spinner");
+const shareUrl = document.getElementById("shareUrl");
+
+new ClipboardJS("#copyButton");
 
 // decode the hash into a profile
 if (window.location.hash) {
@@ -18,10 +20,6 @@ $("#shareModal").on("show.bs.modal", () => {
   const code = encodeURIComponent(btoa(editor.getValue()));
   shareUrl.value = `${baseUrl}#${code}`;
 });
-
-copyUrl.addEventListener("click", () =>
-  navigator.clipboard.writeText(shareUrl.value)
-);
 
 // configure the editor
 const editor = CodeMirror.fromTextArea(profileArea, {
@@ -66,7 +64,7 @@ runButton.addEventListener("click", () => {
 
   try {
     JSON.parse(profile);
-  } catch {
+  } catch (error) {
     showAlert("Profile is not valid JSON");
     return;
   }
@@ -80,7 +78,12 @@ runButton.addEventListener("click", () => {
     },
     body: profile
   })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("The endpoint returned an error");
+      }
+      return response.json()
+    })
     .then(responseJson => {
 
       if (responseJson.errorMessage) {
