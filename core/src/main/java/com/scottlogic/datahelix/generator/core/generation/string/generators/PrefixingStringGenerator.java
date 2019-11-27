@@ -63,4 +63,9 @@ public class PrefixingStringGenerator implements StringGenerator {
     public StringGenerator intersect(StringGenerator stringGenerator) {
         throw new ValidationException("The prefixing generator cannot be combined ");
     }
+
+    @Override
+    public boolean validate(String string) {
+        return matches(string);
+    }
 }

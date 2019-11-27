@@ -194,7 +194,15 @@
             "RIC",
             "firstname",
             "lastname",
-            "fullname"
+            "fullname",
+            "faker.firstname",
+            "faker.lastname",
+            "faker.name",
+            "faker.bloodgroup",
+            "faker.username",
+            "faker.nameprefix",
+            "faker.phonenumber",
+            "faker.cellnumber"
           ]
         },
         "formatting": {

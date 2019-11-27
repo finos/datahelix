@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.profile.validators.profile;
 
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.creation.ConstraintDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
@@ -37,8 +38,8 @@ public class ConstraintValidatorTests
 {
     private final List<FieldDTO> fields = Arrays.asList
         (
-            FieldDTOBuilder.create("text", SpecificFieldType.STRING),
-            FieldDTOBuilder.create("integer", SpecificFieldType.INTEGER)
+            FieldDTOBuilder.create("text", StandardSpecificFieldType.STRING.toSpecificFieldType()),
+            FieldDTOBuilder.create("integer", StandardSpecificFieldType.INTEGER.toSpecificFieldType())
         );
 
     @Test

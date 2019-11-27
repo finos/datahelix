@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
@@ -39,8 +40,8 @@ import static org.junit.Assert.assertEquals;
 
 class FieldSpecRelationTest
 {
-    private Field main = createField("main", SpecificFieldType.DATETIME);
-    private Field other = createField("other", SpecificFieldType.DATETIME);
+    private Field main = createField("main", StandardSpecificFieldType.DATETIME.toSpecificFieldType());
+    private Field other = createField("other", StandardSpecificFieldType.DATETIME.toSpecificFieldType());
 
     @Test
     public void equalTo_exactValue_returnsSame(){

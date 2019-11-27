@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.u
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
@@ -387,7 +388,7 @@ public class CucumberTestState {
         profileFields = profileFields.stream()
             .map(fieldDTO -> {
                 if (fieldDTO.name.equals(fieldName)) {
-                    fieldDTO.type = SpecificFieldType.from(type);
+                    fieldDTO.type = type;
                 }
                 return fieldDTO;
             }).collect(Collectors.toList());

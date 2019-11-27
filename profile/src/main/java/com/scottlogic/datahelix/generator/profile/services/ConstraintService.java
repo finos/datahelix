@@ -34,24 +34,23 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.Rel
 import com.scottlogic.datahelix.generator.profile.factories.constraint_factories.*;
 import com.scottlogic.datahelix.generator.profile.factories.relation_factories.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ConstraintService
-{
+public class ConstraintService {
     private final Map<FieldType, AtomicConstraintFactory> atomicConstraintFactoryMap;
     private final Map<FieldType, FieldSpecRelationFactory> relationFactoryMap;
     private final Map<SpecificFieldType, FieldSpecRelationFactory> specificRelationFactoryMap;
     private final CustomConstraintFactory customConstraintFactory;
+    private final Map<String, Function<Field, Constraint>> fieldTypeToConstraint;
 
     @Inject
-    public ConstraintService(CustomConstraintFactory customConstraintFactory)
-    {
+    public ConstraintService(CustomConstraintFactory customConstraintFactory) {
         this.customConstraintFactory = customConstraintFactory;
         atomicConstraintFactoryMap = new EnumMap<>(FieldType.class);
         atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
@@ -66,79 +65,96 @@ public class ConstraintService
         relationFactoryMap.put(FieldType.TIME, new TimeRelationFactory());
         relationFactoryMap.put(FieldType.BOOLEAN, new BooleanRelationFactory());
 
-        specificRelationFactoryMap = new EnumMap<>(SpecificFieldType.class);
-        specificRelationFactoryMap.put(SpecificFieldType.INTEGER, new IntegerRelationFactory());
-        specificRelationFactoryMap.put(SpecificFieldType.DECIMAL, new DecimalRelationFactory());
+        specificRelationFactoryMap = new HashMap<>();
+        specificRelationFactoryMap.put(StandardSpecificFieldType.INTEGER.toSpecificFieldType(), new IntegerRelationFactory());
+        specificRelationFactoryMap.put(StandardSpecificFieldType.DECIMAL.toSpecificFieldType(), new DecimalRelationFactory());
+
+        fieldTypeToConstraint = new HashMap<>();
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.DATE.getType(),
+            field -> new GranularToDateConstraint(field, new DateTimeGranularity(ChronoUnit.DAYS)));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.INTEGER.getType(),
+            field -> new GranularToNumericConstraint(field, NumericGranularity.create(BigDecimal.ONE)));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.ISIN.getType(),
+            field -> new MatchesStandardConstraint(field, StandardConstraintTypes.ISIN));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.SEDOL.getType(),
+            field -> new MatchesStandardConstraint(field, StandardConstraintTypes.SEDOL));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.CUSIP.getType(),
+            field -> new MatchesStandardConstraint(field, StandardConstraintTypes.CUSIP));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.RIC.getType(),
+            field -> new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.FIRST_NAME.getType(),
+            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.LAST_NAME.getType(),
+            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.FULL_NAME.getType(),
+            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
+        fieldTypeToConstraint.put(
+            StandardSpecificFieldType.FAKER.getType(),
+            field -> new FakerConstraint(field, faker -> genericFakerCall(field.getSpecificType().getFakerMethod().split("\\."), faker))); // TODO: FINISH IMPLEMENTATION
     }
 
-    public Optional<Constraint> createSpecificTypeConstraint(Field field)
-    {
-        switch (field.getSpecificType()) {
-            case DATE:
-                return Optional.of(new GranularToDateConstraint(field, new DateTimeGranularity(ChronoUnit.DAYS)));
-            case INTEGER:
-                return Optional.of(new GranularToNumericConstraint(field, NumericGranularity.create(BigDecimal.ONE)));
-            case ISIN:
-                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.ISIN));
-            case SEDOL:
-                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.SEDOL));
-            case CUSIP:
-                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.CUSIP));
-            case RIC:
-                return Optional.of(new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
-            case FIRST_NAME:
-                return Optional.of(new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
-            case LAST_NAME:
-                return Optional.of(new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
-            case FULL_NAME:
-                return Optional.of(new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
-            default:
-                return Optional.empty();
+    private static String genericFakerCall(String[] subTypes, Object invokee) {
+        try {
+            Class<?> clazz = invokee.getClass();
+            Method method = clazz.getMethod(subTypes[0]);
+            Object returnedValue = method.invoke(invokee);
+            if (subTypes.length == 1) {
+                return returnedValue.toString();
+            }
+            String[] tail = Arrays.copyOfRange(subTypes, 1, subTypes.length);
+            return genericFakerCall(tail, returnedValue).toString();
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public List<Constraint> createConstraints(List<ConstraintDTO> dtos, Fields fields)
-    {
+    public Optional<Constraint> createSpecificTypeConstraint(Field field) {
+        return Optional.ofNullable(fieldTypeToConstraint.get(field.getSpecificType().getType()))
+            .map(f -> f.apply(field));
+    }
+
+    public List<Constraint> createConstraints(List<ConstraintDTO> dtos, Fields fields) {
         return dtos.stream().map(dto -> createConstraint(dto, fields)).collect(Collectors.toList());
     }
 
-    private Constraint createConstraint(ConstraintDTO dto, Fields fields)
-    {
-        if (dto.getType() == ConstraintType.IN_MAP)
-        {
-            FieldType type = fields.getByName(((InMapConstraintDTO)dto).field).getType();
+    private Constraint createConstraint(ConstraintDTO dto, Fields fields) {
+        if (dto.getType() == ConstraintType.IN_MAP) {
+            FieldType type = fields.getByName(((InMapConstraintDTO) dto).field).getType();
             return atomicConstraintFactoryMap.get(type).createInMapRelation((InMapConstraintDTO) dto, fields);
         }
-        if(dto.getType() == ConstraintType.GENERATOR)
-        {
-            Field field = fields.getByName(((GeneratorConstraintDTO)dto).field);
-            return customConstraintFactory.create(field, ((GeneratorConstraintDTO)dto).generator);
+        if (dto.getType() == ConstraintType.GENERATOR) {
+            Field field = fields.getByName(((GeneratorConstraintDTO) dto).field);
+            return customConstraintFactory.create(field, ((GeneratorConstraintDTO) dto).generator);
 
         }
-        if (dto instanceof RelationalConstraintDTO)
-        {
-            SpecificFieldType specificFieldType = fields.getByName(((RelationalConstraintDTO)dto).field).getSpecificType();
+        if (dto instanceof RelationalConstraintDTO) {
+            SpecificFieldType specificFieldType = fields.getByName(((RelationalConstraintDTO) dto).field).getSpecificType();
             FieldType type = specificFieldType.getFieldType();
             return type == FieldType.NUMERIC
                 ? specificRelationFactoryMap.get(specificFieldType).createRelation((RelationalConstraintDTO) dto, fields)
                 : relationFactoryMap.get(type).createRelation((RelationalConstraintDTO) dto, fields);
         }
-        if (dto instanceof AtomicConstraintDTO)
-        {
-            FieldType type = fields.getByName(((AtomicConstraintDTO)dto).field).getType();
+        if (dto instanceof AtomicConstraintDTO) {
+            FieldType type = fields.getByName(((AtomicConstraintDTO) dto).field).getType();
             return atomicConstraintFactoryMap.get(type).createAtomicConstraint((AtomicConstraintDTO) dto, fields);
         }
-        if (dto instanceof GrammaticalConstraintDTO)
-        {
+        if (dto instanceof GrammaticalConstraintDTO) {
             return createGrammaticalConstraint((GrammaticalConstraintDTO) dto, fields);
         }
         throw new IllegalStateException("Unexpected constraint type: " + dto.getType());
     }
 
-    private Constraint createGrammaticalConstraint(GrammaticalConstraintDTO dto, Fields fields)
-    {
-        switch (dto.getType())
-        {
+    private Constraint createGrammaticalConstraint(GrammaticalConstraintDTO dto, Fields fields) {
+        switch (dto.getType()) {
             case ALL_OF:
                 return new AndConstraint(createConstraints(((AllOfConstraintDTO) dto).constraints, fields));
             case ANY_OF:
@@ -152,8 +168,7 @@ public class ConstraintService
         }
     }
 
-    private ConditionalConstraint createConditionalConstraint(ConditionalConstraintDTO dto, Fields fields)
-    {
+    private ConditionalConstraint createConditionalConstraint(ConditionalConstraintDTO dto, Fields fields) {
         Constraint ifConstraint = createConstraint(dto.ifConstraint, fields);
         Constraint thenConstraint = createConstraint(dto.thenConstraint, fields);
         Constraint elseConstraint = dto.elseConstraint == null ? null : createConstraint(dto.elseConstraint, fields);

@@ -67,4 +67,9 @@ public class ChecksumlessIsinGenerator implements StringGenerator {
     public StringGenerator intersect(StringGenerator stringGenerator) {
         throw new ValidationException("Constraints with ISINs can only be used with length and equalTo constraints.");
     }
+
+    @Override
+    public boolean validate(String string) {
+        return matches(string);
+    }
 }

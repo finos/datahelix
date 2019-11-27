@@ -30,6 +30,7 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
     compile "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
+    implementation "com.github.javafaker:javafaker:${FAKER_VERSION}"
 
     testCompile project(":common").sourceSets.test.output
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"

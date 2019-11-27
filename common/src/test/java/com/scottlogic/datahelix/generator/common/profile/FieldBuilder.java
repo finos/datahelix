@@ -18,10 +18,10 @@ package com.scottlogic.datahelix.generator.common.profile;
 
 public class FieldBuilder {
     public static Field createField(String name) {
-        return createField(name, SpecificFieldType.STRING);
+        return createField(name, StandardSpecificFieldType.STRING.toSpecificFieldType());
     }
     public static Field createInternalField(String name) {
-        return createInternalField(name, SpecificFieldType.STRING);
+        return createInternalField(name, StandardSpecificFieldType.STRING.toSpecificFieldType());
     }
     public static Field createField(String name, SpecificFieldType type) {
         return new Field(name, type, false, null, false, false, null);

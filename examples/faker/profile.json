@@ -1,0 +1,29 @@
+{
+  "fields": [
+    {
+      "name": "shortName",
+      "type": "faker.name.firstName",
+      "nullable": false
+    },
+    {
+      "name": "longName",
+      "type": "faker.name.lastName",
+      "nullable": false
+    },
+    {
+      "name": "cellNumber",
+      "type": "faker.phoneNumber.cellPhone",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "shortName",
+      "shorterThan": 6
+    },
+    {
+      "field": "longName",
+      "longerThan": 9
+    }
+  ]
+}

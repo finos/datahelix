@@ -16,11 +16,9 @@
 
 package com.scottlogic.datahelix.generator.profile.dtos;
 
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
-
 public class FieldDTO {
     public String name;
-    public SpecificFieldType type;
+    public String type;
     public String generator;
     public String formatting;
     public boolean unique;

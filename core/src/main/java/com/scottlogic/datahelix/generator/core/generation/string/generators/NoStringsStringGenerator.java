@@ -42,6 +42,11 @@ public class NoStringsStringGenerator implements StringGenerator {
     }
 
     @Override
+    public boolean validate(String string) {
+        return matches(string);
+    }
+
+    @Override
     public Stream<String> generateInterestingValues() {
         return Stream.empty();
     }

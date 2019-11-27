@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile.services;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
@@ -33,23 +34,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FieldService
-{
-    public Fields createFields(ProfileDTO dto)
-    {
+public class FieldService {
+
+    public Fields createFields(ProfileDTO dto) {
         List<Field> fields = dto.fields.stream().map(this::createRegularField).collect(Collectors.toList());
         getInMapFieldNames(dto.constraints).stream().map(this::createInMapField).forEach(fields::add);
         return new Fields(fields);
     }
 
-    private Field createRegularField(FieldDTO fieldDTO)
-    {
-        String formatting = fieldDTO.formatting != null
-            ? fieldDTO.formatting
-            : fieldDTO.type.getDefaultFormatting();
+    public SpecificFieldType specificFieldTypeFromString(String type, String formatting) {
+        return type.startsWith(StandardSpecificFieldType.FAKER.getType())
+            ? new SpecificFieldType(StandardSpecificFieldType.FAKER.getType(),
+            StandardSpecificFieldType.FAKER.getFieldType(),
+            formatting,
+            type.substring(6))
+            : StandardSpecificFieldType.from(type).toSpecificFieldType();
+    }
+
+    private Field createRegularField(FieldDTO fieldDTO) {
+        String formatting = formatting(fieldDTO);
+        SpecificFieldType type = specificFieldTypeFromString(fieldDTO.type, formatting);
         return new Field(
             fieldDTO.name,
-            fieldDTO.type,
+            type,
             fieldDTO.unique,
             formatting,
             false,
@@ -57,13 +64,23 @@ public class FieldService
             fieldDTO.generator);
     }
 
-    private Field createInMapField(String inMapFile)
-    {
-        return new Field(inMapFile, SpecificFieldType.INTEGER, false, null, true, false, null);
+    private String formatting(FieldDTO fieldDTO) {
+        if (fieldDTO.formatting != null) {
+            return fieldDTO.formatting;
+        }
+
+        if (fieldDTO.type.startsWith(StandardSpecificFieldType.FAKER.getType())) {
+            return null;
+        } else {
+            return StandardSpecificFieldType.from(fieldDTO.type).getDefaultFormatting();
+        }
     }
 
-    private List<String> getInMapFieldNames(List<ConstraintDTO> constraintDTOs)
-    {
+    private Field createInMapField(String inMapFile) {
+        return new Field(inMapFile, StandardSpecificFieldType.INTEGER.toSpecificFieldType(), false, null, true, false, null);
+    }
+
+    private List<String> getInMapFieldNames(List<ConstraintDTO> constraintDTOs) {
         return constraintDTOs.stream()
             .flatMap(constraint -> getAllAtomicConstraints(Stream.of(constraint)))
             .filter(constraintDTO -> constraintDTO.getType() == ConstraintType.IN_MAP)
@@ -72,15 +89,12 @@ public class FieldService
             .collect(Collectors.toList());
     }
 
-    public static Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraintDTOs)
-    {
+    public static Stream<ConstraintDTO> getAllAtomicConstraints(Stream<ConstraintDTO> constraintDTOs) {
         return constraintDTOs.flatMap(FieldService::getAllAtomicSubConstraints);
     }
 
-    private static Stream<ConstraintDTO> getAllAtomicSubConstraints(ConstraintDTO constraintDTO)
-    {
-        switch (constraintDTO.getType())
-        {
+    private static Stream<ConstraintDTO> getAllAtomicSubConstraints(ConstraintDTO constraintDTO) {
+        switch (constraintDTO.getType()) {
             case IF:
                 ConditionalConstraintDTO conditionalConstraintDTO = (ConditionalConstraintDTO) constraintDTO;
                 return getAllAtomicConstraints(conditionalConstraintDTO.elseConstraint == null

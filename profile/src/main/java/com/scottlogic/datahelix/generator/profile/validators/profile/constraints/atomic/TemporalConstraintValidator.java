@@ -38,7 +38,7 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if (!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        FieldType fieldType = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst().get().type.getFieldType();
+        FieldType fieldType = getFieldType(dto.field);
 
         ValidationResult validationResult;
 

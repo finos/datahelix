@@ -16,9 +16,11 @@
 
 package com.scottlogic.datahelix.generator.core.restrictions.string;
 
+import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 
 import java.util.Collections;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class StringRestrictionsFactory {
@@ -34,7 +36,8 @@ public class StringRestrictionsFactory {
             negate
                 ? Collections.singleton(pattern)
                 : Collections.emptySet(),
-            Collections.emptySet()
+            Collections.emptySet(),
+            null
         );
     }
 
@@ -50,7 +53,8 @@ public class StringRestrictionsFactory {
             Collections.emptySet(),
             negate
                 ? Collections.singleton(pattern)
-                : Collections.emptySet()
+                : Collections.emptySet(),
+            null
         );
     }
 
@@ -64,7 +68,8 @@ public class StringRestrictionsFactory {
                 ? Collections.singleton(length)
                 : Collections.emptySet(),
             Collections.emptySet(),
-            Collections.emptySet()
+            Collections.emptySet(),
+            null
         );
     }
 
@@ -76,7 +81,8 @@ public class StringRestrictionsFactory {
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
-            Collections.emptySet()
+            Collections.emptySet(),
+            null
         );
     }
 
@@ -88,7 +94,21 @@ public class StringRestrictionsFactory {
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptySet(),
-            Collections.emptySet()
+            Collections.emptySet(),
+            null
+        );
+    }
+
+    public static StringRestrictions forFaker(Function<Faker, String> fakerFunction) {
+        return new StringRestrictions(
+            0,
+            Defaults.MAX_STRING_LENGTH,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            fakerFunction
         );
     }
 }
