@@ -88,14 +88,18 @@ This section will walk you through creating basic profiles with which you can ge
 
 Profiles are JSON documents consisting of two sections: the list of fields and the constraints.
 
-- **List of Fields** - An array of column headings is defined with unique "name" keys.
+- **List of Fields** - An array of [`fields`](#Fields) containing a unique [`name`](#fields-name) property, a [`type`](#fields-type) and any other optional properties.
+
 ```
     "fields": [
         {
-            "name": "Column 1"
+            "name": "Column 1",
+            "type": "string"
+
         },
         {
-            "name": "Column 2"
+            "name": "Column 2",
+            "type": "integer"
         }
     ]
 ```
@@ -114,7 +118,7 @@ to the desired range of values. They are formatted as JSON objects. There are tw
             },
             {
               "field": "Column 2",
-              "equalTo": "bar"
+              "equalTo": 5
             }
       ]
 
