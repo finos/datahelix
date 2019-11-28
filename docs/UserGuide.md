@@ -1,18 +1,24 @@
-# Table of Contents
-1. [Introduction](#Introduction)
+# User Guide
 
-2. [Profiles](#Profiles)
+This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema.
+
+* If you are new to DataHelix, please read the [Getting Started page](GettingStarted.md)
+
+* If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of   the DataHelix then see the [Developer Guide](DeveloperGuide.md).
+
+### Table of Contents
+1. [Profiles](#Profiles)
     1. [Creating a Profile](#Creating-a-Profile)
     2. [Example Profile](#Example-Profile)
 
-3. [Fields](#Fields)
+2. [Fields](#Fields)
     1. [Name](#fields-name)
     2. [Type](#fields-type)
     3. [Nullable](#fields-nullable)
     4. [Formatting](#fields-formatting)
     5. [Unique](#fields-unique)
 
-4. [Data types](#Data-Types)
+3. [Data types](#Data-Types)
     1. [Integer/Decimal](#integerdecimal)
     2. [Strings](#Strings)
     3. [DateTime](#DateTime)
@@ -20,7 +26,7 @@
     5. [Boolean](#boolean)
     6. [Faker](#faker)
 
-5. [Predicate constraints](#Predicate-constraints)
+4. [Predicate constraints](#Predicate-constraints)
     1. [Theory](#Theory)
     2. [General constraints](#General-constraints)
         1. [equalTo](#predicate-equalto)
@@ -49,18 +55,18 @@
         1. [otherField](#predicate-otherfield)
         2. [offset](#predicate-offset)
 
-6. [Grammatical constraints](#Grammatical-Constraints)
+5. [Grammatical constraints](#Grammatical-Constraints)
     1. [not](#not)
     2. [anyOf](#anyOf)
     3. [allOf](#allOf)
     4. [if](#if)
 
-7. [Custom Generators](#custom-generator)
+6. [Custom Generators](#custom-generator)
     1. [adding](#adding-custom-generator)
     2. [using](#using-custom-generator)
     3. [using as constraint](#using-custom-generator-as-constraint)
 
-8. [Running a Profile](#Running-a-Profile)
+7. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
         1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
     2. [Generation Strategies](#Generation-strategies)
@@ -71,15 +77,8 @@
                 2. [Exhaustive](#Exhaustive)
                 3. [Pinning](#Pinning)
 
-9. [Visualising Decision Trees](#Visualising-Decision-Trees)
+8. [Visualising Decision Trees](#Visualising-Decision-Trees)
 
-# Introduction
-
-This guide outlines how to create a profile and contains information on the syntax of the DataHelix schema.
-
-* If you are new to DataHelix, please read the [Getting Started page](GettingStarted.md)
-
-* If you would like information on how to contribute to the project as well as a technical overview of the key concepts and structure of   the DataHelix then see the [Developer Guide](DeveloperGuide.md).
 
 # Profiles
 
