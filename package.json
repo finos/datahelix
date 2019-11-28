@@ -1,0 +1,15 @@
+{
+  "name": "datahelix-website",
+  "description": "",
+  "private": true,
+  "devDependencies": {
+    "eslint-plugin-compat": "^3.3.0",
+    "eslint": "^6.7.1"
+  },
+  "scripts": {
+    "lint": "eslint .; exit 0"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}
