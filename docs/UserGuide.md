@@ -194,14 +194,8 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `lastname`
 *  `fullname`
 *  `boolean`
-*  `faker.firstname`
-*  `faker.lastname`
-*  `faker.name`
-*  `faker.bloodgroup`
-*  `faker.username`
-*  `faker.nameprefix`
-*  `faker.phonenumber`
-*  `faker.cellnumber`
+*  `faker.<method>.<type>`
+
 
  This is a required property.
 
@@ -318,14 +312,13 @@ Currently these types are only supported with the `equalTo` and `equalToField` c
 
 Users can invoke the [Faker](https://github.com/DiUS/java-faker/) custom data generators to create values.
 
-All of the types supplied on the [Faker class](https://github.com/DiUS/java-faker/blob/javafaker-1.0.1/src/main/java/com/github/javafaker/Faker.java) are accessible. Methods are invoked by entering the method signature chain. For example:
+All of the types supplied on the [Faker class](https://github.com/DiUS/java-faker/blob/javafaker-1.0.1/src/main/java/com/github/javafaker/Faker.java) are accessible. Methods are invoked by entering the method signature chain. For example if we want to generate job titles, then we have to find `job.java` in the [java faker source code](https://github.com/DiUS/java-faker/tree/master/src/main/java/com/github/javafaker). From this we can see that one of the methods we can invoke on `job` is `title`. To use this in the profile we would supply the field type as `faker.job.title` as shown in the following profile.
 
-```java
-faker.name().firstName()
 ```
-would be used in the profile by supplying the type:
-```bash
-faker.name.firstName
+{
+  "fields":      [{"name": "Job-Title", "type": "faker.job.title"}],
+  "constraints": []
+}
 ```
 
 # Predicate constraints
