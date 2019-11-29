@@ -167,7 +167,7 @@ First we'll expand the example profile to add a new `age` field, a not-null inte
 
 Next, we'll add some conditional logic to give some of our users a number plate. Lets add a `numberPlate` string to the list of fields.
 
-Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have numbers plates, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
+Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have number plates, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
 
 ```json
 {
