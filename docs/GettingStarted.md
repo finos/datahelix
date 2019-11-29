@@ -112,7 +112,7 @@ ylbmop
 
 The current profile outputs random text strings for the `username` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
 
-There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex or we load usernames from a csv file using an [`inSet`](UserGuide#predicate-inset) constraint. In fact the datahelix directly supports generating many common types either through [internal types](UserGuide.md#Data-Types) or through [faker support](UserGuide#faker).
+There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex or we load usernames from a csv file using an [`inSet`](UserGuide.md#predicate-inset) constraint. In fact the datahelix directly supports generating many common types either through [internal types](UserGuide.md#Data-Types) or through [faker support](UserGuide.md#faker).
 
 ## Data types
 
@@ -125,19 +125,19 @@ The generator supports many different data types including:
 
 A full list of the supported data types can be found [here](UserGuide.md#type).
 
-We are going to use the `firstname` type to produce realistic looking names. Add a new field `firstname` with the `fullname` type.
+We are going to use the `firstname` type to produce realistic looking names. Add a new field `firstname` with the `firstname` type.
 
 The profile should look something like:
 
 ```JSON
 {
   "fields": [{ "name": "username", "type": "string" },
-             { "name": "name", "type": "firstname" }],
+             { "name": "firstname", "type": "firstname" }],
   "constraints": [{ "field": "username", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
 
-Running the profile now gives a random list of first names.
+Running the profile now gives a random list of usernames and first names.
 
 ```
 username,name
@@ -157,32 +157,35 @@ First we'll expand the example profile to add a new `age` field, a not-null inte
 ```json
 {
     "fields": [
+      { "name": "username", "type": "string" },
       { "name": "firstName", "type": "firstname" },
       { "name": "age", "type": "integer" }
     ],
     "constraints": [
+        { "field": "username", "matchingRegex": "[a-z]{1,10}" },
         { "field": "age", "greaterThan": 0 },
         { "field": "age", "lessThan": 100 }
     ]
 }
 ```
 
-Next, we'll add some conditional logic to give some of our users a number plate. Lets add a `numberPlate` string to the list of fields.
+Next, we'll add some conditional logic to give some of our users a job. Lets add a `job` field to the profile. We can use [faker](UserGuide.md#faker) to generate realistic looking job titles. From looking at the [`job.java`](https://github.com/DiUS/java-faker/blob/master/src/main/java/com/github/javafaker/Job.java) class in the faker docs we can see that we need to call the `title` method. We add this to the profile by adding the `faker.job.title` type to a field.
 
-Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have number plates, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
+Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have jobs, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
+
+The new field we need to add is:
 
 ```json
 {
-    "name": "numberPlate",
-    "type": "string",
+    "name": "jobTitle",
+    "type": "faker.job.title",
     "nullable": true
 }
 ```
- We also want all of our drivers to be at least 17 so lets add an [if constraint](UserGuide.md#if).
+ We also want people to be at least 17 before they get a job so lets add an [if constraint](UserGuide.md#if).
  ```json
- { "if":    { "field": "age", "greaterThanOrEqualTo": 17 },
-   "then":  { "field": "numberPlate", "matchingRegex": "[A-Z]{2}[0-9]{2} [A-Z]{3}"},
-   "else" : { "field": "numberPlate", "isNull": true}
+ { "if":    { "field": "age", "lessThan": 17 },
+   "then":  { "field": "jobTitle", "isNull": true}
  }
   ```
 
@@ -191,16 +194,17 @@ Putting it all together will lead to a profile looking like this:
 ```json
 {
     "fields": [
+      { "name": "username", "type": "string" },
       { "name": "firstName", "type": "firstname" },
       { "name": "age", "type": "integer" },
-      { "name": "numberPlate", "type": "string" , "nullable": true}
+      { "name": "jobTitle", "type": "faker.job.title", "nullable": true}
     ],
     "constraints": [
+        { "field": "username", "matchingRegex": "[a-z]{1,10}" },
         { "field": "age", "greaterThan": 0 },
         { "field": "age", "lessThan": 100 },
-        { "if": { "field": "age", "greaterThanOrEqualTo": 17 },
-          "then": {"field": "numberPlate", "matchingRegex": "[A-Z]{2}[0-9]{2} [A-Z]{3}"},
-          "else" : { "field": "numberPlate", "isNull": true}
+        { "if":    { "field": "age", "lessThan": 17 },
+          "then":  { "field": "jobTitle", "isNull": true}
         }
     ]
 }
@@ -209,14 +213,13 @@ Putting it all together will lead to a profile looking like this:
 Running the above profile will produce something like:
 
 ```
-firstName,age,numberPlate
-Katie,17,
-Cameron,16,
-Angus,63,
-Douglas,10,
-Benjamin,6,
-Brodie,66,OH86 KHY
-Keir,77,VX39 KIR
+username,firstName,age,jobTitle
+scds,Arthur,38,Construction Administrator
+jcmg,Harley,14,
+ovcoljd,James,7,
+dmhzdxb,Louie,71,Direct Sales Technician
+ffosyzeh,Ellie,67,Farming Designer
+[...]
 ```
 
 ## Generation modes
