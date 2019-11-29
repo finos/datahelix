@@ -37,7 +37,7 @@ We'll start by creating a simple profile containing a single field `username` wi
 
 ```json
 {
-    "fields": [{ "name": "firstName", "type": "string" }],
+    "fields": [{ "name": "username", "type": "string" }],
     "constraints": []
 }
 ```
@@ -65,7 +65,7 @@ or click [here](UserGuide.md#command-line-arguments) to find the full range of c
 If you open up `output.csv` you'll see something like the following:
 
 ```
-firstName
+username
 "[EN6^!Sd^ 4Jha'~Z.0-M+B+m#N=\#>SuUh+T0o )%^6}mW8%#R>TeBGQq7v0_S<{tbtxSTF&:j\{}RU.>'{J-SW3b)rrH$6B~|R#:LU^'FxJ5'8)XV]8kPON-I~n?lZSO-]1&@bjH'rZ4NC<.[bk-x+?W!g yG?Uxc4sAv'~(0`'_1a-ynlPXDlH_nAL+$ChP#xq5q1lnc#}xP0B,?5XF,FZ6fO|z&TiVkKm.4[y>oZE#3N+<W#F""ex~6#!^$L\ipQHp<wl:f.U&Miz|e6pidz1` Kt7$|='A`%by^9O?pU5|EWE1IFCGw1<p7L.=zzc.Mad,{$]@EpomnP8DHq4UosSol4,""&)XpLu[VWI--/YzriJsU{zOcG9u^})~<fahg*Tx#scve_bEX9l#Cjqvl{kk8V{mn-}klTF3J|Qy0cOd]`QAjDV\@S\~xlQxM7MVJn\ zP*pm/|8-MU jqJCyYnyLL'dRA.N}4|dM<1y,F7`xfSXQ?/a6C|q{~1>R]mBhmes6Xb:DkyN>EX)UBQ]v,nM5n]`9-4>9NHN~.&:#SH0t><\b^,br.Yi2;kc-aJ-cq>xh7Q1{k[%^)>XL$ca$M"".m:/+AdqiTnXpf%z?7le""?Kk~Wv); <&R~`qn#Jp j""/Da Y~uTQx*aC<|D"
 niIU8r.{y'idVK(ki2D[#N8{h?dP[D;
 ":dT+0YYW35/|91cwp^h)=wXe4!UzD<BSJZm|C>MX,`('kS),{UiuUin\h<PX#vGTa<2U7$O;qr:8VVF}IUaLU.jTqf4z<{m^do4%D)9=trJ|u?ML3c|p~vj\8tw8h:x,Kj&a8Y:#Ct42%PGxl""_zVu""BE/j1Pys'KuuS# Fgj`X#!ai|kjF8W?3K$82"
@@ -75,9 +75,9 @@ niIU8r.{y'idVK(ki2D[#N8{h?dP[D;
 [...]
 ```
 
-The generator has successfully created 100 rows of random data. However, for this guide we want to create more realistic looking first names. It is likely that the `firstName` field should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
+The generator has successfully created 100 rows of random data. However, for this guide we want to create more realistic looking usernames. It is likely that the `username` field should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
 
-Let's assume you only want to generate characters between a to z for the `firstName` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
+Let's assume you only want to generate characters between a to z for the `username` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
 
 ## Adding constraints
 
@@ -86,21 +86,21 @@ The datahelix supports two different types of constraint:
 -   [**Predicates**](UserGuide.md#predicate-constraints) - boolean-valued functions that define whether a given value is valid or invalid.
 -   [**Grammatical**](UserGuide.md#grammatical-constraints) - combine or modify other constraints including other grammatical constraints.
 
-We are going to use the [`matchingRegex`](UserGuide.md#predicate-matchingregex) constraint to restrict the strings produced by the `firstName` field. The `matchingRegex` constraint is an example of a predicate constraint.
+We are going to use the [`matchingRegex`](UserGuide.md#predicate-matchingregex) constraint to restrict the strings produced by the `username` field. The `matchingRegex` constraint is an example of a predicate constraint.
 
 Update the JSON profile to the following:
 
 ```json
 {
-    "fields": [{ "name": "firstName", "type": "string" }],
-    "constraints": [{ "field": "firstName", "matchingRegex": "[a-z]{1,10}" }]
+    "fields": [{ "name": "username", "type": "string" }],
+    "constraints": [{ "field": "username", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
 
 Re-running generation now creates a file containing random strings that match the simple regex `[a-z]{1,10}`:
 
 ```
-firstName
+username
 fepky
 cf
 lku
@@ -110,9 +110,9 @@ ylbmop
 [...]
 ```
 
-The current profile outputs random text strings for the `firstName` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
+The current profile outputs random text strings for the `username` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
 
-There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex. However, the datahelix gives us a few other options which could be quite useful. For example, we could make use of the [`firstname`](UserGuide.md#Data-Types) type.
+There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex or we load usernames from a csv file using an [`inSet`](UserGuide#predicate-inset) constraint. In fact the datahelix directly supports generating many common types either through [internal types](UserGuide.md#Data-Types) or through [faker support](UserGuide#faker).
 
 ## Data types
 
@@ -125,27 +125,29 @@ The generator supports many different data types including:
 
 A full list of the supported data types can be found [here](UserGuide.md#type).
 
-We are going to use the `firstname` type to produce realistic looking first names. Change the type of the firstname field from `string` to `firstname` and remove the `matchingRegex` constraint.
+We are going to use the `firstname` type to produce realistic looking names. Add a new field `firstname` with the `fullname` type.
 
 The profile should look something like:
 
 ```JSON
 {
-    "fields": [{ "name": "firstName", "type": "firstname" }],
-    "constraints": []
+  "fields": [{ "name": "username", "type": "string" },
+             { "name": "name", "type": "firstname" }],
+  "constraints": [{ "field": "username", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
 
 Running the profile now gives a random list of first names.
 
 ```
-firstName
-Zac
-Sophie
-Millie
-Annabel
-Muhammad
-Ruaridh
+username,name
+tsd,Jorgie MARTIN
+wkbnohgmt,Murray THOMSON
+fzenkosi,Ruairi GRAY
+x,Jacob SMITH
+kagg,Kiera PATERSON
+jy,Lucie MASON
+[...]
 ```
 
 This is looking good but now we will want to add some more fields to get some more interesting data.
