@@ -433,7 +433,7 @@ Scotland, Edinburgh
 ```
 <div id="predicate-null"></div>
 
-### [`null`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
+### [`isNull`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
 
 ```javascript
 { "field": "price", "isNull" : true }
@@ -845,7 +845,8 @@ Examples:
 
 #### Combination Strategies
 <div id="Combination-Strategies"></div>
-There are a few different combination strategies which can be used in **full sequential mode** with minimal being the default. In modes other than full sequential, combination strategy will have no effect.
+
+There are a few different combination strategies which can be used in `FULL_SEQUENTIAL` mode with minimal being the default. In modes other than full sequential, combination strategy will have no effect.
 
 It is simplest to see how the different combination strategies work by look at the effect on a simple example profile. The following [profile](https://github.com/finos/datahelix/tree/master/examples/multipleFields/profile.json) contains two fields:
   * field1 - has values in set [ "A", "B" ]
