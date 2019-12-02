@@ -5,14 +5,10 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schemaVersion",
     "fields"
   ],
   "properties": {
     "additionalProperties": false,
-    "schemaVersion": {
-      "$ref": "#/definitions/schemaVersion"
-    },
     "description": {
       "title": "A description of what data the profile is modelling",
       "type": "string"
@@ -37,10 +33,6 @@
     }
   },
   "definitions": {
-    "schemaVersion": {
-      "title": "The version of the DataHelix profile schema",
-      "const": "0.18"
-    },
     "dataType": {
       "oneOf": [
         {
