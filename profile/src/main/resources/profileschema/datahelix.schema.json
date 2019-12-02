@@ -152,6 +152,10 @@
         ]
       }
     },
+    "faker": {
+      "type": "string",
+      "pattern": "^faker.(w+.?)((w+).)*(w+)"
+    },
     "field": {
       "title": "The field definitions of a field to generate data for",
       "type": "object",
@@ -172,29 +176,29 @@
           "type": "string"
         },
         "type": {
-          "type": "string",
-          "enum": [
-            "decimal",
-            "integer",
-            "string",
-            "datetime",
-            "date",
-            "time",
-            "ISIN",
-            "SEDOL",
-            "CUSIP",
-            "RIC",
-            "firstname",
-            "lastname",
-            "fullname",
-            "faker.firstname",
-            "faker.lastname",
-            "faker.name",
-            "faker.bloodgroup",
-            "faker.username",
-            "faker.nameprefix",
-            "faker.phonenumber",
-            "faker.cellnumber"
+          "oneOf" : [
+            {
+              "type": "string",
+              "enum": [
+                "decimal",
+                "integer",
+                "string",
+                "datetime",
+                "date",
+                "time",
+                "ISIN",
+                "SEDOL",
+                "CUSIP",
+                "RIC",
+                "firstname",
+                "lastname",
+                "fullname"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^faker\\.(\\w+.?)((\\w+).)*(\\w+)"
+            }
           ]
         },
         "formatting": {
