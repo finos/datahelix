@@ -1,6 +1,6 @@
 # Getting Started
 
-The following guide give a short introduction to the datahelix via a practical example.
+The following guide should give a short introduction to the datahelix via a practical example.
 
 For more comprehensive documentation please refer to the [user guide](UserGuide.md).
 
