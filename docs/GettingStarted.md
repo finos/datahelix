@@ -61,7 +61,7 @@ $ java -jar generator.jar --help
 
 or click [here](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
 
-Alternatively you can use the [datahelix playground](https://finos.github.io/datahelix/playground/) to get a feel for what it is like to run the profile without downloading the JAR. Please note that the playground does not support all features and is not intended to be a substitute for downloading the JAR.
+Alternatively you can use the [datahelix playground](https://finos.github.io/datahelix/playground/) to get a feel for what it is like to run the profile without downloading the JAR. Although the playground supports almost all features, there are some it does not, and we don't intend it to be a substitute for downloading and running the Datahelix Generator yourself.
 
 If you open up `output.csv` you'll see something like the following:
 
