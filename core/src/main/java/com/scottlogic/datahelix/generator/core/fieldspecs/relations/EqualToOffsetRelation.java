@@ -19,11 +19,15 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.*;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation
 {
@@ -48,7 +52,11 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
             return FieldSpecFactory.nullOnly();
         }
         if (otherFieldSpec instanceof WhitelistFieldSpec) {
-            throw new UnsupportedOperationException("cannot combine sets with equal to offset relation, Issue #1489");
+            WhitelistFieldSpec whitelistFieldSpec = (WhitelistFieldSpec) otherFieldSpec;
+            List<WeightedElement<T>> modified = whitelistFieldSpec.getWhitelist().distributedList().stream()
+                .map(x -> new WeightedElement<>(offsetGranularity.getNext((T) x.element(), offset), x.weight()))
+                .collect(Collectors.toList());
+            return FieldSpecFactory.fromList((DistributedList) new DistributedList<>(modified));
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
