@@ -1,1 +1,3 @@
 Generates strings containing `^(Joh?n|Mar[yk])$`. This should generate the same ouput as [../regex](../regex). Start and end anchors `^` & `$` are required here because generating an infinite string is impossible.
+
+Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmlyc3RfbmFtZSIsCiAgICAgICJ0eXBlIjogInN0cmluZyIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaXJzdF9uYW1lIiwKICAgICAgImNvbnRhaW5pbmdSZWdleCI6ICJeKEpvaD9ufE1hclt5a10pJCIKICAgIH0KICBdCn0%3D) to run the profile using the datahelix playground.

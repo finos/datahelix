@@ -1,1 +1,3 @@
-This is a simple profile using the "anyOf" constraint. 
+This is a simple profile using the "anyOf" constraint.
+
+Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQxIiwKICAgICAgInR5cGUiOiAic3RyaW5nIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImFueU9mIjogWwogICAgICAgIHsKICAgICAgICAgICJmaWVsZCI6ICJmaWVsZDEiLAogICAgICAgICAgImVxdWFsVG8iOiAiZm9vIgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImZpZWxkIjogImZpZWxkMSIsCiAgICAgICAgICAiZXF1YWxUbyI6ICJiYXIiCiAgICAgICAgfQogICAgICBdCiAgICB9CiAgXQp9Cg%3D%3D) to run this profile using the datahelix playground. 
