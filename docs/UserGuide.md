@@ -427,7 +427,7 @@ Scotland, Edinburgh
 ```
 <div id="predicate-null"></div>
 
-### [`isNull`](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiAgICAgIFt7Im5hbWUiOiAiYWxsZXJnaWVzX2ZsYWciLCAidHlwZSI6ICJib29sZWFuIn1dLAogICJjb25zdHJhaW50cyI6IFtdCn0%3D) _(field)_
+### [`isNull`](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiBbCiAgICB7Im5hbWUiOiAiZmllbGQxIiwgInR5cGUiOiAiYm9vbGVhbiIsICJudWxsYWJsZSI6IHRydWV9LAogICAgeyJuYW1lIjogImZpZWxkMiIsICJ0eXBlIjogImJvb2xlYW4iLCAibnVsbGFibGUiOiB0cnVlfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgeyJmaWVsZCI6ICJmaWVsZDEiLCAiaXNOdWxsIjogdHJ1ZX0sCiAgICB7ImZpZWxkIjogImZpZWxkMiIsICJpc051bGwiOiBmYWxzZX0KICBdCn0%3D) _(field)_
 
 ```javascript
 { "field": "price", "isNull" : true }
