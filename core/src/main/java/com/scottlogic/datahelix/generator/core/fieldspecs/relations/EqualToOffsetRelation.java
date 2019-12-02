@@ -29,8 +29,7 @@ import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestric
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation
-{
+public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;
     private final Field other;
     private final Granularity<T> offsetGranularity;
@@ -48,18 +47,21 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
 
     @Override
     public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
-        if (otherFieldSpec instanceof NullOnlyFieldSpec){
+        if (otherFieldSpec instanceof NullOnlyFieldSpec) {
             return FieldSpecFactory.nullOnly();
         }
         if (otherFieldSpec instanceof WhitelistFieldSpec) {
             WhitelistFieldSpec whitelistFieldSpec = (WhitelistFieldSpec) otherFieldSpec;
-            List<WeightedElement<T>> modified = whitelistFieldSpec.getWhitelist().distributedList().stream()
+            List<WeightedElement<T>> modified = whitelistFieldSpec
+                .getWhitelist()
+                .distributedList()
+                .stream()
                 .map(x -> new WeightedElement<>(offsetGranularity.getNext((T) x.element(), offset), x.weight()))
                 .collect(Collectors.toList());
             return FieldSpecFactory.fromList((DistributedList) new DistributedList<>(modified));
         }
 
-        LinearRestrictions<T> otherRestrictions = (LinearRestrictions)((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
+        LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
 
         if (otherRestrictions.isContradictory()) {
             return FieldSpecFactory.nullOnly();
