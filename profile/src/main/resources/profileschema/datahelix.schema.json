@@ -5,14 +5,10 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schemaVersion",
     "fields"
   ],
   "properties": {
     "additionalProperties": false,
-    "schemaVersion": {
-      "$ref": "#/definitions/schemaVersion"
-    },
     "description": {
       "title": "A description of what data the profile is modelling",
       "type": "string"
@@ -37,10 +33,6 @@
     }
   },
   "definitions": {
-    "schemaVersion": {
-      "title": "The version of the DataHelix profile schema",
-      "const": "0.18"
-    },
     "dataType": {
       "oneOf": [
         {
@@ -160,6 +152,10 @@
         ]
       }
     },
+    "faker": {
+      "type": "string",
+      "pattern": "^faker.(w+.?)((w+).)*(w+)"
+    },
     "field": {
       "title": "The field definitions of a field to generate data for",
       "type": "object",
@@ -180,29 +176,29 @@
           "type": "string"
         },
         "type": {
-          "type": "string",
-          "enum": [
-            "decimal",
-            "integer",
-            "string",
-            "datetime",
-            "date",
-            "time",
-            "ISIN",
-            "SEDOL",
-            "CUSIP",
-            "RIC",
-            "firstname",
-            "lastname",
-            "fullname",
-            "faker.firstname",
-            "faker.lastname",
-            "faker.name",
-            "faker.bloodgroup",
-            "faker.username",
-            "faker.nameprefix",
-            "faker.phonenumber",
-            "faker.cellnumber"
+          "oneOf" : [
+            {
+              "type": "string",
+              "enum": [
+                "decimal",
+                "integer",
+                "string",
+                "datetime",
+                "date",
+                "time",
+                "ISIN",
+                "SEDOL",
+                "CUSIP",
+                "RIC",
+                "firstname",
+                "lastname",
+                "fullname"
+              ]
+            },
+            {
+              "type": "string",
+              "pattern": "^faker\\.(\\w+.?)((\\w+).)*(\\w+)"
+            }
           ]
         },
         "formatting": {
