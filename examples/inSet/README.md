@@ -8,4 +8,4 @@ A profile showing the use of the inSet constraint.
 
  Note that to run this profile, the csv file should either be in the same location as the jar or the ```--set-from-file-directory``` flag should be used to specify the location of the csv file.
 
-This profile is not supported by the datahelix playground as it uses an external file.
+This profile is not currently supported by the datahelix playground as it requires an external file.
