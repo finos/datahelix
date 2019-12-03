@@ -1,0 +1,24 @@
+{
+  "fields" : [ {
+    "name" : "First",
+    "type" : "integer",
+    "unique" : false,
+    "nullable" : false
+  }, {
+    "name" : "Second",
+    "type" : "integer",
+    "unique" : false,
+    "nullable" : false
+  } ],
+  "constraints" : [ {
+    "field" : "First",
+    "inSet" : [1, 2, 3]
+  }, {
+    "field" : "Second",
+    "inSet" : [3, 4, 5]
+  }, {
+    "field" : "Second",
+    "equalToField" : "First",
+    "offset": 1
+  }]
+}

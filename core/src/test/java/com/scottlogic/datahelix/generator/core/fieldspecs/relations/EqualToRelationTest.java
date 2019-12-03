@@ -30,7 +30,7 @@ import java.time.ZoneOffset;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
-class EqualToDateRelationTest {
+class EqualToRelationTest {
 
     private final Field a = new Field("a", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false ,"", false, false, null);
     private final Field b = new Field("b", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false, "", false, false, null);
