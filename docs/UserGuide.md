@@ -144,6 +144,7 @@ These sections are combined to form the [complete profile](#Example-Profile).
         ]
     }
 ```
+* See the [datahelix playground](https://finos.github.io/datahelix/playground/#ICAgIHsKICAgICJmaWVsZHMiOiBbCiAgICAgICAgewogICAgICAgICAgICAibmFtZSI6ICJDb2x1bW4gMSIsCiAgICAgICAgICAgICJ0eXBlIjogInN0cmluZyIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgIm5hbWUiOiAiQ29sdW1uIDIiLAogICAgICAgICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgICAgIH0KICAgIF0sCiAgICAiY29uc3RyYWludHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgImZpZWxkIjogIkNvbHVtbiAxIiwKICAgICAgICAgICAgImVxdWFsVG8iOiAiZm9vIgogICAgICAgICAgICB9CiAgICAgICAgXQogICAgfQ%3D%3D) to run and edit this profile online.
 * For a larger profile example see [here](user/Schema.md)
 * Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
 
@@ -191,14 +192,8 @@ The data type of the field. See [Data types](#Data-Types) for more on how types 
 *  `lastname`
 *  `fullname`
 *  `boolean`
-*  `faker.firstname`
-*  `faker.lastname`
-*  `faker.name`
-*  `faker.bloodgroup`
-*  `faker.username`
-*  `faker.nameprefix`
-*  `faker.phonenumber`
-*  `faker.cellnumber`
+*  `faker.<method>.<type>`
+
 
  This is a required property.
 
@@ -225,7 +220,7 @@ For the formatting to be applied, the generated data must be applicable, and the
 
 Formatting will not be applied if not applicable to the field's value.
 
-Note that currently integer datatypes must be formatted as if they were decimals. For example to format a integer field to be used as part of a string a `value` like `"number: %.0f"` should be used. See [this](https://github.com/finos/datahelix/tree/master/examples/formatting) example to see another example of formatting integers as well as examples of formatting other datatypes.
+Note that currently integer datatypes must be formatted as if they were decimals. For example to format a integer field to be used as part of a string a `value` like `"number: %.0f"` should be used. See [this](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZGVjaW1hbCIsCiAgICAgICJ0eXBlIjogImRlY2ltYWwiLAogICAgICAibnVsbGFibGUiOiBmYWxzZSwKICAgICAgImZvcm1hdHRpbmciOiAioyUuMmYiLAogICAgICAidW5pcXVlIjogdHJ1ZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiYW5faW50ZWdlciIsCiAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAibnVsbGFibGUiOiBmYWxzZSwKICAgICAgImZvcm1hdHRpbmciOiAiJSwuMGYiCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJkYXRlMSIsCiAgICAgICJ0eXBlIjogImRhdGV0aW1lIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UsCiAgICAgICJmb3JtYXR0aW5nIjogIiV0RiIsCiAgICAgICJ1bmlxdWUiOiB0cnVlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJkYXRlMiIsCiAgICAgICJ0eXBlIjogImRhdGV0aW1lIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UsCiAgICAgICJmb3JtYXR0aW5nIjogIklzc3VlZDogJTEkdGIgJTEkdFkiLAogICAgICAidW5pcXVlIjogdHJ1ZQogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAiZGVjaW1hbCIsCiAgICAgICJlcXVhbFRvIjogMTQuMQogICAgfSwKICAgIHsKICAgICAgImZpZWxkIjogImRhdGUxIiwKICAgICAgImVxdWFsVG8iOiAiMjAwMS0wMi0wM1QwNDowNTowNi4wMDciCiAgICB9LAogICAgewogICAgICAiZmllbGQiOiAiZGF0ZTIiLAogICAgICAiZXF1YWxUbyI6ICIyMDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0sCiAgICB7CiAgICAgICJmaWVsZCI6ICJhbl9pbnRlZ2VyIiwKICAgICAgImVxdWFsVG8iOiAxMjM0NTY3ODkwCiAgICB9CiAgXQp9) example to see another example of formatting integers as well as examples of formatting other datatypes.
 
 This is an optional property of the field object and will default to use no formatting.
 
@@ -315,14 +310,13 @@ Currently these types are only supported with the `equalTo` and `equalToField` c
 
 Users can invoke the [Faker](https://github.com/DiUS/java-faker/) custom data generators to create values.
 
-All of the types supplied on the [Faker class](https://github.com/DiUS/java-faker/blob/javafaker-1.0.1/src/main/java/com/github/javafaker/Faker.java) are accessible. Methods are invoked by entering the method signature chain. For example:
+All of the types supplied on the [Faker class](https://github.com/DiUS/java-faker/blob/javafaker-1.0.1/src/main/java/com/github/javafaker/Faker.java) are accessible. Methods are invoked by entering the method signature chain. For example if we want to generate job titles, then we have to find `job.java` in the [java faker source code](https://github.com/DiUS/java-faker/tree/master/src/main/java/com/github/javafaker). From this we can see that one of the methods we can invoke on `job` is `title`. To use this in the profile we would supply the field type as `faker.job.title` as shown in the following profile.
 
-```java
-faker.name().firstName()
 ```
-would be used in the profile by supplying the type:
-```bash
-faker.name.firstName
+{
+  "fields":      [{"name": "Job-Title", "type": "faker.job.title"}],
+  "constraints": []
+}
 ```
 
 # Predicate constraints
@@ -343,7 +337,7 @@ The [grammatical `not` constraint](#Grammatical-Constraints) inverts a constrain
 
 <div id="predicate-equalto"></div>
 
-### [`equalTo`](https://github.com/finos/datahelix/tree/master/examples/datetimeEqualTo) _(field, value)_  
+### [`equalTo`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZGF0ZSIsCiAgICAgICJ0eXBlIjogImRhdGV0aW1lIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogImRhdGUiLAogICAgICAiZXF1YWxUbyI6ICIyMDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0KICBdCn0%3D) _(field, value)_  
 
 ```javascript
 { "field": "type", "equalTo": "X_092" }
@@ -361,7 +355,7 @@ Is satisfied if `field`'s value is equal to `value`
 
 <div id="predicate-inset"></div>
 
-### [`inSet`](https://github.com/finos/datahelix/tree/master/examples/inSet) _(field, values)_
+### [`inSet`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAid2Vla2RheXMiLAogICAgICAidHlwZSI6ICJzdHJpbmciLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAid2Vla2RheXMiLAogICAgICAiaW5TZXQiOiBbCiAgICAgICAgIk1vbmRheSIsCiAgICAgICAgIlR1ZXNkYXkiLAogICAgICAgICJXZWRuZXNkYXkiLAogICAgICAgICJUaHVyc2RheSIsCiAgICAgICAgIkZyaWRheSIKICAgICAgXQogICAgfQogIF0KfQ%3D%3D) _(field, values)_
 
 ```javascript
 { "field": "type", "inSet": [ "X_092", "2001-02-03T04:05:06.007" ] }
@@ -399,7 +393,7 @@ Scotland, 3
 ...
 ```
 
-After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated.
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated. See [here](https://github.com/finos/datahelix/tree/master/examples/inSet) for an example showing the `inSet` constraint being used with a file.
 
 <div id="predicate-inmap"></div>
 
@@ -433,7 +427,7 @@ Scotland, Edinburgh
 ```
 <div id="predicate-null"></div>
 
-### [`isNull`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull) _(field)_
+### [`isNull`](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiBbCiAgICB7Im5hbWUiOiAiZmllbGQxIiwgInR5cGUiOiAiYm9vbGVhbiIsICJudWxsYWJsZSI6IHRydWV9LAogICAgeyJuYW1lIjogImZpZWxkMiIsICJ0eXBlIjogImJvb2xlYW4iLCAibnVsbGFibGUiOiB0cnVlfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgeyJmaWVsZCI6ICJmaWVsZDEiLCAiaXNOdWxsIjogdHJ1ZX0sCiAgICB7ImZpZWxkIjogImZpZWxkMiIsICJpc051bGwiOiBmYWxzZX0KICBdCn0%3D) _(field)_
 
 ```javascript
 { "field": "price", "isNull" : true }
@@ -446,7 +440,7 @@ Is satisfied if `field` is null or absent.
 
 <div id="predicate-matchingregex"></div>
 
-### [`matchingRegex`](https://github.com/finos/datahelix/tree/master/examples/userAccount) _(field, value)_
+### [`matchingRegex`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZW1haWxfYWRkcmVzcyIsCiAgICAgICJ0eXBlIjogInN0cmluZyIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogImVtYWlsX2FkZHJlc3MiLAogICAgICAibWF0Y2hpbmdSZWdleCI6ICJeW2EtejAtOV0rXFxAW2EtejAtOV0rXFwuY28obXxcXC51aykkIgogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "name", "matchingRegex": "[a-z]{0, 10}" }
@@ -460,7 +454,7 @@ The following non-capturing groups are unsupported:
 
 <div id="predicate-containingregex"></div>
 
-### [`containingRegex`](https://github.com/finos/datahelix/tree/master/examples/containingRegex) _(field, value)_
+### [`containingRegex`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiRG9nIiwKICAgICAgInR5cGUiOiAic3RyaW5nIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAiRG9nIiwKICAgICAgImNvbnRhaW5pbmdSZWdleCI6ICJEb2ciCiAgICB9LAogICAgewogICAgICAiZmllbGQiOiAiRG9nIiwKICAgICAgInNob3J0ZXJUaGFuIjogNgogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "name", "containingRegex": "[a-z]{0, 10}" }
@@ -474,7 +468,7 @@ The following non-capturing groups are unsupported:
 
 <div id="predicate-oflength"></div>
 
-### [`ofLength`](https://github.com/finos/datahelix/tree/master/examples/ofLength) _(field, value)_
+### [`ofLength`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJzdHJpbmciCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCgogICAgewogICAgICAiZmllbGQiOiAiZmllbGQiLAogICAgICAib2ZMZW5ndGgiOiA1CiAgICB9CiAgXQp9) _(field, value)_
 
 ```javascript
 { "field": "name", "ofLength": 5 }
@@ -484,7 +478,7 @@ Is satisfied if `field` is a string whose length exactly matches `value`, must b
 
 <div id="predicate-longerthan"></div>
 
-### [`longerThan`](https://github.com/finos/datahelix/tree/master/examples/stringBetween) _(field, value)_
+### [`longerThan`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJzdHJpbmciCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCgogICAgewogICAgICAiZmllbGQiOiAiZmllbGQiLAogICAgICAibG9uZ2VyVGhhbiI6IDUKICAgIH0KICBdCn0%3D) _(field, value)_
 
 ```javascript
 { "field": "name", "longerThan": 3 }
@@ -494,7 +488,7 @@ Is satisfied if `field` is a string with length greater than `value`, must be a 
 
 <div id="predicate-shorterthan"></div>
 
-### [`shorterThan`](https://github.com/finos/datahelix/tree/master/examples/stringBetween) _(field, value)_
+### [`shorterThan`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJzdHJpbmciCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCgogICAgewogICAgICAiZmllbGQiOiAiZmllbGQiLAogICAgICAic2hvcnRlclRoYW4iOiA1CiAgICB9CiAgXQp9) _(field, value)_
 
 ```javascript
 { "field": "name", "shorterThan": 3 }
@@ -506,7 +500,7 @@ Is satisfied if `field` is a string with length less than `value`, must be a who
 
 <div id="predicate-greaterthan"></div>
 
-### [`greaterThan`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
+### [`greaterThan`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwoKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkIiwKICAgICAgImdyZWF0ZXJUaGFuIjogMwogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "price", "greaterThan": 0 }
@@ -516,7 +510,7 @@ Is satisfied if `field` is a number greater than `value`.
 
 <div id="predicate-greaterthanorequalto"></div>
 
-### [`greaterThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
+### [`greaterThanOrEqualTo`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwoKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkIiwKICAgICAgImdyZWF0ZXJUaGFuT3JFcXVhbFRvIjogNQogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "price", "greaterThanOrEqualTo": 0 }
@@ -526,7 +520,7 @@ Is satisfied if `field` is a number greater than or equal to `value`.
 
 <div id="predicate-lessthan"></div>
 
-### [`lessThan`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
+### [`lessThan`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwoKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkIiwKICAgICAgImxlc3NUaGFuIjogNQogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "price", "lessThan": 0 }
@@ -536,7 +530,7 @@ Is satisfied if `field` is a number less than `value`.
 
 <div id="predicate-lessthanorequalto"></div>
 
-### [`lessThanOrEqualTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
+### [`lessThanOrEqualTo`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwoKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkIiwKICAgICAgImxlc3NUaGFuT3JFcXVhbFRvIjogNQogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "price", "lessThanOrEqualTo": 0 }
@@ -546,7 +540,7 @@ Is satisfied if `field` is a number less than or equal to `value`.
 
 <div id="predicate-granularto"></div>
 
-### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/realNumberRange) _(field, value)_
+### [`granularTo`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkZWNpbWFsIgogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwoKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkIiwKICAgICAgImdyYW51bGFyVG8iOiAwLjEKICAgIH0KICBdCn0%3D) _(field, value)_
 
 ```javascript
 { "field": "price", "granularTo": 0.1 }
@@ -560,7 +554,7 @@ The time and datetime are shared but must be used with the same type. For exampl
 
 <div id="predicate-after"></div>
 
-### [`after`](https://github.com/finos/datahelix/tree/master/examples/datetimeAfter) _(field, value)_
+### [`after`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZCIsCiAgICAgICJhZnRlciI6ICIyMDA1LTA1LTEyIgogICAgfQogIF0KfQ%3D%3D) _(field, value)_
 
 ```javascript
 { "field": "date", "after": "2018-09-01T00:00:00.000" }
@@ -570,7 +564,7 @@ Is satisfied if `field` is a time or datetime occurring after `value`.
 
 <div id="predicate-afterorat"></div>
 
-### [`afterOrAt`](https://github.com/finos/datahelix/tree/master/examples/dateBetween) _(field, value)_
+### [`afterOrAt`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZCIsCiAgICAgICJhZnRlck9yQXQiOiAiMjAwNS0wNS0xMiIKICAgIH0KICBdCn0%3D) _(field, value)_
 
 ```javascript
 { "field": "time", "afterOrAt": "00:00:00" }
@@ -580,7 +574,7 @@ Is satisfied if `field` is a time or datetime occurring after or simultaneously 
 
 <div id="predicate-before"></div>
 
-### [`before`](https://github.com/finos/datahelix/tree/master/examples/timeBefore) _(field, value)_
+### [`before`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZCIsCiAgICAgICJiZWZvcmUiOiAiMjAwNS0wNS0xMiIKICAgIH0KICBdCn0%3D) _(field, value)_
 
 ```javascript
 { "field": "date", "before": "2018-09-01T00:00:00.000" }
@@ -590,7 +584,7 @@ Is satisfied if `field` is a time or datetime occurring before `value`.
 
 <div id="predicate-beforeorat"></div>
 
-### [`beforeOrAt`](https://github.com/finos/datahelix/tree/master/examples/dateBetween) _(field, value)_
+### [`beforeOrAt`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZCIsCiAgICAgICJiZWZvcmVPckF0IjogIjIwMDUtMDUtMTIiCiAgICB9CiAgXQp9) _(field, value)_
 
 ```javascript
 { "field": "date", "beforeOrAt": "2018-09-01T00:00:00.000" }
@@ -600,7 +594,7 @@ Is satisfied if `field` is a time or datetime occurring before or simultaneously
 
 <div id="predicate-granularto-datetime"></div>
 
-### [`granularTo`](https://github.com/finos/datahelix/tree/master/examples/datetimeAfter) _(field, value)_
+### [`granularTo`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZCIsCiAgICAgICJncmFudWxhclRvIjogIkRBWVMiCiAgICB9CiAgXQp9) _(field, value)_
 
 ```javascript
 { "field": "date", "granularTo": "days" }
@@ -614,7 +608,7 @@ Is satisfied if `field` has at least the [granularity](#DateTime-granularity) sp
 
 <div id="predicate-otherfield"></div>
 
-### [`afterField`, `afterOrAtField`, `beforeField`, `beforeOrAtField`](https://github.com/finos/datahelix/tree/master/examples/datetimeDynamicFields)
+### [`afterField`, `afterOrAtField`, `beforeField`, `beforeOrAtField`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQxIiwKICAgICAgInR5cGUiOiAiZGF0ZXRpbWUiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQyIiwKICAgICAgInR5cGUiOiAiZGF0ZXRpbWUiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQzIiwKICAgICAgInR5cGUiOiAiZGF0ZXRpbWUiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQ0IiwKICAgICAgInR5cGUiOiAiZGF0ZXRpbWUiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAiZmllbGQxIiwKICAgICAgImFmdGVyRmllbGQiOiAiZmllbGQyIgogICAgfSwKICAgIHsKICAgICAgImZpZWxkIjogImZpZWxkMyIsCiAgICAgICJiZWZvcmVPckF0RmllbGQiOiAiZmllbGQ0IgogICAgfQogIF0KfQ%3D%3D)
 
 allows a time/datetime field to be dependent on the output of another time/datetime field.
 
@@ -625,14 +619,14 @@ allows a time/datetime field to be dependent on the output of another time/datet
 
 <div id="predicate-offset"></div>
 
-### [`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://github.com/finos/datahelix/tree/master/examples/integerDynamicFields)
+### [`greaterThanField`, `greaterThanOrEqualToField`, `lessThan`, `lessThanOrEqualToField`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQxIiwKICAgICAgInR5cGUiOiAiaW50ZWdlciIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJmaWVsZDIiLAogICAgICAidHlwZSI6ICJpbnRlZ2VyIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImZpZWxkMyIsCiAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQ0IiwKICAgICAgInR5cGUiOiAiaW50ZWdlciIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaWVsZDEiLAogICAgICAiZ3JlYXRlclRoYW5PckVxdWFsVG9GaWVsZCI6ICJmaWVsZDIiCiAgICB9LAogICAgewogICAgICAiZmllbGQiOiAiZmllbGQzIiwKICAgICAgImxlc3NUaGFuRmllbGQiOiAiZmllbGQ0IgogICAgfQogIF0KfQ%3D%3D)
 
 allows a numeric field to be dependent on the output of another numeric field.
 ```javascript
 { "field": "laterNumericField", "greaterThanField": "previousNumericField" }
 ```
 
-### [`offset`](https://github.com/finos/datahelix/tree/master/examples/integerOffset)
+### [`offset`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAicmFuZG9tSW50ZWdlciIsCiAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfSwKICAgIHsKICAgICAgIm5hbWUiOiAib25lR3JlYXRlciIsCiAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAib25lR3JlYXRlciIsCiAgICAgICJlcXVhbFRvRmllbGQiOiAicmFuZG9tSW50ZWdlciIsCiAgICAgICJvZmZzZXQiOiAxCiAgICB9CiAgXQp9Cg%3D%3D)
 Allows a dependent time/datetime/numeric field to always be a certain offset away from another time/datetime/numeric field.
 
 The syntax is slightly different depending on the type.
@@ -649,7 +643,7 @@ The syntax is slightly different depending on the type.
 ```
 
 Note that offsetUnit can be any of the [granularites](#DateTime-granularity) supported by datahelix.
-Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. A profile showing this can be found [here](https://github.com/finos/datahelix/tree/master/examples/datetimeEqualToDynamicOffset).
+Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. A profile showing this can be found [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmlyc3QiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJzZWNvbmQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaXJzdCIsCiAgICAgICJhZnRlciI6ICI4MDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0sCiAgICB7CiAgICAgICJmaWVsZCI6ICJzZWNvbmQiLAogICAgICAiZXF1YWxUb0ZpZWxkIjogImZpcnN0IiwKICAgICAgIm9mZnNldCI6IDMsCiAgICAgICJvZmZzZXRVbml0IjogImRheXMiCiAgICB9CiAgXQp9).
 
 
 # Grammatical constraints
@@ -659,7 +653,7 @@ Additionally in the case that the field is a datetime then the `working days` of
 
 See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an in depth explanation of how the constraints are merged and data generated from them.
 
-## [`not`](https://github.com/finos/datahelix/tree/master/examples/integerRangeWithBlacklist)
+## [`not`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiYW5faW50ZWdlciIsCiAgICAgICJ0eXBlIjogImludGVnZXIiLAogICAgICAibnVsbGFibGUiOiBmYWxzZQogICAgfQogIF0sCiAgImNvbnN0cmFpbnRzIjogWwogICAgewogICAgICAiZmllbGQiOiAiYW5faW50ZWdlciIsCiAgICAgICJncmVhdGVyVGhhbk9yRXF1YWxUbyI6IDEKICAgIH0sCiAgICB7CiAgICAgICJmaWVsZCI6ICJhbl9pbnRlZ2VyIiwKICAgICAgImxlc3NUaGFuT3JFcXVhbFRvIjogNAogICAgfSwKICAgIHsKICAgICAgIm5vdCI6IHsKICAgICAgICAiZmllbGQiOiAiYW5faW50ZWdlciIsCiAgICAgICAgImVxdWFsVG8iOiAyCiAgICAgIH0KICAgIH0KICBdCn0%3D)
 
 ```javascript
 { "not": { "field": "foo", "equalTo": "bar" } }
@@ -667,7 +661,7 @@ See [set restriction and generation](user/SetRestrictionAndGeneration.md) for an
 
 Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ satisfied.
 
-## [`anyOf`](https://github.com/finos/datahelix/tree/master/examples/anyOf)
+## [`anyOf`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmllbGQxIiwKICAgICAgInR5cGUiOiAic3RyaW5nIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImFueU9mIjogWwogICAgICAgIHsKICAgICAgICAgICJmaWVsZCI6ICJmaWVsZDEiLAogICAgICAgICAgImVxdWFsVG8iOiAiZm9vIgogICAgICAgIH0sCiAgICAgICAgewogICAgICAgICAgImZpZWxkIjogImZpZWxkMSIsCiAgICAgICAgICAiZXF1YWxUbyI6ICJiYXIiCiAgICAgICAgfQogICAgICBdCiAgICB9CiAgXQp9)
 
 ```javascript
 { "anyOf": [
@@ -678,7 +672,7 @@ Wraps a constraint. Is satisfied if, and only if, its inner constraint is _not_ 
 
 Contains a number of sub-constraints. Is satisfied if any of the inner constraints are satisfied.
 
-## [`allOf`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull)
+## [`allOf`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiYWxsZXJnaWVzX2ZsYWciLAogICAgICAidHlwZSI6ICJib29sZWFuIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImFsbGVyZ2llcyIsCiAgICAgICJ0eXBlIjogInN0cmluZyIsCiAgICAgICJudWxsYWJsZSI6IHRydWUKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImlmIjogewogICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXNfZmxhZyIsCiAgICAgICAgImVxdWFsVG8iOiB0cnVlCiAgICAgIH0sCiAgICAgICJ0aGVuIjogewogICAgICAgICJhbGxPZiI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgImZpZWxkIjogImFsbGVyZ2llcyIsCiAgICAgICAgICAgICJpblNldCI6IFsKICAgICAgICAgICAgICAiZG9ncyIsCiAgICAgICAgICAgICAgInBlYW51dHMiLAogICAgICAgICAgICAgICJzaGVsbGZpc2giCiAgICAgICAgICAgIF0KICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXMiLAogICAgICAgICAgICAiaXNOdWxsIjogZmFsc2UKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIH0sCiAgICAgICJlbHNlIjogewogICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXMiLAogICAgICAgICJpc051bGwiOiB0cnVlCiAgICAgIH0KICAgIH0KICBdCn0%3D)
 
 ```javascript
 { "allOf": [
@@ -689,7 +683,7 @@ Contains a number of sub-constraints. Is satisfied if any of the inner constrain
 
 Contains a number of sub-constraints. Is satisfied if all of the inner constraints are satisfied.
 
-## [`if`](https://github.com/finos/datahelix/tree/master/examples/ifIsNull)
+## [`if`](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiYWxsZXJnaWVzX2ZsYWciLAogICAgICAidHlwZSI6ICJib29sZWFuIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0sCiAgICB7CiAgICAgICJuYW1lIjogImFsbGVyZ2llcyIsCiAgICAgICJ0eXBlIjogInN0cmluZyIsCiAgICAgICJudWxsYWJsZSI6IHRydWUKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImlmIjogewogICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXNfZmxhZyIsCiAgICAgICAgImVxdWFsVG8iOiB0cnVlCiAgICAgIH0sCiAgICAgICJ0aGVuIjogewogICAgICAgICJhbGxPZiI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgImZpZWxkIjogImFsbGVyZ2llcyIsCiAgICAgICAgICAgICJpblNldCI6IFsKICAgICAgICAgICAgICAiZG9ncyIsCiAgICAgICAgICAgICAgInBlYW51dHMiLAogICAgICAgICAgICAgICJzaGVsbGZpc2giCiAgICAgICAgICAgIF0KICAgICAgICAgIH0sCiAgICAgICAgICB7CiAgICAgICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXMiLAogICAgICAgICAgICAiaXNOdWxsIjogZmFsc2UKICAgICAgICAgIH0KICAgICAgICBdCiAgICAgIH0sCiAgICAgICJlbHNlIjogewogICAgICAgICJmaWVsZCI6ICJhbGxlcmdpZXMiLAogICAgICAgICJpc051bGwiOiB0cnVlCiAgICAgIH0KICAgIH0KICBdCn0%3D)
 
 ```javascript
 {

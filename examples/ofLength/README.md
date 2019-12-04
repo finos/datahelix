@@ -1,3 +1,5 @@
 Profile using the ofLength constraint.
 
 Creates strings with 10 characters.
+
+Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAidGVuIiwKICAgICAgInR5cGUiOiAic3RyaW5nIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogInRlbiIsCiAgICAgICJvZkxlbmd0aCI6ICIxMCIKICAgIH0KICBdCn0K) to run the profile using the datahelix playground.

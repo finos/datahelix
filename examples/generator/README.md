@@ -1,1 +1,3 @@
 An example of using the custom generator constraint.
+
+Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAidGVzdCIsCiAgICAgICJ0eXBlIjogInN0cmluZyIKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogInRlc3QiLAogICAgICAiZ2VuZXJhdG9yIjogImxvcmVtIGlwc3VtIgogICAgfQogIF0KfQ%3D%3D) to run this profile using the datahelix playground.
