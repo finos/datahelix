@@ -1,6 +1,6 @@
 ### Profile Validation
 
-The [JSON schema](https://json-schema.org/) for the DataHelix data profile is stored in the file `datahelix.schema.json` in the [schemas](https://github.com/finos/datahelix/tree/master/profile/src/main/resources/profileschema) directory.
+The [JSON schema](https://json-schema.org/) for the DataHelix profile is stored in the file `datahelix.schema.json` in the [profileschema](https://github.com/finos/datahelix/tree/master/profile/src/main/resources/profileschema) directory.
 
 We recommend using Visual Studio Code to validate your profiles. To enable it to validate json files against the DataHelix profile schema a `json.schemas` section needs to be added to the `settings.json` file.
 

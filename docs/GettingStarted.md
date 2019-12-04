@@ -29,8 +29,8 @@ We are going to work through creating a profile to generate random personal data
 
 Profiles are JSON files that describe the data you want to generate. They are composed of:
 
--   **fields** - an array of uniquely named fields (or columns).
--   **constraints** - an array of restrictions on the types and ranges of data permitted for the given column.
+-   **fields** - an array of uniquely named fields.
+-   **constraints** - an array of restrictions on the types and ranges of data permitted for a given field.
 
 We'll start by creating a simple profile containing a single field `username` with no constraints. Using  your favourite text editor, create the following JSON profile and save it as `profile.json`:
 
@@ -78,13 +78,13 @@ niIU8r.{y'idVK(ki2D[#N8{h?dP[D;
 
 The generator has successfully created 100 rows of random data. However, for this guide we want to create more realistic looking usernames. It is likely that the `username` field should only allow a subset of possible string values. If you don't provide any constraints, the generator will output random strings containing basic latin characters and punctuation.
 
-Let's assume you only want to generate characters between a to z for the `username` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
+Let's assume you only want to generate characters between a and z for the `username` field; this can be achieved by adding a `matchingRegex` constraint for the field. With this constraint alone, the generator will only output strings valid for the regex.
 
 ## Adding constraints
 
 The datahelix supports two different types of constraint:
 
--   [**Predicates**](UserGuide.md#predicate-constraints) - boolean-valued functions that define whether a given value is valid or invalid.
+-   [**Predicate**](UserGuide.md#predicate-constraints) - boolean-valued functions that define whether a given value is valid or invalid.
 -   [**Grammatical**](UserGuide.md#grammatical-constraints) - combine or modify other constraints including other grammatical constraints.
 
 We are going to use the [`matchingRegex`](UserGuide.md#predicate-matchingregex) constraint to restrict the strings produced by the `username` field. The `matchingRegex` constraint is an example of a predicate constraint.
@@ -114,7 +114,7 @@ ylbmop
 
 The current profile outputs random text strings for the `username` field. Depending on what you are intending to use the data for this may or may not be appropriate. For testing purposes, you are likely to want output data that has a lot of variability. However, if you are using the generator to create simulation data, then the generated data from this profile may not be good enough.
 
-There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex or we load usernames from a csv file using an [`inSet`](UserGuide.md#predicate-inset) constraint. In fact the datahelix directly supports generating many common types either through [internal types](UserGuide.md#Data-Types) or through [faker support](UserGuide.md#faker).
+There are a few different approaches we could use to try to make the data more realistic. We could try to use a more comprehensive regex, or we could load usernames from a csv file using an [`inSet`](UserGuide.md#predicate-inset) constraint. In fact the datahelix directly supports generating many common types either through [internal types](UserGuide.md#Data-Types) or through [faker support](UserGuide.md#faker).
 
 ## Data types
 
@@ -143,17 +143,17 @@ Click [here](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiBbe
 Running the profile now gives a random list of usernames and first names.
 
 ```
-username,name
-tsd,Jorgie MARTIN
-wkbnohgmt,Murray THOMSON
-fzenkosi,Ruairi GRAY
-x,Jacob SMITH
-kagg,Kiera PATERSON
-jy,Lucie MASON
+username,firstname
+tsd,Jorgie
+wkbnohgmt,Murray
+fzenkosi,Ruairi
+x,Jacob
+kagg,Kiera
+jy,Lucie
 [...]
 ```
 
-This is looking good but now we will want to add some more fields to get some more interesting data.
+This is looking good, but now we want to add some more fields to get some more interesting data.
 
 First we'll expand the example profile to add a new `age` field, a not-null integer in the range 1-99:
 
@@ -174,9 +174,9 @@ First we'll expand the example profile to add a new `age` field, a not-null inte
 
 Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgICAgeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgeyAibmFtZSI6ICJmaXJzdE5hbWUiLCAidHlwZSI6ICJmaXJzdG5hbWUiIH0sCiAgICAgIHsgIm5hbWUiOiAiYWdlIiwgInR5cGUiOiAiaW50ZWdlciIgfQogICAgXSwKICAgICJjb25zdHJhaW50cyI6IFsKICAgICAgICB7ICJmaWVsZCI6ICJ1c2VybmFtZSIsICJtYXRjaGluZ1JlZ2V4IjogIlthLXpdezEsMTB9IiB9LAogICAgICAgIHsgImZpZWxkIjogImFnZSIsICJncmVhdGVyVGhhbiI6IDAgfSwKICAgICAgICB7ICJmaWVsZCI6ICJhZ2UiLCAibGVzc1RoYW4iOiAxMDAgfQogICAgXQp9) to open the profile in the datahelix playground.
 
-Next, we'll add some conditional logic to give some of our users a job. Lets add a `job` field to the profile. We can use [faker](UserGuide.md#faker) to generate realistic looking job titles. From looking at the [`job.java`](https://github.com/DiUS/java-faker/blob/master/src/main/java/com/github/javafaker/Job.java) class in the faker docs we can see that we need to call the `title` method. We add this to the profile by adding the `faker.job.title` type to a field.
+Next, we'll add some conditional logic to give some of our users a job. Let's add a `job` field to the profile. We can use [faker](UserGuide.md#faker) to generate realistic looking job titles. From looking at the [`job.java`](https://github.com/DiUS/java-faker/blob/master/src/main/java/com/github/javafaker/Job.java) class in the faker docs we can see that we need to call the `title` method. We add this to the profile by adding the `faker.job.title` type to a field.
 
-Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have jobs, we should mark the `numberPlate` field as [`nullable`](UserGuide.md#nullable).
+Fields are non-nullable by default, however, you can indicate that a field is nullable.  As we only want some users to have jobs, we should mark the `jobTitle` field as [`nullable`](UserGuide.md#nullable).
 
 The new field we need to add is:
 
@@ -187,7 +187,7 @@ The new field we need to add is:
     "nullable": true
 }
 ```
- We also want people to be at least 17 before they get a job so lets add an [if constraint](UserGuide.md#if).
+ We also want people to be at least 17 before they get a job, so let's add an [if constraint](UserGuide.md#if).
  ```json
  { "if":    { "field": "age", "lessThan": 17 },
    "then":  { "field": "jobTitle", "isNull": true}
@@ -257,7 +257,7 @@ If the generation is taking too long, you can halt the command via <kbd>Ctrl</kb
 
 ## Next steps
 
-We now have now finished creating a simple profile for the datahelix. Possible extensions could be adding more fields or using a [custom generator](UserGuide.md#custom-generators) to generate number plates.
+We have now finished creating a simple profile for the datahelix. Possible extensions could be adding more fields or using a [custom generator](UserGuide.md#custom-generators) to generate job titles.
 
 * If you'd like to find out more about the various constraints the tool supports, the [User Guide](UserGuide.md) is a good next step.
 
