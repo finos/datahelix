@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.utils;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Random;
 
 public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator
@@ -58,9 +59,26 @@ public class JavaUtilRandomNumberGenerator implements RandomNumberGenerator
 
     @Override
     public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
-        return BigDecimal.valueOf(random.nextDouble())
-            .multiply(upperExclusive.subtract(lowerInclusive))
-            .add(lowerInclusive);
+        int lowerScale = lowerInclusive.scale();
+        int upperScale = upperExclusive.scale();
+        int greatestScale = Math.max(lowerScale, upperScale);
+        BigInteger lowerValue = adjustToScale(lowerInclusive, greatestScale);
+        BigInteger upperValue = adjustToScale(upperExclusive, greatestScale);
+
+        return new BigDecimal(nextBigInteger(lowerValue, upperValue), greatestScale);
+    }
+
+    private BigInteger adjustToScale(BigDecimal decimal, int scale) {
+        return decimal.unscaledValue().multiply(BigInteger.TEN.pow(scale - decimal.scale()));
+    }
+
+    private BigInteger nextBigInteger(BigInteger lowerInclusive, BigInteger upperExclusive) {
+        BigInteger range = upperExclusive.subtract(lowerInclusive);
+        BigInteger randomValue = null;
+        while (randomValue == null || randomValue.compareTo(range) >= 0) {
+            randomValue = new BigInteger(range.bitLength(), random);
+        }
+        return lowerInclusive.add(randomValue);
     }
 
 }

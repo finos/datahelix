@@ -36,6 +36,8 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MAX;
+import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MIN;
 import static com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
@@ -185,8 +187,8 @@ public class FieldSpecGetFieldValueSourceTests {
         }
 
         final List<BigDecimal> expectedValues = Arrays.asList(
-            new BigDecimal("-1E+20"),
-            new BigDecimal("1E+20")
+            NUMERIC_MIN,
+            NUMERIC_MAX
         );
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
