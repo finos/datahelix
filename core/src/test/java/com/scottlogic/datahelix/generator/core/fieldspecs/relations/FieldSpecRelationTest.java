@@ -15,19 +15,23 @@
  */
 package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
-import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
-import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
-import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RestrictionsFieldSpec;
+import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
@@ -38,13 +42,12 @@ import static java.time.temporal.ChronoUnit.MILLIS;
 import static java.time.temporal.ChronoUnit.YEARS;
 import static org.junit.Assert.assertEquals;
 
-class FieldSpecRelationTest
-{
+class FieldSpecRelationTest {
     private Field main = createField("main", StandardSpecificFieldType.DATETIME.toSpecificFieldType());
     private Field other = createField("other", StandardSpecificFieldType.DATETIME.toSpecificFieldType());
 
     @Test
-    public void equalTo_exactValue_returnsSame(){
+    public void equalTo_exactValue_returnsSame() {
         FieldSpec fieldSpec = forYears(2018, 2018);
         EqualToRelation relation = new EqualToRelation(main, other);
 
@@ -55,7 +58,7 @@ class FieldSpecRelationTest
     }
 
     @Test
-    public void equalTo_range_returnsSame(){
+    public void equalTo_range_returnsSame() {
         FieldSpec fieldSpec = forYears(2018, 2020);
         EqualToRelation relation = new EqualToRelation(main, other);
 
@@ -66,7 +69,7 @@ class FieldSpecRelationTest
     }
 
     @Test
-    public void afterOrAt_exactValue_returnsBetween(){
+    public void afterOrAt_exactValue_returnsBetween() {
         FieldSpec fieldSpec = forYears(2018, 2018);
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get(), offsetGranularity, 0);
@@ -78,7 +81,7 @@ class FieldSpecRelationTest
     }
 
     @Test
-    public void afterOrAt_range_returnsFromMin(){
+    public void afterOrAt_range_returnsFromMin() {
         FieldSpec fieldSpec = forYears(2018, 2020);
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         AfterRelation relation = new AfterRelation(main, other, true, DateTimeDefaults.get(), offsetGranularity, 0);
@@ -104,14 +107,14 @@ class FieldSpecRelationTest
 
         OffsetDateTime expectedMin = OffsetDateTime.of(minYear, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
             .plusNanos(1000000);  // Current smallest granularity is milliseconds.
-        OffsetDateTime expectedMax =DateTimeDefaults.get().max();
+        OffsetDateTime expectedMax = DateTimeDefaults.get().max();
 
         assertEquals(actualMin.compareTo(expectedMin), 0);
         assertEquals(actualMax.compareTo(expectedMax), 0);
     }
 
     @Test
-    public void beforeOrAt_exactValue_returnsBetween(){
+    public void beforeOrAt_exactValue_returnsBetween() {
         FieldSpec fieldSpec = forYears(2018, 2018);
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get(), offsetGranularity, 0);
@@ -123,7 +126,7 @@ class FieldSpecRelationTest
     }
 
     @Test
-    public void beforeOrAt_range_returnsFromMin(){
+    public void beforeOrAt_range_returnsFromMin() {
         FieldSpec fieldSpec = forYears(2018, 2020);
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
         BeforeRelation relation = new BeforeRelation(main, other, true, DateTimeDefaults.get(), offsetGranularity, 0);
@@ -135,10 +138,10 @@ class FieldSpecRelationTest
     }
 
     @Test
-    public void before_range_returnsFromMin(){
+    public void before_range_returnsFromMin() {
         int maxYear = 2020;
         DateTimeGranularity offsetGranularity = DateTimeGranularity.create("MILLIS");
-        FieldSpec fieldSpec = forYears(maxYear-3, maxYear);
+        FieldSpec fieldSpec = forYears(maxYear - 3, maxYear);
         BeforeRelation relation = new BeforeRelation(main, other, false, DateTimeDefaults.get(), offsetGranularity, 0);
 
         RestrictionsFieldSpec actualFieldSpec = (RestrictionsFieldSpec) relation.createModifierFromOtherFieldSpec(fieldSpec);
@@ -152,6 +155,30 @@ class FieldSpecRelationTest
 
         assertEquals(actualMin.compareTo(expectedMin), 0);
         assertEquals(actualMax.compareTo(expectedMax), 0);
+    }
+
+    @Test
+    public void equalTo_forSet_returns() {
+        DistributedList<Object> expectedValues = DistributedList.uniform(
+            Stream.of("2", "3", "4")
+                .map(BigDecimal::new)
+                .collect(Collectors.toSet()));
+        WhitelistFieldSpec expected = FieldSpecFactory.fromList(expectedValues);
+
+        DistributedList<Object> secondValues = DistributedList.uniform(
+            Stream.of("1", "2", "3")
+                .map(BigDecimal::new)
+                .collect(Collectors.toSet()));
+        WhitelistFieldSpec second = FieldSpecFactory.fromList(secondValues);
+
+        Field firstField = FieldBuilder.createField("first");
+        Field secondField = FieldBuilder.createField("second");
+
+        FieldSpecRelation equalTo = new EqualToOffsetRelation<>(firstField, secondField, NumericGranularity.INTEGER_DEFAULT, 1);
+
+        FieldSpec result = equalTo.createModifierFromOtherFieldSpec(second);
+
+        assertEquals(expected, result);
     }
 
     private FieldSpec fromMin(int year) {

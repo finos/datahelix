@@ -31,7 +31,7 @@ import java.time.temporal.ChronoUnit;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AfterDateRelationTest {
+public class AfterRelationTest {
 
     private final Field a = new Field("a", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false, "", false, false, null);
     private final Field b = new Field("b", StandardSpecificFieldType.DATETIME.toSpecificFieldType(), false, "", false, false, null);
