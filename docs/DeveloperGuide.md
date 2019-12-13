@@ -53,11 +53,10 @@ Checklist before raising an issue:
 * [ ] Have you managed to isolate the issue to a simple profile or test case?
 
 ### Raising an Issue
-* Create your issue [here](https://github.com/finos/datahelix/issues/new).
-* New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
-  * Please also tag the new issue with either "Bug" or "Enhancement".
-* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
-liberally to assist in readability.
+* Create your issue [here](https://github.com/finos/datahelix/issues/new) selecting the relevant issue template.
+
+* Please also tag the new issue with a relevant tag.
+* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/) liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
 ## Building
@@ -500,4 +499,3 @@ If we break the above down into first the null state, then the chosen value:
 ## Null Operator
 
 The `null` operator works by making the typed values set the empty set `{ }`. This produces `{ null } ∪ { } `, leaving null as the only valid value.
-
