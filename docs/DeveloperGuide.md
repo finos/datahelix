@@ -375,10 +375,6 @@ The pathway through the automaton is:
       - transition to state **1** (because the current state "ABCA" is rejected/incomplete)
       - current state is accepted so exit with the current string "ABCA"
 
-### Character support
-
-The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
-
 
 ## Tree Walking Algorithm
 
