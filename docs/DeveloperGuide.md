@@ -376,22 +376,6 @@ The pathway through the automaton is:
       - current state is accepted so exit with the current string "ABCA"
 
 
-## Tree Walking Algorithm
-
-The generator transforms each profile into one or more [decision trees](#Decision-Trees), each of these can then be process through some strategy.
-
-The algorithm that walks a tree recursively selects an option from the decision tree, then reduces the tree for the constraints in that option.
-
-The algorithm generates row specs by:
- 1. choosing and removing a decision from the tree
- 2. selecting an option from that decision
- 3. adding the constraints from the chosen option to the root of the tree
-    - adding the sub decisions from the chosen option to the root of the tree
- 4. "pruning" the tree by removing any options from the tree that contradict with the new root node
-    - any decisions that only have 1 remaining option will have that option also moved up the tree, and pruned again.
- 5. restarting from 1, until there are no decision left
- 6. creating a rowspec from the constraints in the remaining root node.
-
 # Behaviour in Detail
 
 ## Type System
