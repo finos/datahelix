@@ -1,7 +1,14 @@
+# Introduction
+
+This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
+
+* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
+
+* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
+
 # Table of Contents
 
 
-1. [Introduction](#introduction)
 1. [Development](#Development)
 
     1. [Bugs And Issues](#bugs-and-issues)
@@ -32,19 +39,11 @@
     1. [Nullness](#nullness)
     1. [Type Implication](#Type-Implication)
 
-# Introduction
-
-This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
-
-* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
-
-* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
-
 # Development
 
 ## Bugs and Issues
 
-Raising well structured and detailed bug reports will be hugely valuable to maturing the DataHelix.
+Raising well structured and detailed bug reports is hugely valuable to maturing the DataHelix.
 
 Checklist before raising an issue:
 * [ ] Have you [searched for duplicates](https://github.com/finos/datahelix/issues?utf8=%E2%9C%93&q=)?  A simple search for exception error messages or a summary of the unexpected behaviour should suffice.
@@ -76,8 +75,6 @@ Our strategy is to ensure all aspects of the generator are tested through some f
 * For all new classes and methods that are developed, unit or component tests should be added to the code base
 
 * If a change is made to existing class implementations and a test does not exist, then a test should be added
-
-* If it's a brand new feature, a [Schema validation](https://github.com/finos/datahelix/tree/master/profile/src/test/resources/test-profiles) test should be added as well as an appropriate Cucumber test
 
 [JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
 
