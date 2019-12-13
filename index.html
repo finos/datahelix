@@ -1,183 +1,119 @@
-<!doctype html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>DataHelix Generator – FINOS</title>
-        <meta name="description" content="Quickly generate customised, complex data for system testing and validation.">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>DataHelix Generator – FINOS</title>
+    <meta
+      name="description"
+      content="Quickly generate customised, complex data for system testing and validation."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/bootstrap@4.4.0/dist/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <!--[if lt IE 8]>
+      <p class="browserupgrade">
+        You are using an <strong>outdated</strong> browser. Please
+        <a href="http://browsehappy.com/">upgrade your browser</a> to improve
+        your experience.
+      </p>
+    <![endif]-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">DataHelix Generator</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="navbarNavDropdown" class="navbar-collapse collapse">
+        <ul class="navbar-nav mr-auto"></ul>
+        <ul class="navbar-nav ">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/finos/datahelix/"
+              >GitHub</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/playground/">Playground</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md"
+              >Getting Started</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="https://github.com/finos/datahelix/blob/master/docs/UserGuide.md"
+              >User Guide</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="style.css">
+    <div class="jumbotron">
+      <h1 class="icon-header title">DataHelix Generator</h1>
+      <p>
+        Quickly generate rich and realistic data for simulation and testing.
+      </p>
+      <a
+        class="btn btn-outline-primary"
+        href="https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md"
+      >
+        Getting Started
+      </a>
+      <a class="btn btn-outline-primary" href="/playground">
+        Online Playground
+      </a>
+    </div>
 
-        <!--[if lt IE 9]>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
-    <body>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <div class="container">
-            <div class="row">
-
-                <div class="three columns sidebar">
-                    <h1 class="title">DataHelix Generator</h1>
-                    <nav>
-                        <ul>
-                            <li><a href="#background">Background</a></li>
-                            <li>
-                                <a href="#key-documents">Key Documents</a>
-                                <ul>
-                                    <li><a href="https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md">Getting Started</a></li>
-                                    <li><a href="https://github.com/finos/datahelix/blob/master/docs/UserGuide.md">User Guide</a></li>
-                                    <li><a href="https://github.com/finos/datahelix/blob/master/docs/DeveloperGuide.md">Developer Guide</a></li>
-                                    <li><a href="https://github.com/finos/datahelix/blob/master/docs/RoadMap.md">Road Map</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#the-problem">The Problem</a></li>
-                            <li><a href="#the-mission">The Mission</a></li>
-                            <li><a href="#the-product">The Product</a></li>
-                            <li><a href="https://github.com/finos/datahelix/releases/">Latest release</a></li>
-                            <li><a href="https://github.com/finos/datahelix/blob/master/docs/DeveloperGuide.md#Contributing">Contributing</a></li>
-                            <li><a href="#license">License</a></li>
-                        </ul>
-                    </nav>
-                    <section class="attributions">
-                        <section class="attribution finos">
-                            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <polygon points="26 20.02 6 13.82 6 6.21 26 12.41 26 20.02" fill="#3785ba"/>
-                                <polygon points="26 0 6 6.21 6 13.82 26 7.61 26 0" fill="#00b5e2"/>
-                                <polygon points="26 12.41 6 18.62 6 26.23 6 32 13.7 32 13.7 23.84 26 20.02 26 12.41" fill="#00b5e2"/>
-                            </svg>
-                            <span>By <a href="https://www.finos.org/">FINOS</a></span>
-                        </section>
-                        <section class="attribution github">
-                            <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                <path d="M16,0a16,16,0,0,0-5.06,31.18c.8.15,1.09-.34,1.09-.77s0-1.38,0-2.72c-4.45,1-5.39-2.14-5.39-2.14A4.25,4.25,0,0,0,4.85,23.2c-1.46-1,.11-1,.11-1a3.39,3.39,0,0,1,2.45,1.65,3.39,3.39,0,0,0,4.65,1.33,3.44,3.44,0,0,1,1-2.14c-3.55-.4-7.29-1.78-7.29-7.91a6.21,6.21,0,0,1,1.65-4.29A5.67,5.67,0,0,1,7.6,6.64S8.94,6.21,12,8.28a15.12,15.12,0,0,1,8,0c3-2.07,4.39-1.64,4.39-1.64a5.72,5.72,0,0,1,.16,4.23,6.16,6.16,0,0,1,1.65,4.29c0,6.15-3.74,7.5-7.31,7.9A3.79,3.79,0,0,1,20,26c0,2.14,0,3.87,0,4.39s.29.93,1.1.77A16,16,0,0,0,16,0Z" fill="#181818" fill-rule="evenodd"/>
-                            </svg>
-                            <span>View on <a href="https://github.com/finos/datahelix/">GitHub</a></span>     
-                        </section>
-                    </section>
-                </div>
-
-                <div class="nine columns">
-                    <h2><a id="background"></a>Background</h2>
-                    <p>The generation of representative test and simulation data is a challenging
-                    and time-consuming task. The DataHelix Generator allows you to quickly create
-                    data, based on a JSON profile that defines fields and the relationships
-                    between them, for the purpose of testing and validation. The generator supports
-                    a number of generation modes, allowing the creation of data that both conforms
-                    to, or violates, the profile.
-                    <p>DataHelix is a proud member of the <a href="https://www.finos.org/">Fintech 
-                    Open Source Foundation</a> and operates within its <a href="https://www.finos.org/dt">
-                    Data Technologies Program</a>.</p>
-                    
-                    <h2 id="key-documents">Key documents</h2>
-                    <p><a href="https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md">Getting Started guide</a> - for information on how to get started with DataHelix</p>
-                    <p><a href="https://github.com/finos/datahelix/blob/master/docs/UserGuide.md">User Guide</a> - for information on the syntax of the DataHelix schema</p>
-                    <p><a href="https://github.com/finos/datahelix/blob/master/docs/DeveloperGuide.md">Developer Guide</a> - for information on how to contribute to the project as well as a technical overview of the key concepts and structure</p>
-                    <p><a href="https://github.com/finos/datahelix/blob/master/docs/RoadMap.md">Road Map</a> - for a high level project road map</p>
-
-                    <h2 id="the-problem">The Problem</h2>
-
-                    <p>When performing functional or load testing on a system, prototyping an API or pitching a service to a potential customer, sample data is mandatory, but maintaining it is often expensive and error prone. The nature of financial services makes it particularly difficult to cleanly manage data schemas, and therefore sample datasets:</p>
-
-                    <ul>
-                        <li>Regulatory and methodological change often forces changes in how data is represented.</li>
-
-                        <li>It is often difficult to completely remove legacy data due to obligations to honour deprecated financial products.</li>
-
-                        <li>Errors can be costly and reputation-damaging, which strongly disincentivises the large-scale code change that comes with schema reinvention.</li>
-
-                        <li>For legal and/or privacy reasons, it is often impossible to include real data in samples.</li>
-                    </ul>
-
-                    <p>The usual response is to progressively complicate schemas with special cases and exceptions, such as:</p>
-
-                    <ul>
-                        <li><em>"We introduced a subtype of a product. We couldn't rewrite the <code>product_code</code> field's legal values, so we introduced a <code>sub_product_code</code> field that should only be populated when <code>product_code</code> is a specific value"</em></li>
-
-                        <li><em>"We realised that not all trades will have an <code>action_date</code>, but our new lead dislikes nulls, so we're using <code>N/A</code> for those trades. We'll have to change the field type to string and accept that invalid dates could creep in"</em></li>
-                    </ul>
-
-                    <p>For all the above reasons, it is common to handcraft sample datasets. This approach brings several problems:</p>
-
-                    <ul>
-                        <li>It costs significant time up-front, and thereafter every time the schema changes.</li>
-
-                        <li>It's very easy to introduce errors, especially when updating data created by others.</li>
-
-                        <li>It can be difficult to determine how exhaustively the data covers valid cases, especially when complicated multi-field rules are involved.</li>
-                    </ul>
-
-                    <p>Moreover, since the schema's complexities are only loosely documented, and not directly integrated into any systems that use or create the data, there is no guard against the documentation becoming out of date and inaccurate. It would be better if the mechanism for documenting the data were also used in its generation and validation.</p>
-
-                    <p>For data generation, partial solutions are available in services/libraries such as TSimulus, Mockaroo or GenRocket. However, these have limitations:</p>
-
-                    <ul>
-                        <li>They are limited to relatively simple data schemas, with either no cross-field dependencies or dependencies limited to pairs of fields.</li>
-
-                        <li>None of them offer a complete end-to-end solution of profiling existing data to discover trends and rules, generating from those rules, and validating against them.</li>
-
-                        <li>Where they offer complicated behaviour, it's through an <em>imperative</em> style, forcing the user to design solutions using the library's toolbox. Our approach has a <em>declarative</em> style, where the user describes their data and the system decides how to deliver it. This means users don't need to have more than surface-level understanding to write profiles, opening up the scope of who can write or maintain them.</li>
-                    </ul>
-
-                    <h2 id="the-mission">The Mission</h2>
-
-                    <p>We aim to solve (at least) the following user needs:</p>
-
-                    <ul>
-                        <li>"I want to generate test cases for my validation procedures"</li>
-
-                        <li>"I want to generate volumes of sample data to document my API, or to return from a non-production version of my API"</li>
-
-                        <li>"I want to validate some data against known specifications"</li>
-
-                        <li>"I want to measure my existing test data's coverage against the range of possible data"</li>
-
-                        <li>"I want to generate a combinatorially exhaustive set of data, for testing an API's robustness"</li>
-                    </ul>
-
-                    <h2 id="the-product">The Product</h2>
-
-                    <p>A suite of tools:</p>
-
-                    <ul>
-                        <li>That can profile data it is pointed at, including constraints and rules, or take in a profile created via a web front end/manually, which defines a users needs.</li>
-
-                        <li>That can generate data from this profile via web page, CLI or Rest API interface, configured for volume and output needs.</li>
-
-                        <li>That can validate the data produced back against the profile used to create it</li>
-                    </ul>
-
-                    <h2><a href="https://github.com/finos/datahelix/releases/">Latest release</a></h2>
-
-                    <h2><a href="https://github.com/finos/datahelix/blob/master/docs/DeveloperGuide.md#Contributing">Contributing</a></h2>
-                    
-                    <h2><a id="license"></a>License</h2>
-                    <p>Copyright 2019 Scott Logic Ltd</p>
-                    <p>Distributed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" rel="nofollow">Apache License, Version 2.0</a>.</p>
-                    <p>SPDX-License-Identifier: <a href="https://spdx.org/licenses/Apache-2.0" rel="nofollow">Apache-2.0</a></p>
-
-                </div>
-            </div>
+    <div class="container">
+      <div class="row features">
+        <div class="col-sm">
+          <h2 class="icon-header open-source">Open source</h2>
+          Open-sourced within <a href="https://www.finos.org/">FINOS</a> and actively developed by a passionate team
         </div>
+        <div class="col-sm">
+          <h2 class="icon-header declarative-rules">Declarative rules</h2>
+          Simple declarative syntax that mimics business rules
+        </div>
+        <div class="col-sm">
+          <h2 class="icon-header open-architecture">Open architecture</h2>
+          Open and extensible architecture
+        </div>
+        <div class="col-sm">
+          <h2 class="icon-header big-data">Big data</h2>
+          Generate large volumes of data – many fields, many rows, or both
+        </div>
+      </div>
+    </div>
 
-        <script>
-            // (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-            // function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-            // e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-            // e.src='//www.google-analytics.com/analytics.js';
-            // r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-            // ga('create','UA-126914328-1','auto');ga('send','pageview');
-        </script>
-    </body>
+    <div class="notices">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm">
+            <p>Copyright 2019 Scott Logic Ltd</p>
+            <p>Distributed under the Apache License, Version 2.0.</p>
+            <p>SPDX-License-Identifier: Apache-2.0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
