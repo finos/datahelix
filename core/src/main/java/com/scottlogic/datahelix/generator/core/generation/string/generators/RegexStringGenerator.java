@@ -72,6 +72,9 @@ public class RegexStringGenerator implements StringGenerator {
         if (regexPattern != null) {
             return regexPattern;
         }
+        if (regexRepresentation.contains("∩") || regexRepresentation.contains("∪")) {
+            throw new IllegalArgumentException("Faker generation does not support regexes");
+        }
         String firstStripped = regexRepresentation.charAt(0) == '/'
             ? regexRepresentation.substring(1)
             : regexRepresentation;
