@@ -2,9 +2,9 @@
 
 This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
 
-* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
+* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md).
 
-* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
+* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md).
 
 # Table of Contents
 
