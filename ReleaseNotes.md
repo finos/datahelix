@@ -4,7 +4,7 @@ The current major version release of DataHelix Generator is 2.0.0
 
 ## Version 2.0.0 
 
-Version 2.0.0 was a significant milestone: the first production release of DataHelix.  It included the following key features:
+Version 2.0.0 was a significant milestone: the first production release of DataHelix.  It included the following key features and enhancements:
 
 * A new [website](https://finos.github.io/datahelix/).
 * A new [interactive playground](https://finos.github.io/datahelix/playground/) to enable prospective users to try out most of DataHelix Generator's features.
