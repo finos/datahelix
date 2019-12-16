@@ -68,7 +68,7 @@ _NOTE:_ Commits and pull requests to FINOS repositories will only be accepted fr
 
 ## License
 
-Copyright 2019 Scott Logic Ltd
+Copyright 2019 Scott Logic Ltd.
 
 Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
