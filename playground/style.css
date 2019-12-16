@@ -1,0 +1,49 @@
+nav .btn {
+  margin-right: 10px;
+}
+
+.navbar-brand {
+  background: url(../logo.svg) left center transparent no-repeat;
+  padding-left: 50px;
+}
+
+#content {
+  display: flex;
+  position: fixed;
+  top: 56;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid gray;
+}
+
+#editor-panel {
+  flex: 1;
+}
+
+#output-panel {
+  flex: 1;
+  overflow: scroll;
+  border-left: 1px solid gray;
+}
+
+#error {
+  color: red;
+  margin: 10px;
+}
+
+#codearea-container {
+  flex: 1 1 auto;
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}
+
+.CodeMirror {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100% !important;
+}
