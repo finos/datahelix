@@ -1,7 +1,14 @@
+# Introduction
+
+This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
+
+* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md).
+
+* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md).
+
 # Table of Contents
 
 
-1. [Introduction](#introduction)
 1. [Development](#Development)
 
     1. [Bugs And Issues](#bugs-and-issues)
@@ -32,19 +39,11 @@
     1. [Nullness](#nullness)
     1. [Type Implication](#Type-Implication)
 
-# Introduction
-
-This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
-
-* For information on how to get started with DataHelix see our [Getting Started guide](GettingStarted.md)
-
-* For information on the syntax of the DataHelix schema see the [User Guide](UserGuide.md)
-
 # Development
 
 ## Bugs and Issues
 
-Raising well structured and detailed bug reports will be hugely valuable to maturing the DataHelix.
+Raising well structured and detailed bug reports is hugely valuable to maturing the DataHelix.
 
 Checklist before raising an issue:
 * [ ] Have you [searched for duplicates](https://github.com/finos/datahelix/issues?utf8=%E2%9C%93&q=)?  A simple search for exception error messages or a summary of the unexpected behaviour should suffice.
@@ -53,11 +52,10 @@ Checklist before raising an issue:
 * [ ] Have you managed to isolate the issue to a simple profile or test case?
 
 ### Raising an Issue
-* Create your issue [here](https://github.com/finos/datahelix/issues/new).
-* New issues contain two templates in the description: bug report and enhancement request. Please pick the most appropriate for your issue, **then delete the other**.
-  * Please also tag the new issue with either "Bug" or "Enhancement".
-* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/)
-liberally to assist in readability.
+* Create your issue [here](https://github.com/finos/datahelix/issues/new) selecting the relevant issue template.
+
+* Please also tag the new issue with a relevant tag.
+* Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/) liberally to assist in readability.
   * [Code fences](https://help.github.com/articles/creating-and-highlighting-code-blocks/) for exception stack traces and log entries, for example, massively improve readability.
 
 ## Building
@@ -77,8 +75,6 @@ Our strategy is to ensure all aspects of the generator are tested through some f
 * For all new classes and methods that are developed, unit or component tests should be added to the code base
 
 * If a change is made to existing class implementations and a test does not exist, then a test should be added
-
-* If it's a brand new feature, a [Schema validation](https://github.com/finos/datahelix/tree/master/profile/src/test/resources/test-profiles) test should be added as well as an appropriate Cucumber test
 
 [JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
 
@@ -116,51 +112,6 @@ _NOTE:_ Commits and pull requests to FINOS repositories will only be accepted fr
 
 *Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
 
-
-
-## Adding Schema Versions
-
-1. Copy a package in _profile/src/main/resources/profileschema/_ and rename to the new version number.
-1. Change the _schemaVersion_ const from the old version number to the new one.
-
-### Example
-If the file structure currently looks like the below...
-```
-- profileschema
-     |- 0.1
-         |- datahelix.schema.json
-```
-...and the new version is 0.2 then change it to the following:
-```
-- profileschema
-     |- 0.1
-         |- datahelix.schema.json
-     |- 0.2
-         |- datahelix.schema.json
-```
-
-Then change the below (in the new file)...
-```
-...
-"schemaVersion": {
-  "title": "The version of the DataHelix profile schema",
-  "const": "0.1"
-},
-...
-```
-...to this:
-```
-...
-"schemaVersion": {
-  "title": "The version of the DataHelix profile schema",
-  "const": "0.2"
-},
-...
-```
-
-You will need to update the test in _ProfileSchemaImmutabilityTests_ to contain the new schema version generated. Old versions should **not** be modified. This is reflected by the test failing if any existing schemas are modified.
-
-If you experience any issues with this test not updating the schema in IntelliJ, it is recommended to invalidate the cache and restart, or to delete the _profile/out_ directory and rebuild.
 
 # Algorithms and Data Structures
 
@@ -421,26 +372,6 @@ The pathway through the automaton is:
       - transition to state **1** (because the current state "ABCA" is rejected/incomplete)
       - current state is accepted so exit with the current string "ABCA"
 
-### Character support
-
-The generator does not support generating strings above the Basic Unicode plane (Plane 0). Using regexes that match characters above the basic plane may lead to unexpected behaviour.
-
-
-## Tree Walking Algorithm
-
-The generator transforms each profile into one or more [decision trees](#Decision-Trees), each of these can then be process through some strategy.
-
-The algorithm that walks a tree recursively selects an option from the decision tree, then reduces the tree for the constraints in that option.
-
-The algorithm generates row specs by:
- 1. choosing and removing a decision from the tree
- 2. selecting an option from that decision
- 3. adding the constraints from the chosen option to the root of the tree
-    - adding the sub decisions from the chosen option to the root of the tree
- 4. "pruning" the tree by removing any options from the tree that contradict with the new root node
-    - any decisions that only have 1 remaining option will have that option also moved up the tree, and pruned again.
- 5. restarting from 1, until there are no decision left
- 6. creating a rowspec from the constraints in the remaining root node.
 
 # Behaviour in Detail
 
@@ -500,4 +431,3 @@ If we break the above down into first the null state, then the chosen value:
 ## Null Operator
 
 The `null` operator works by making the typed values set the empty set `{ }`. This produces `{ null } ∪ { } `, leaving null as the only valid value.
-
