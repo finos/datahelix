@@ -2,55 +2,10 @@
 
 <head>
   <title>DataHelix Generator – Playground</title>
+
   <link rel="stylesheet" href="https://unpkg.com/codemirror@5.45.0/lib/codemirror.css" />
   <link rel="stylesheet" href="https://unpkg.com/bootstrap@4.3.1/dist/css/bootstrap.min.css"/>
-
-  <style>
-    nav .btn {
-      margin-right: 10px;
-    }
-
-    #content {
-      display: flex;
-      position: fixed;
-      top: 56;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-top: 1px solid gray;
-    }
-
-    #editor-panel {
-      flex: 1;
-    }
-
-    #output-panel {
-      flex: 1;
-      overflow: scroll;
-      border-left: 1px solid gray;
-    }
-
-    #error {
-      color: red;
-      margin: 10px;
-    }
-
-    #codearea-container {
-      flex: 1 1 auto;
-      margin-top: 0;
-      height: 100%;
-      position: relative;
-    }
-
-    .CodeMirror {
-      position: absolute !important;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 100% !important;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 
   <script src="https://unpkg.com/codemirror@5.45.0/lib/codemirror.js"></script>
   <script src="https://unpkg.com/codemirror@5.45.0/mode/javascript/javascript.js"></script>
@@ -62,6 +17,7 @@
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+  <a class="navbar-brand" href="..">DataHelix Generator</a>
   <div>
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#shareModal">
       Share
@@ -72,9 +28,6 @@
     <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
       style="display: none"></span>
   </div>
-  <form class="form-inline my-2 my-lg-0">
-    <a class="navbar-brand" href="..">DataHelix</a>
-  </form>
 </nav>
 
 <div id="content">
