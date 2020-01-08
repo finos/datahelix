@@ -144,7 +144,7 @@ const loadExamples = () => {
 
     resonse.json().then(profileExamples => {
       const categoryMap = {};
-      let firstExample = null;
+      let defaultExample = null;
 
       profileExamples.sort((a, b) => {
         const categoryComparison = a.category.localeCompare(b.category);
@@ -164,12 +164,16 @@ const loadExamples = () => {
           });
 
           category.appendChild(profileElement);
-          firstExample = firstExample || profileElement;
+          if (profileExample.default) {
+            defaultExample = defaultExample || profileElement;
+          }
       });
 
-      if (profileExamples.length > 0) {
-        firstExample.click();
+      if (defaultExample) {
+        defaultExample.click();
+      }
 
+      if (profileExamples.length > 0) {
         examplesButton.addEventListener("click", () => {
           showExamples();
         })

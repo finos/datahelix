@@ -446,7 +446,8 @@
         ]
       },
       "description": "Faker",
-      "category": "Data Types"
+      "category": "Data Types",
+      "default": true
     },
     {
       "profile": {
