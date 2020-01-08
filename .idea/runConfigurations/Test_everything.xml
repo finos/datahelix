@@ -1,0 +1,32 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Test everything" type="GradleRunConfiguration" factoryName="Gradle">
+    <ExternalSystemSettings>
+      <option name="executionName" />
+      <option name="externalProjectPath" value="$PROJECT_DIR$" />
+      <option name="externalSystemIdString" value="GRADLE" />
+      <option name="scriptParameters" value="--tests *" />
+      <option name="taskDescriptions">
+        <list />
+      </option>
+      <option name="taskNames">
+        <list>
+          <option value=":common:cleanTest" />
+          <option value=":core:cleanTest" />
+          <option value=":custom:cleanTest" />
+          <option value=":orchestrator:cleanTest" />
+          <option value=":output:cleanTest" />
+          <option value=":profile:cleanTest" />
+          <option value=":common:test" />
+          <option value=":core:test" />
+          <option value=":custom:test" />
+          <option value=":orchestrator:test" />
+          <option value=":output:test" />
+          <option value=":profile:test" />
+        </list>
+      </option>
+      <option name="vmOptions" value="" />
+    </ExternalSystemSettings>
+    <GradleScriptDebugEnabled>false</GradleScriptDebugEnabled>
+    <method v="2" />
+  </configuration>
+</component>
