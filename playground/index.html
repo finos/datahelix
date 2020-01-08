@@ -19,6 +19,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
   <a class="navbar-brand" href="..">DataHelix Generator</a>
   <div>
+    <button id="examplesButton" type="button" class="btn btn-outline-success">
+      Examples
+    </button>
+    <div id="examples" class="examples-display"></div>
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#shareModal">
       Share
     </button>
@@ -42,28 +46,7 @@
     </template>
 
     <div id="codearea-container">
-      <textarea rows="20" class="form-control" id="profile" wrap="off">
-{
-  "fields": [
-    { "name": "name", "type": "string" },
-    { "name": "age", "type": "integer" }
-  ], 
-  "constraints": [
-    {
-      "field": "name",
-      "matchingRegex": "[a-z]{1,10}"
-    },
-    {
-      "field": "age",
-      "greaterThanOrEqualTo": 0
-    },
-    {
-      "field": "age",
-      "lessThan": 100
-    }
-  ]
-}
-        </textarea>
+      <textarea rows="20" class="form-control" id="profile" wrap="off"></textarea>
     </div>
   </div>
   <div id="output-panel">

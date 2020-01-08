@@ -5,6 +5,9 @@ const profileArea = document.getElementById("profile");
 const editorPanel = document.getElementById("editor-panel");
 const spinner = document.getElementById("spinner");
 const shareUrl = document.getElementById("shareUrl");
+const examplesDisplay = document.getElementById("examples");
+const examplesButton = document.getElementById("examplesButton");
+const examplesRootUrl = "examples.json";
 
 new ClipboardJS("#copyButton");
 
@@ -106,3 +109,79 @@ runButton.addEventListener("click", () => {
     })
     .finally(() => isLoading(false));
 });
+
+const createCategory = (categoryName, categoryMap) => {
+  const categoryElement = document.createElement("div");
+  categoryElement.className = "example-category";
+
+  const categoryNameElement = document.createElement("h4");
+  categoryNameElement.innerText = categoryName;
+  categoryElement.appendChild(categoryNameElement);
+
+  examplesDisplay.appendChild(categoryElement);
+
+  const listElement = document.createElement("ol");
+  categoryElement.appendChild(listElement);
+
+  categoryMap[categoryName] = listElement;
+  return listElement;
+}
+
+const showExamples = (show) => {
+  examplesDisplay.style.display = (examplesDisplay.style.display === "none" || show)
+    ? ""
+    : "none";
+}
+
+const hideExamples = () => {
+  examplesDisplay.style.display = "none";
+}
+
+const loadExamples = () => {
+  fetch(examplesRootUrl).then(resonse => {
+    editor.setValue("Loading examples...");
+    hideExamples();
+
+    resonse.json().then(profileExamples => {
+      const categoryMap = {};
+      let firstExample = null;
+
+      profileExamples.sort((a, b) => {
+        const categoryComparison = a.category.localeCompare(b.category);
+        return categoryComparison === 0
+          ? a.description.localeCompare(b.description)
+          : categoryComparison;
+      });
+
+      profileExamples.forEach(profileExample => {
+          const category = categoryMap[profileExample.category] || createCategory(profileExample.category, categoryMap);
+
+          const profileElement = document.createElement("li");
+          profileElement.innerText = profileExample.description;
+          profileElement.addEventListener("click", () => {
+              hideExamples();
+              editor.setValue(JSON.stringify(profileExample.profile, null, 2));
+          });
+
+          category.appendChild(profileElement);
+          firstExample = firstExample || profileElement;
+      });
+
+      if (profileExamples.length > 0) {
+        firstExample.click();
+
+        examplesButton.addEventListener("click", () => {
+          showExamples();
+        })
+      } else {
+        editor.setValue("No examples loaded.");
+      }
+    }, jsonErr => {
+      editor.setValue("Error loading examples: " + jsonErr)
+    });
+  }, requestErr => {
+    editor.setValue("Error requesting examples: " + requestErr)
+  });
+};
+
+loadExamples();
