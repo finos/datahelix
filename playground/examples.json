@@ -1,0 +1,918 @@
+﻿[
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "forename",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "surname",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "anyOf": [
+              {
+                "field": "forename",
+                "equalTo": "Matt"
+              },
+              {
+                "field": "forename",
+                "equalTo": "Ryan"
+              }
+            ]
+          },
+          {
+            "if": {
+              "field": "forename",
+              "equalTo": "Matt"
+            },
+            "then": {
+              "field": "surname",
+              "equalTo": "Damon"
+            },
+            "else": {
+              "field": "surname",
+              "inSet": [
+                "Reynolds",
+                "Gosling"
+              ]
+            }
+          }
+        ]
+      },
+      "description": "Actor names",
+      "category": "Strings"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "isin",
+            "type": "ISIN",
+            "nullable": false
+          }
+        ],
+        "constraints": []
+      },
+      "description": "ISIN codes",
+      "category": "Financial"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "alwaysTrue",
+            "type": "boolean",
+            "nullable": false
+          },
+          {
+            "name": "alwaysFalseOrNull",
+            "type": "boolean",
+            "nullable": true
+          }
+        ],
+        "constraints": [
+          {
+            "field": "alwaysTrue",
+            "equalTo": true
+          },
+          {
+            "not": {
+              "field": "alwaysFalseOrNull",
+              "equalToField": "alwaysTrue"
+            }
+          }
+        ]
+      },
+      "description": "Boolean",
+      "category": "Data Types"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "first_name",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "first_name",
+            "containingRegex": "^(Joh?n|Mar[yk])$"
+          }
+        ]
+      },
+      "description": "Containing regex",
+      "category": "Strings"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "date",
+            "type": "date",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "date",
+            "afterOrAt": "2001-02-03"
+          },
+          {
+            "field": "date",
+            "beforeOrAt": "2009-01-06"
+          }
+        ]
+      },
+      "description": "Between dates",
+      "category": "Dates"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "date",
+            "type": "datetime",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "date",
+            "after": "2808-09-04"
+          },
+          {
+            "field": "date",
+            "granularTo": "days"
+          }
+        ]
+      },
+      "description": "After date",
+      "category": "Dates"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "field1",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "field2",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "field3",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "field4",
+            "type": "datetime",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "field1",
+            "afterField": "field2"
+          },
+          {
+            "field": "field3",
+            "beforeOrAtField": "field4"
+          }
+        ]
+      },
+      "description": "Dynamic dates",
+      "category": "Dates"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "first",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "second",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "third",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "fourth",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "firstWorking",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "secondWorking",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "current",
+            "type": "datetime",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "first",
+            "after": "8001-02-03T04:05:06.007"
+          },
+          {
+            "field": "second",
+            "equalToField": "first",
+            "offset": 3,
+            "offsetUnit": "days"
+          },
+          {
+            "field": "third",
+            "equalToField": "fourth",
+            "offset": -3,
+            "offsetUnit": "days"
+          },
+          {
+            "field": "firstWorking",
+            "equalTo": "2019-08-12T12:00:00.000"
+          },
+          {
+            "field": "secondWorking",
+            "equalToField": "firstWorking",
+            "offset": -8,
+            "offsetUnit": "working days"
+          },
+          {
+            "field": "current",
+            "before": "now"
+          },
+          {
+            "field": "current",
+            "after": "2019-06-01T12:00:00.000"
+          }
+        ]
+      },
+      "description": "Dynamic date offset",
+      "category": "Offsets"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "foo",
+            "type": "datetime",
+            "nullable": false
+          },
+          {
+            "name": "bar",
+            "type": "datetime",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "bar",
+            "equalToField": "foo",
+            "offset": -3,
+            "offsetUnit": "working days"
+          }
+        ]
+      },
+      "description": "Date offset working days",
+      "category": "Offsets"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "tradeId",
+            "type": "integer",
+            "nullable": false,
+            "unique": true
+          },
+          {
+            "name": "stock",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "side",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "tradePrice",
+            "type": "decimal",
+            "nullable": false
+          },
+          {
+            "name": "volume",
+            "type": "integer",
+            "nullable": false
+          },
+          {
+            "name": "tradeDatetime",
+            "type": "datetime",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "tradeId",
+            "greaterThanOrEqualTo": 10000
+          },
+          {
+            "field": "tradeId",
+            "lessThanOrEqualTo": 99999
+          },
+          {
+            "field": "stock",
+            "inSet": "stockCodes.csv"
+          },
+          {
+            "field": "side",
+            "inSet": [
+              "BUY",
+              "SELL"
+            ]
+          },
+          {
+            "field": "tradePrice",
+            "granularTo": 0.01
+          },
+          {
+            "field": "tradePrice",
+            "greaterThan": 140
+          },
+          {
+            "field": "tradePrice",
+            "lessThan": 150
+          },
+          {
+            "field": "volume",
+            "greaterThanOrEqualTo": 1
+          },
+          {
+            "field": "volume",
+            "lessThanOrEqualTo": 200
+          },
+          {
+            "field": "tradeDatetime",
+            "after": "2019-09-02T09:30:00.000"
+          },
+          {
+            "field": "tradeDatetime",
+            "before": "2019-09-02T16:30:00.000"
+          }
+        ]
+      },
+      "description": "Trades",
+      "category": "Financial"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "a",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "anyOf": [
+              {
+                "field": "a",
+                "equalTo": "foo"
+              },
+              {
+                "field": "a",
+                "equalTo": "foo"
+              }
+            ]
+          }
+        ]
+      },
+      "description": "Duplicates",
+      "category": "Logical"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "shortName",
+            "type": "faker.name.firstName",
+            "nullable": false
+          },
+          {
+            "name": "longName",
+            "type": "faker.name.lastName",
+            "nullable": false
+          },
+          {
+            "name": "cellNumber",
+            "type": "faker.phoneNumber.cellPhone",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "shortName",
+            "shorterThan": 6
+          },
+          {
+            "field": "longName",
+            "longerThan": 9
+          }
+        ]
+      },
+      "description": "Faker",
+      "category": "Data Types",
+      "default": true
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "decimal",
+            "type": "decimal",
+            "nullable": false,
+            "formatting": "£%.2f",
+            "unique": true
+          },
+          {
+            "name": "an_integer",
+            "type": "integer",
+            "nullable": false,
+            "formatting": "%,.0f"
+          },
+          {
+            "name": "date1",
+            "type": "datetime",
+            "nullable": false,
+            "formatting": "%tF",
+            "unique": true
+          },
+          {
+            "name": "date2",
+            "type": "datetime",
+            "nullable": false,
+            "formatting": "Issued: %1$tb %1$tY",
+            "unique": true
+          }
+        ],
+        "constraints": [
+          {
+            "field": "decimal",
+            "equalTo": 14.1
+          },
+          {
+            "field": "date1",
+            "equalTo": "2001-02-03T04:05:06.007"
+          },
+          {
+            "field": "date2",
+            "equalTo": "2001-02-03T04:05:06.007"
+          },
+          {
+            "field": "an_integer",
+            "equalTo": 1234567890
+          }
+        ]
+      },
+      "description": "Formatting",
+      "category": "Data Types"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "country",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "capital",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "country",
+            "inMap": "countries.csv",
+            "key": "Country"
+          },
+          {
+            "field": "capital",
+            "inMap": "countries.csv",
+            "key": "Capital"
+          }
+        ]
+      },
+      "description": "In map",
+      "category": "Data Types"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "weekdays",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "vegetables",
+            "type": "string",
+            "nullable": false
+          },
+          {
+            "name": "discount",
+            "type": "decimal",
+            "nullable": true
+          }
+        ],
+        "constraints": [
+          {
+            "field": "weekdays",
+            "inSet": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ]
+          },
+          {
+            "field": "vegetables",
+            "inSet": "vegetables.csv"
+          },
+          {
+            "field": "discount",
+            "inSet": "reductions.csv"
+          }
+        ]
+      },
+      "description": "In set",
+      "category": "Data Types"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "field1",
+            "type": "integer",
+            "nullable": false
+          },
+          {
+            "name": "field2",
+            "type": "integer",
+            "nullable": false
+          },
+          {
+            "name": "field3",
+            "type": "integer",
+            "nullable": false
+          },
+          {
+            "name": "field4",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "field1",
+            "greaterThanOrEqualToField": "field2"
+          },
+          {
+            "field": "field3",
+            "lessThanField": "field4"
+          }
+        ]
+      },
+      "description": "Dynamic integers",
+      "category": "Numeric"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "randomInteger",
+            "type": "integer",
+            "nullable": false
+          },
+          {
+            "name": "oneGreater",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "oneGreater",
+            "equalToField": "randomInteger",
+            "offset": 1
+          }
+        ]
+      },
+      "description": "Offset integers",
+      "category": "Offsets"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "First",
+            "type": "integer",
+            "unique": false,
+            "nullable": false
+          },
+          {
+            "name": "Second",
+            "type": "integer",
+            "unique": false,
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "First",
+            "inSet": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "field": "Second",
+            "inSet": [
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "field": "Second",
+            "equalToField": "First",
+            "offset": 1
+          }
+        ]
+      },
+      "description": "Offset integers from a set",
+      "category": "Offsets"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "an_integer",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "an_integer",
+            "greaterThanOrEqualTo": 1
+          },
+          {
+            "field": "an_integer",
+            "lessThanOrEqualTo": 4
+          },
+          {
+            "not": {
+              "field": "an_integer",
+              "equalTo": 1
+            }
+          }
+        ]
+      },
+      "description": "Integer ranges",
+      "category": "Numeric"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "forename",
+            "type": "firstname",
+            "nullable": false
+          },
+          {
+            "name": "surname",
+            "type": "lastname",
+            "nullable": false
+          },
+          {
+            "name": "fullname",
+            "type": "fullname",
+            "nullable": false
+          }
+        ],
+        "constraints": []
+      },
+      "description": "Names",
+      "category": "Strings"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "decimal",
+            "type": "decimal",
+            "nullable": false
+          },
+          {
+            "name": "integer",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "decimal",
+            "granularTo": 0.01
+          },
+          {
+            "field": "decimal",
+            "greaterThanOrEqualTo": 0.5
+          },
+          {
+            "field": "decimal",
+            "lessThan": 5
+          },
+          {
+            "field": "integer",
+            "greaterThan": 0
+          },
+          {
+            "field": "integer",
+            "lessThanOrEqualTo": 200
+          }
+        ]
+      },
+      "description": "Decimal ranges",
+      "category": "Numeric"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "first_name",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "first_name",
+            "matchingRegex": "(Joh?n|Mar[yk])"
+          },
+          {
+            "field": "first_name",
+            "matchingRegex": "M.*"
+          },
+          {
+            "not": {
+              "field": "first_name",
+              "equalTo": "Mary"
+            }
+          }
+        ]
+      },
+      "description": "Regex intersection",
+      "category": "Strings"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "field1",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": []
+      },
+      "description": "Strings",
+      "category": "Data Types"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "password",
+            "type": "string",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "password",
+            "shorterThan": 21
+          },
+          {
+            "field": "password",
+            "longerThan": 6
+          }
+        ]
+      },
+      "description": "String lengths",
+      "category": "Strings"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "morning",
+            "type": "time",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "morning",
+            "before": "12:00:00"
+          }
+        ]
+      },
+      "description": "Before time of day",
+      "category": "Dates"
+    },
+    {
+      "profile": {
+        "description": "Time Profile",
+        "fields": [
+          {
+            "name": "a",
+            "type": "time",
+            "nullable": false
+          },
+          {
+            "name": "b",
+            "type": "time",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "if": {
+              "field": "a",
+              "after": "12:00:00"
+            },
+            "then": {
+              "field": "b",
+              "equalTo": "12:34:56"
+            }
+          }
+        ]
+      },
+      "description": "If time of day",
+      "category": "Logical"
+    },
+    {
+      "profile": {
+        "fields": [
+          {
+            "name": "id",
+            "type": "integer",
+            "nullable": false,
+            "unique": true
+          },
+          {
+            "name": "number",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "id",
+            "greaterThanOrEqualTo": 0
+          }
+        ]
+      },
+      "description": "Uniqueness",
+      "category": "Logical"
+    }
+  ]
