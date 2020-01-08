@@ -82,6 +82,8 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
     }
+    
+    @Test
     public void validateAtomicConstraint_withEmptyField_fails()
     {
         // Arrange
