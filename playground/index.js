@@ -6,7 +6,6 @@ const editorPanel = document.getElementById("editor-panel");
 const spinner = document.getElementById("spinner");
 const shareUrl = document.getElementById("shareUrl");
 const examplesDisplay = document.getElementById("examples");
-const examplesButton = document.getElementById("examplesButton");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
 const markdownConverter = new showdown.Converter();
@@ -136,7 +135,6 @@ const displayReadmeMarkdown = (markdown) => {
 const renderExample = (profileExample) => {
   hideAlert();
   isLoading(true);
-  window.location.hash = profileExample.profileDirectory;
 
   const profilePath = examplesContentUrl + profileExample.profileDirectory;
   const profileContentPath = profilePath + "/profile.json";
@@ -219,9 +217,7 @@ const loadExamples = () => {
         try {
           editor.setValue(atob(decodeURIComponent(encoded)));
         } catch (e) {
-          renderExample({
-            profileDirectory: encoded
-          });
+          showAlert("Error loading profile: " + err.message);
         }
       } else if (defaultExample) {
         defaultExample.click();
