@@ -186,7 +186,9 @@ const renderExample = (profileExample) => {
 
 const loadExamples = () => {
   fetch(examplesRootUrl).then(response => {
-    editor.setValue("Loading examples...");
+    if (!profileArea.value.trim()) {
+      editor.setValue("Loading examples...");
+    }
 
     response.json().then(profileExamples => {
       const categoryMap = {};
@@ -217,7 +219,7 @@ const loadExamples = () => {
           }
       });
 
-      if (defaultExample) {
+      if (defaultExample && !profileArea.value.trim()) {
         defaultExample.click();
       }
 
