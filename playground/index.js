@@ -14,12 +14,6 @@ const readmeBaseUrl = "https://github.com/finos/datahelix/tree/master/examples/"
 
 new ClipboardJS("#copyButton");
 
-// decode the hash into a profile
-if (window.location.hash) {
-  const encoded = window.location.href.split("#")[1];
-  profileArea.value = atob(decodeURIComponent(encoded));
-}
-
 // if the share button is pressed, encode the profile 
 $("#shareModal").on("show.bs.modal", () => {
   const baseUrl = window.location.href.split("#")[0];
@@ -142,6 +136,7 @@ const displayReadmeMarkdown = (markdown) => {
 const renderExample = (profileExample) => {
   hideAlert();
   isLoading(true);
+  window.location.hash = profileExample.profileDirectory;
 
   const profilePath = examplesContentUrl + profileExample.profileDirectory;
   const profileContentPath = profilePath + "/profile.json";
@@ -186,12 +181,11 @@ const renderExample = (profileExample) => {
 
 const loadExamples = () => {
   fetch(examplesRootUrl).then(response => {
-    if (!profileArea.value.trim()) {
-      editor.setValue("Loading examples...");
-    }
+    editor.setValue("Loading examples...");
 
     response.json().then(profileExamples => {
       const categoryMap = {};
+      const profileMap = {};
       let defaultExample = null;
 
       profileExamples.sort((a, b) => {
@@ -204,6 +198,7 @@ const loadExamples = () => {
       profileExamples.forEach(profileExample => {
           const category = categoryMap[profileExample.category] || createCategory(profileExample.category, categoryMap);
 
+          profileMap[profileExample.profileDirectory] = profileExample;
           const profileElement = document.createElement("button");
           profileElement.className = "dropdown-item";
           profileElement.type = "button";
@@ -219,7 +214,16 @@ const loadExamples = () => {
           }
       });
 
-      if (defaultExample && !profileArea.value.trim()) {
+      if (window.location.hash) {
+        const encoded = window.location.href.split("#")[1];
+        try {
+          editor.setValue(atob(decodeURIComponent(encoded)));
+        } catch (e) {
+          renderExample({
+            profileDirectory: encoded
+          });
+        }
+      } else if (defaultExample) {
         defaultExample.click();
       }
 
