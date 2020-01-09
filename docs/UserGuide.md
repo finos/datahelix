@@ -816,7 +816,7 @@ Generate some random data that abides by the given set of constraints.
 Examples:
 
 | Constraint | Emitted valid data |
-| ---- | ---- | ---- |
+| ---- | ---- |
 | `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ |
 | `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ |
 
@@ -830,7 +830,7 @@ Generate all data that can be generated in order from lowest to highest.
 Examples:
 
 | Constraint | Emitted valid data |
-| ---- | ---- | ---- |
+| ---- | ---- |
 | `Field 1 > 0 AND Field 1 < 5` | _(null, 1, 2, 3, 4)_ |
 | `Field 1 in set [A, B, C]` | _(null, A, B, C)_ |
 
