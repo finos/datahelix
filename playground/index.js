@@ -10,6 +10,7 @@ const examplesButton = document.getElementById("examplesButton");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
 const markdownConverter = new showdown.Converter();
+const readmeBaseUrl = "https://github.com/finos/datahelix/tree/master/examples/";
 
 new ClipboardJS("#copyButton");
 
@@ -205,6 +206,7 @@ const loadExamples = () => {
           profileElement.className = "dropdown-item";
           profileElement.type = "button";
           profileElement.innerText = profileExample.description;
+          profileElement.setAttribute("data-profile-path", profileExample.profileDirectory);
           profileElement.addEventListener("click", () => {
               renderExample(profileExample);
           });
@@ -229,5 +231,30 @@ const loadExamples = () => {
     editor.setValue("Error requesting examples: " + requestErr)
   });
 };
+
+generatorOutput.addEventListener("click", (e) => {
+  if (e.target.tagName !== "A" || !e.target.getAttribute("href")) {
+    return;
+  }
+
+  const href = e.target.getAttribute("href");
+  if (href.indexOf("https://") !== 0 && href.indexOf("http://") !== 0) {
+    //link to another example?
+    const exampleName = href.replace(/[\.\/]/g, "");
+    if (exampleName) {
+      e.preventDefault();
+      renderExample({
+        profileDirectory: exampleName
+      });
+      return false;
+    }
+
+    e.target.setAttribute("href", readmeBaseUrl + "someExample/" + href);
+  }
+
+  if (href.indexOf("https://finos.github.io/datahelix/playground/#") !== 0) {
+    e.target.setAttribute("target", "_blank");
+  }
+})
 
 loadExamples();
