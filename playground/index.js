@@ -9,6 +9,7 @@ const examplesDisplay = document.getElementById("examples");
 const examplesButton = document.getElementById("examplesButton");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
+const markdownConverter = new showdown.Converter();
 
 new ClipboardJS("#copyButton");
 
@@ -139,7 +140,11 @@ function hideExamples() {
 }
 
 const displayReadmeMarkdown = (markdown) => {
-  generatorOutput.innerHTML = markdown;
+  const html = markdownConverter.makeHtml(markdown);
+
+  const readmeHeading = "<p>Click <i>Run</i> above to execute this example.</p>";
+  const readmeFooter = "";
+  generatorOutput.innerHTML = readmeHeading + html + readmeFooter;
 }
 
 const renderExample = (profileExample) => {
