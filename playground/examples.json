@@ -25,7 +25,7 @@
       "category": "Dates"
     },
     {
-      "profile": "datetimeAfter",
+      "profileDirectory": "datetimeAfter",
       "description": "After date",
       "category": "Dates"
     },
@@ -63,16 +63,6 @@
     {
       "profileDirectory": "formatting",
       "description": "Formatting",
-      "category": "Data Types"
-    },
-    {
-      "profileDirectory": "inMap",
-      "description": "In map",
-      "category": "Data Types"
-    },
-    {
-      "profileDirectory": "inSet",
-      "description": "In set",
       "category": "Data Types"
     },
     {
