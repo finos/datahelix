@@ -76,7 +76,7 @@ public class AtomicConstraintDeserialiserTests {
             deserialiseJsonString(json);
             Assert.fail("should have thrown an exception");
         } catch (JsonParseException e) {
-            String expectedMessage = "Unexpected character ('}' (code 125)): expected a valid value (number, String, array, object, 'true', 'false' or 'null')\n at [Source: (String)\"{\"field\": \"type\", \"equalTo\": }\"; line: 1, column: 31]";
+            String expectedMessage = "Unexpected character ('}' (code 125)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n at [Source: (String)\"{\"field\": \"type\", \"equalTo\": }\"; line: 1, column: 31]";
             assertThat(e.getMessage(), sameBeanAs(expectedMessage));
         }
     }
