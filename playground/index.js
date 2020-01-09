@@ -129,15 +129,14 @@ const createCategory = (categoryName, categoryMap) => {
   return listElement;
 }
 
-const showExamples = show => {
+const showExamples = (show) =>
   examplesDisplay.style.display = (examplesDisplay.style.display === "none" || show)
     ? ""
     : "none";
-}
 
-function hideExamples() {
+
+const hideExamples = () =>
   examplesDisplay.style.display = "none";
-}
 
 const displayReadmeMarkdown = (markdown) => {
   const html = markdownConverter.makeHtml(markdown);
