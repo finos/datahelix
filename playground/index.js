@@ -139,6 +139,9 @@ const displayReadmeMarkdown = (markdown) => {
 }
 
 const renderExample = (profileExample) => {
+  hideAlert();
+  isLoading(true);
+
   const profilePath = examplesContentUrl + profileExample.profileDirectory;
   const profileContentPath = profilePath + "/profile.json";
   const readmeContentPath = profilePath + "/README.md";
@@ -159,6 +162,9 @@ const renderExample = (profileExample) => {
       })
     }, err => {
       editor.setValue("Error getting profile content." + err.message);
+    })
+    .then(() => {
+      isLoading(false);
     });
 
     fetch(readmeContentPath)
