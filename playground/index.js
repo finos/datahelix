@@ -8,6 +8,7 @@ const shareUrl = document.getElementById("shareUrl");
 const examplesDisplay = document.getElementById("examples");
 const examplesButton = document.getElementById("examplesButton");
 const examplesRootUrl = "examples.json";
+const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
 
 new ClipboardJS("#copyButton");
 
@@ -127,22 +128,67 @@ const createCategory = (categoryName, categoryMap) => {
   return listElement;
 }
 
-const showExamples = (show) => {
+const showExamples = show => {
   examplesDisplay.style.display = (examplesDisplay.style.display === "none" || show)
     ? ""
     : "none";
 }
 
-const hideExamples = () => {
+function hideExamples() {
   examplesDisplay.style.display = "none";
 }
 
+const displayReadmeMarkdown = (markdown) => {
+  generatorOutput.innerHTML = markdown;
+}
+
+const renderExample = (profileExample) => {
+  hideExamples();
+
+  const profilePath = examplesContentUrl + profileExample.profileDirectory;
+  const profileContentPath = profilePath + "/profile.json";
+  const readmeContentPath = profilePath + "/README.md";
+
+  editor.setValue("Loading profile...");
+  generatorOutput.innerHTML = "Loading profile...";
+
+  fetch(profileContentPath)
+    .then(response => {
+      response.json().then(apiData => {
+        if (apiData.encoding === "base64") {
+          editor.setValue(atob(apiData.content));
+        } else {
+          throw new Error("Unknown encoding for profile content: " + apiData.encoding);
+        }
+      }, err => {
+        editor.setValue("Error reading profile content. " + err.message);
+      })
+    }, err => {
+      editor.setValue("Error getting profile content." + err.message);
+    });
+
+    fetch(readmeContentPath)
+    .then(response => {
+      response.json().then(apiData => {
+        if (apiData.encoding === "base64") {
+          displayReadmeMarkdown(atob(apiData.content));
+        } else {
+          throw new Error("Unknown encoding for profile content: " + apiData.encoding);
+        }
+      }, err => {
+        generatorOutput.innerHTML = "Error loading readme. " + err.message;
+      })
+    }, err => {
+      generatorOutput.innerHTML = "Error getting readme. " + err.message;
+    });
+}
+
 const loadExamples = () => {
-  fetch(examplesRootUrl).then(resonse => {
+  fetch(examplesRootUrl).then(response => {
     editor.setValue("Loading examples...");
     hideExamples();
 
-    resonse.json().then(profileExamples => {
+    response.json().then(profileExamples => {
       const categoryMap = {};
       let defaultExample = null;
 
@@ -159,8 +205,7 @@ const loadExamples = () => {
           const profileElement = document.createElement("li");
           profileElement.innerText = profileExample.description;
           profileElement.addEventListener("click", () => {
-              hideExamples();
-              editor.setValue(JSON.stringify(profileExample.profile, null, 2));
+              renderExample(profileExample);
           });
 
           category.appendChild(profileElement);
