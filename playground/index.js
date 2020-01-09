@@ -122,21 +122,13 @@ const createCategory = (categoryName, categoryMap) => {
 
   examplesDisplay.appendChild(categoryElement);
 
-  const listElement = document.createElement("ol");
+  const listElement = document.createElement("div");
+  listElement.className = "example-category-group";
   categoryElement.appendChild(listElement);
 
   categoryMap[categoryName] = listElement;
   return listElement;
 }
-
-const showExamples = (show) =>
-  examplesDisplay.style.display = (examplesDisplay.style.display === "none" || show)
-    ? ""
-    : "none";
-
-
-const hideExamples = () =>
-  examplesDisplay.style.display = "none";
 
 const displayReadmeMarkdown = (markdown) => {
   const html = markdownConverter.makeHtml(markdown);
@@ -147,8 +139,6 @@ const displayReadmeMarkdown = (markdown) => {
 }
 
 const renderExample = (profileExample) => {
-  hideExamples();
-
   const profilePath = examplesContentUrl + profileExample.profileDirectory;
   const profileContentPath = profilePath + "/profile.json";
   const readmeContentPath = profilePath + "/README.md";
@@ -190,7 +180,6 @@ const renderExample = (profileExample) => {
 const loadExamples = () => {
   fetch(examplesRootUrl).then(response => {
     editor.setValue("Loading examples...");
-    hideExamples();
 
     response.json().then(profileExamples => {
       const categoryMap = {};
@@ -206,7 +195,9 @@ const loadExamples = () => {
       profileExamples.forEach(profileExample => {
           const category = categoryMap[profileExample.category] || createCategory(profileExample.category, categoryMap);
 
-          const profileElement = document.createElement("li");
+          const profileElement = document.createElement("button");
+          profileElement.className = "dropdown-item";
+          profileElement.type = "button";
           profileElement.innerText = profileExample.description;
           profileElement.addEventListener("click", () => {
               renderExample(profileExample);
@@ -222,11 +213,7 @@ const loadExamples = () => {
         defaultExample.click();
       }
 
-      if (profileExamples.length > 0) {
-        examplesButton.addEventListener("click", () => {
-          showExamples();
-        })
-      } else {
+      if (profileExamples.length === 0) {
         editor.setValue("No examples loaded.");
       }
     }, jsonErr => {
