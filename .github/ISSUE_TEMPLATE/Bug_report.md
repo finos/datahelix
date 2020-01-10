@@ -7,7 +7,10 @@ labels: bug
 
 ## Bug report
 
+Be sure to search existing issues since someone might have already raised this bug already.
+
 ### Description of the bug
+A short description of the bug.
 
 ### Steps to reproduce:
 Please include the command line and any supporting files (e.g. the profile, any other input files).
