@@ -1,3 +1,2 @@
 A profile that generates dates equal to the one specified.
 
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZGF0ZSIsCiAgICAgICJ0eXBlIjogImRhdGV0aW1lIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogImRhdGUiLAogICAgICAiZXF1YWxUbyI6ICIyMDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0KICBdCn0%3D) to run the profile using the datahelix playground.

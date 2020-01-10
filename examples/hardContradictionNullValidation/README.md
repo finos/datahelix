@@ -1,3 +1,1 @@
 It is a hard contradiction to say that a field is null and not null.
-
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiQ29sdW1uIDEiLAogICAgICAidHlwZSI6ICJzdHJpbmciCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJDb2x1bW4gMSIsCiAgICAgICJpc051bGwiOiB0cnVlCiAgICB9LAogICAgewogICAgICAiZmllbGQiOiAiQ29sdW1uIDEiLAogICAgICAiaXNOdWxsIjogZmFsc2UKICAgIH0KICBdCn0%3D) to run this profile using the datahelix playground.

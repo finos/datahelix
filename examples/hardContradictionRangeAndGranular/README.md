@@ -1,4 +1,2 @@
 It is a hard contradiction to say that a field can only be a decimal field between zero and one exclusive, and also must
 be granular to one (i.e. an integer).
-
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiQ29sdW1uIDEiLAogICAgICAidHlwZSI6ICJkZWNpbWFsIiwKICAgICAgIm51bGxhYmxlIjogZmFsc2UKICAgIH0KICBdLAogICJjb25zdHJhaW50cyI6IFsKICAgIHsKICAgICAgImZpZWxkIjogIkNvbHVtbiAxIiwKICAgICAgImdyZWF0ZXJUaGFuIjogMAogICAgfSwKICAgIHsKICAgICAgImZpZWxkIjogIkNvbHVtbiAxIiwKICAgICAgImxlc3NUaGFuIjogMQogICAgfSwKICAgIHsKICAgICAgImZpZWxkIjogIkNvbHVtbiAxIiwKICAgICAgImdyYW51bGFyVG8iOiAxCiAgICB9CiAgXQp9) to run this profile using the datahelix playground.
