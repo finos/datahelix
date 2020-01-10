@@ -10,5 +10,3 @@ labels: enhancement
 What would you like the generator to be able to do (differently)?   
 Which groups of users would it benefit?   
 If you have any ideas, how it could be achieved?
-
-Be sure to search existing issues since someone might have already asked something similar.
