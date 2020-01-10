@@ -162,7 +162,7 @@ public class TemporalConstraintValidatorTests {
         // Arrange
         AfterConstraintDTO dto = new AfterConstraintDTO();
         dto.field = "datetime";
-        dto.value = "invalid";
+        dto.value = "invalid datetime";
 
         // Act
         ValidationResult validationResult = new TemporalConstraintValidator(fields).validate(dto);
@@ -177,7 +177,7 @@ public class TemporalConstraintValidatorTests {
         // Arrange
         AfterConstraintDTO dto = new AfterConstraintDTO();
         dto.field = "time";
-        dto.value = "invalid";
+        dto.value = "invalid time";
 
         // Act
         ValidationResult validationResult = new TemporalConstraintValidator(fields).validate(dto);
