@@ -47,7 +47,7 @@ We'll start by creating a simple profile containing a single field `username` wi
 }
 ```
 
-When manually writing profiles, we recommend using a text editor which can validate profiles using the datahelix schema. Instructions for how to setup automatic profile validation using VS Code can be found [here](user/ProfileValidation.md).
+When manually writing profiles, we recommend using a text editor which can validate profiles using the datahelix schema. Instructions for how to setup automatic profile validation using VS Code can be found in the [Profile Validation documentation](user/ProfileValidation.md).
 
 ## Running the generator
 
@@ -65,7 +65,7 @@ Use
 $ java -jar generator.jar --help
 ```
 
-or click [here](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
+or see [the User Guide](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
 
 Alternatively you can use the [datahelix playground](https://finos.github.io/datahelix/playground/) to get a feel for what it is like to run the profile without downloading the JAR. Although the playground supports almost all features, there are some it does not, and we don't intend it to be a substitute for downloading and running the Datahelix Generator yourself.
 
@@ -103,7 +103,7 @@ Update the JSON profile to the following:
     "constraints": [{ "field": "username", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFt7ICJuYW1lIjogInVzZXJuYW1lIiwgInR5cGUiOiAic3RyaW5nIiB9XSwKICAgICJjb25zdHJhaW50cyI6IFt7ICJmaWVsZCI6ICJ1c2VybmFtZSIsICJtYXRjaGluZ1JlZ2V4IjogIlthLXpdezEsMTB9IiB9XQp9IA%3D%3D) to open the profile in the datahelix playground.
+[Open this profile in the online playground](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFt7ICJuYW1lIjogInVzZXJuYW1lIiwgInR5cGUiOiAic3RyaW5nIiB9XSwKICAgICJjb25zdHJhaW50cyI6IFt7ICJmaWVsZCI6ICJ1c2VybmFtZSIsICJtYXRjaGluZ1JlZ2V4IjogIlthLXpdezEsMTB9IiB9XQp9IA%3D%3D).
 
 Re-running generation now creates a file containing random strings that match the simple regex `[a-z]{1,10}`:
 
@@ -131,7 +131,7 @@ The generator supports many different data types including:
 -   **string** - sequences of unicode characters up to a maximum length of 1000 characters
 -   **datetime** - specific moments in time, with values in the range 0001-01-01T00:00:00.000 to 9999-12-31T23:59:59.999, with an optional granularity / precision (from a maximum of one year to a minimum of one millisecond) that can be defined via a `granularTo` constraint.
 
-A full list of the supported data types can be found [here](UserGuide.md#type).
+A full list of the supported data types can be found in the [User Guide](UserGuide.md#type).
 
 We are going to use the `firstname` type to produce realistic looking names. Add a new field `firstname` with the `firstname` type.
 
@@ -144,7 +144,7 @@ The profile should look something like:
   "constraints": [{ "field": "username", "matchingRegex": "[a-z]{1,10}" }]
 }
 ```
-Click [here](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiBbeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgICAgICAgIHsgIm5hbWUiOiAiZmlyc3RuYW1lIiwgInR5cGUiOiAiZmlyc3RuYW1lIiB9XSwKICAiY29uc3RyYWludHMiOiBbeyAiZmllbGQiOiAidXNlcm5hbWUiLCAibWF0Y2hpbmdSZWdleCI6ICJbYS16XXsxLDEwfSIgfV0KfQ%3D%3D) to open the profile in the datahelix playground.
+[Open this profile in the online playground](https://finos.github.io/datahelix/playground/#ewogICJmaWVsZHMiOiBbeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgICAgICAgIHsgIm5hbWUiOiAiZmlyc3RuYW1lIiwgInR5cGUiOiAiZmlyc3RuYW1lIiB9XSwKICAiY29uc3RyYWludHMiOiBbeyAiZmllbGQiOiAidXNlcm5hbWUiLCAibWF0Y2hpbmdSZWdleCI6ICJbYS16XXsxLDEwfSIgfV0KfQ%3D%3D).
 
 Running the profile now gives a random list of usernames and first names.
 
@@ -178,7 +178,7 @@ First we'll expand the example profile to add a new `age` field, a not-null inte
 }
 ```
 
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgICAgeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgeyAibmFtZSI6ICJmaXJzdE5hbWUiLCAidHlwZSI6ICJmaXJzdG5hbWUiIH0sCiAgICAgIHsgIm5hbWUiOiAiYWdlIiwgInR5cGUiOiAiaW50ZWdlciIgfQogICAgXSwKICAgICJjb25zdHJhaW50cyI6IFsKICAgICAgICB7ICJmaWVsZCI6ICJ1c2VybmFtZSIsICJtYXRjaGluZ1JlZ2V4IjogIlthLXpdezEsMTB9IiB9LAogICAgICAgIHsgImZpZWxkIjogImFnZSIsICJncmVhdGVyVGhhbiI6IDAgfSwKICAgICAgICB7ICJmaWVsZCI6ICJhZ2UiLCAibGVzc1RoYW4iOiAxMDAgfQogICAgXQp9) to open the profile in the datahelix playground.
+[Open this profile in the online playground](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgICAgeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgeyAibmFtZSI6ICJmaXJzdE5hbWUiLCAidHlwZSI6ICJmaXJzdG5hbWUiIH0sCiAgICAgIHsgIm5hbWUiOiAiYWdlIiwgInR5cGUiOiAiaW50ZWdlciIgfQogICAgXSwKICAgICJjb25zdHJhaW50cyI6IFsKICAgICAgICB7ICJmaWVsZCI6ICJ1c2VybmFtZSIsICJtYXRjaGluZ1JlZ2V4IjogIlthLXpdezEsMTB9IiB9LAogICAgICAgIHsgImZpZWxkIjogImFnZSIsICJncmVhdGVyVGhhbiI6IDAgfSwKICAgICAgICB7ICJmaWVsZCI6ICJhZ2UiLCAibGVzc1RoYW4iOiAxMDAgfQogICAgXQp9).
 
 Next, we'll add some conditional logic to give some of our users a job. Let's add a `job` field to the profile. We can use [faker](UserGuide.md#faker) to generate realistic looking job titles. From looking at the [`job.java`](https://github.com/DiUS/java-faker/blob/master/src/main/java/com/github/javafaker/Job.java) class in the faker docs we can see that we need to call the `title` method. We add this to the profile by adding the `faker.job.title` type to a field.
 
@@ -220,7 +220,7 @@ Putting it all together will lead to a profile looking like this:
     ]
 }
 ```
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgICAgeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgeyAibmFtZSI6ICJmaXJzdE5hbWUiLCAidHlwZSI6ICJmaXJzdG5hbWUiIH0sCiAgICAgIHsgIm5hbWUiOiAiYWdlIiwgInR5cGUiOiAiaW50ZWdlciIgfSwKICAgICAgeyAibmFtZSI6ICJqb2JUaXRsZSIsICJ0eXBlIjogImZha2VyLmpvYi50aXRsZSIsICJudWxsYWJsZSI6IHRydWV9CiAgICBdLAogICAgImNvbnN0cmFpbnRzIjogWwogICAgICAgIHsgImZpZWxkIjogInVzZXJuYW1lIiwgIm1hdGNoaW5nUmVnZXgiOiAiW2Etel17MSwxMH0iIH0sCiAgICAgICAgeyAiZmllbGQiOiAiYWdlIiwgImdyZWF0ZXJUaGFuIjogMCB9LAogICAgICAgIHsgImZpZWxkIjogImFnZSIsICJsZXNzVGhhbiI6IDEwMCB9LAogICAgICAgIHsgImlmIjogICAgeyAiZmllbGQiOiAiYWdlIiwgImxlc3NUaGFuIjogMTcgfSwKICAgICAgICAgICJ0aGVuIjogIHsgImZpZWxkIjogImpvYlRpdGxlIiwgImlzTnVsbCI6IHRydWV9CiAgICAgICAgfQogICAgXQp9) to open the profile in the datahelix playground.
+[Open this profile in the online playground](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgICAgeyAibmFtZSI6ICJ1c2VybmFtZSIsICJ0eXBlIjogInN0cmluZyIgfSwKICAgICAgeyAibmFtZSI6ICJmaXJzdE5hbWUiLCAidHlwZSI6ICJmaXJzdG5hbWUiIH0sCiAgICAgIHsgIm5hbWUiOiAiYWdlIiwgInR5cGUiOiAiaW50ZWdlciIgfSwKICAgICAgeyAibmFtZSI6ICJqb2JUaXRsZSIsICJ0eXBlIjogImZha2VyLmpvYi50aXRsZSIsICJudWxsYWJsZSI6IHRydWV9CiAgICBdLAogICAgImNvbnN0cmFpbnRzIjogWwogICAgICAgIHsgImZpZWxkIjogInVzZXJuYW1lIiwgIm1hdGNoaW5nUmVnZXgiOiAiW2Etel17MSwxMH0iIH0sCiAgICAgICAgeyAiZmllbGQiOiAiYWdlIiwgImdyZWF0ZXJUaGFuIjogMCB9LAogICAgICAgIHsgImZpZWxkIjogImFnZSIsICJsZXNzVGhhbiI6IDEwMCB9LAogICAgICAgIHsgImlmIjogICAgeyAiZmllbGQiOiAiYWdlIiwgImxlc3NUaGFuIjogMTcgfSwKICAgICAgICAgICJ0aGVuIjogIHsgImZpZWxkIjogImpvYlRpdGxlIiwgImlzTnVsbCI6IHRydWV9CiAgICAgICAgfQogICAgXQp9).
 
 Running the above profile will produce something like:
 
