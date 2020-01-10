@@ -1,6 +1,7 @@
 ---
 name: 🤗 Question
 about: If you have a question 💬
+labels: question
 
 ---
 
