@@ -1,3 +1,9 @@
+<div>
+    <a href="https://finos.github.io/datahelix/">
+        <img src="https://finos.github.io/datahelix/docs-header.png" />
+    </a>
+</div>
+
 # Table of Contents
 1. [Introduction](#Introduction)
 

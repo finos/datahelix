@@ -1,3 +1,9 @@
+<div>
+    <a href="https://finos.github.io/datahelix/">
+        <img src="https://finos.github.io/datahelix/docs-header.png" />
+    </a>
+</div>
+
 # Getting Started
 
 The following guide gives a short introduction to the datahelix via a practical example.

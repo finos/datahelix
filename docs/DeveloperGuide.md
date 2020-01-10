@@ -1,3 +1,9 @@
+<div>
+    <a href="https://finos.github.io/datahelix/">
+        <img src="https://finos.github.io/datahelix/docs-header.png" />
+    </a>
+</div>
+
 # Introduction
 
 This guide outlines how to contribute to the project as well as the key concepts and structure of the DataHelix.
