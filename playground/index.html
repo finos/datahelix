@@ -14,11 +14,18 @@
   <script src="https://unpkg.com/whatwg-fetch@3.0.0/dist/fetch.umd.js"></script>
   <script src="https://unpkg.com/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://unpkg.com/bootstrap@4.4.0/dist/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/showdown@1.9.1/dist/showdown.min.js"></script>
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
   <a class="navbar-brand" href="..">DataHelix Generator</a>
   <div>
+    <div class="dropdown" style="display: inline-block;">
+      <button id="examplesButton" type="button" class="btn btn-secondary dropdown-toggle btn-success" data-toggle="dropdown">
+        Examples
+      </button>
+      <div id="examples" class="dropdown-menu dropdown-menu-right" aria-labelledby="examplesButton"></div>
+    </div>
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#shareModal">
       Share
     </button>
@@ -28,6 +35,7 @@
     <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
       style="display: none"></span>
   </div>
+
 </nav>
 
 <div id="content">
@@ -42,28 +50,7 @@
     </template>
 
     <div id="codearea-container">
-      <textarea rows="20" class="form-control" id="profile" wrap="off">
-{
-  "fields": [
-    { "name": "name", "type": "string" },
-    { "name": "age", "type": "integer" }
-  ], 
-  "constraints": [
-    {
-      "field": "name",
-      "matchingRegex": "[a-z]{1,10}"
-    },
-    {
-      "field": "age",
-      "greaterThanOrEqualTo": 0
-    },
-    {
-      "field": "age",
-      "lessThan": 100
-    }
-  ]
-}
-        </textarea>
+      <textarea rows="20" class="form-control" id="profile" wrap="off"></textarea>
     </div>
   </div>
   <div id="output-panel">

@@ -1,0 +1,123 @@
+﻿[
+    {
+      "profileDirectory": "actorNames",
+      "description": "Actor names",
+      "category": "Strings"
+    },
+    {
+      "profileDirectory": "aValidIsin",
+      "description": "ISIN codes",
+      "category": "Financial"
+    },
+    {
+      "profileDirectory": "boolean",
+      "description": "Boolean",
+      "category": "Data Types"
+    },
+    {
+      "profileDirectory": "containingRegex",
+      "description": "Containing regex",
+      "category": "Strings"
+    },
+    {
+      "profileDirectory": "dateBetween",
+      "description": "Between dates",
+      "category": "Dates"
+    },
+    {
+      "profileDirectory": "datetimeAfter",
+      "description": "After date",
+      "category": "Dates"
+    },
+    {
+      "profileDirectory": "datetimeDynamicFields",
+      "description": "Dynamic dates",
+      "category": "Dates"
+    },
+    {
+      "profileDirectory": "datetimeEqualToDynamicOffset",
+      "description": "Dynamic date offset",
+      "category": "Offsets"
+    },
+    {
+      "profileDirectory": "datetimeEqualToDynamicOffset",
+      "description": "Date offset working days",
+      "category": "Offsets"
+    },
+    {
+      "profileDirectory": "demoTradesSmaller",
+      "description": "Trades",
+      "category": "Financial"
+    },
+    {
+      "profileDirectory": "duplicates",
+      "description": "Duplicates",
+      "category": "Logical"
+    },
+    {
+      "profileDirectory": "faker",
+      "description": "Faker",
+      "category": "Data Types",
+      "default": true
+    },
+    {
+      "profileDirectory": "formatting",
+      "description": "Formatting",
+      "category": "Data Types"
+    },
+    {
+      "profileDirectory": "integerDynamicFields",
+      "description": "Dynamic integers",
+      "category": "Numeric"
+    },
+    {
+      "profileDirectory": "integerOffset",
+      "description": "Offset integers",
+      "category": "Offsets"
+    },
+    {
+      "profileDirectory": "integerOffsetFromSet",
+      "description": "Offset integers from a set",
+      "category": "Offsets"
+    },
+    {
+      "profileDirectory": "integerRange",
+      "description": "Integer ranges",
+      "category": "Numeric"
+    },
+    {
+      "profileDirectory": "names",
+      "description": "Names",
+      "category": "Strings"
+    },
+    {
+      "profileDirectory": "realNumberRange",
+      "description": "Decimal ranges",
+      "category": "Numeric"
+    },
+    {
+      "profileDirectory": "regexIntersect",
+      "description": "Regex intersection",
+      "category": "Strings"
+    },
+    {
+      "profileDirectory": "stringBetween",
+      "description": "String lengths",
+      "category": "Strings"
+    },
+    {
+      "profileDirectory": "timeBefore",
+      "description": "Before time of day",
+      "category": "Dates"
+    },
+    {
+      "profileDirectory": "timeIf",
+      "description": "If time of day",
+      "category": "Logical"
+    },
+    {
+      "profileDirectory": "unique",
+      "description": "Uniqueness",
+      "category": "Logical"
+    }
+  ]
