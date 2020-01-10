@@ -17,10 +17,10 @@ DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.
 * For a high level road map see [Road Map](docs/RoadMap.md).
 
 ## The Problem
-When performing a wide range of software development tasks - functional or load testing on a system, prototyping an API or pitching a service to a potential customer - sample data is a necessity, but generating and maintaining it can be difficult. The nature of the financial services industry makes it particularly difficult to cleanly manage data schemas, and sample datasets:
+When performing a wide range of software development tasks - functional or load testing on a system, prototyping an API or pitching a service to a potential customer - sample data is a necessity, but generating and maintaining it can be difficult. The nature of the some industries makes it particularly difficult to cleanly manage data schemas, and sample datasets:
 
 * Regulatory and methodological change often forces data schema changes.
-* It is often difficult to completely remove legacy data due to obligations to maintain deprecated financial products.  Because of this, schemas tend to be progressively complicated with special cases and exceptions.
+* It is often difficult to completely remove legacy data due to obligations to maintain deprecated products.  Because of this, schemas tend to be progressively complicated with special cases and exceptions.
 * Errors can be costly and reputation-damaging.
 * For legal and/or privacy reasons, it is normally impossible to include real data in samples.
 
