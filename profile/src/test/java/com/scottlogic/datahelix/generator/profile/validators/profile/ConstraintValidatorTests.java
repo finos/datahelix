@@ -15,7 +15,6 @@
  */
 package com.scottlogic.datahelix.generator.profile.validators.profile;
 
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.creation.ConstraintDTOBuilder;
@@ -82,7 +81,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
     }
-    
+
     @Test
     public void validateAtomicConstraint_withEmptyField_fails()
     {
