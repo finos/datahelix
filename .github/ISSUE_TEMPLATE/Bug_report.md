@@ -1,24 +1,27 @@
 ---
-name: 🐛 Bug Report
-about: If something isn't working as expected 🤔.
+name: 🐛 Bug report
+about: If something isn't working as expected 🤔
 
 ---
 
-## Bug Report
+## Bug report
 
-### Steps to Reproduce:
- 1. ...step 1 description...
- 2. ...step 2 description...
- 3. ...step 3 description...
+### Description of the bug
 
-### Expected Result:
-...description of what you expected to see...
+### Steps to reproduce:
+Please include the command line and any supporting files (e.g. the profile, any other input files).
 
-### Actual Result:
-...what actually happened, including full exceptions (please include the entire stack trace, including "caused by" entries), log entries, screen shots etc. where appropriate...
+ 1. step 1 ...
+ 2. step 2 ...
+ 3. step 3 ...
 
-### Environment:
-...version and build of the project, OS and runtime versions, virtualised environment (if any), etc. ...
+### Expected result:
+What did you expect to happen?
 
-### Additional Context:
-...add any other context about the problem here. If applicable, add screenshots to help explain...
+### Actual result:
+What actually happened, if possible include the output (or a screenshot as appropriate).
+
+### Additional context:
+- Which version of the generator?
+- Which version of Java are you using?
+- Any other information that may be relevant to reproduce & resolve the bug
