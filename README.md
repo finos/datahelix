@@ -2,7 +2,7 @@
 
 ![DataHelix logo](docs/logo.png)
 
-The generation of representative test and simulation data is a challenging and time-consuming task. DataHelix allows you to quickly create data for the purpose of testing and validation, based on a straightforward JSON data profile document.
+The generation of representative test and simulation data is a challenging and time-consuming task. Although DataHelix was created to address a specific challenge in the financial services industry, you will find it a useful tool for the generation of realistic data for simulation and testing, regardless of industry sector. All this from a straightforward JSON data profile document.
 
 DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.finos.org/) and operates within the [FINOS Data Technologies Program](https://www.finos.org/dt).
 
