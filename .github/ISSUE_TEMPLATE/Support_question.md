@@ -1,11 +1,11 @@
 ---
-name: 🤗 Support Question
-about: If you have a question about configuration, usage, etc. 💬
+name: 🤗 Question
+about: If you have a question 💬
+labels: question
 
 ---
 
-## Support Question
+## Question
 
-...ask your question here.
-
-...be sure to search existing issues since someone might have already asked something similar.
+Ask your question here.  
+If there are supporting documents, screenshots or text that can help clarify your question, please attach them too.
