@@ -1,3 +1,1 @@
 Generates strings matching `(Joh?n|Mar[yk])`
-
-Click [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmlyc3RfbmFtZSIsCiAgICAgICJ0eXBlIjogInN0cmluZyIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaXJzdF9uYW1lIiwKICAgICAgIm1hdGNoaW5nUmVnZXgiOiAiKEpvaD9ufE1hclt5a10pIgogICAgfQogIF0KfQ%3D%3D) to run the profile using the datahelix playground.
