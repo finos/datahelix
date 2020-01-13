@@ -58,7 +58,7 @@ Checklist before raising an issue:
 * [ ] Have you managed to isolate the issue to a simple profile or test case?
 
 ### Raising an Issue
-* Create your issue [here](https://github.com/finos/datahelix/issues/new) selecting the relevant issue template.
+* Use the [create your issue](https://github.com/finos/datahelix/issues/new) page and select the relevant issue template.
 
 * Please also tag the new issue with a relevant tag.
 * Please use [Markdown formatting](https://help.github.com/categories/writing-on-github/) liberally to assist in readability.
@@ -82,7 +82,7 @@ Our strategy is to ensure all aspects of the generator are tested through some f
 
 * If a change is made to existing class implementations and a test does not exist, then a test should be added
 
-[JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. An outline of how unit tests should be written within DataHelix can be found [here](./developer/JUnitCookbook.md).
+[JUnit (Jupiter)](https://junit.org/junit5/docs/current/user-guide/) is used for unit and integration tests. This document shows [an outline of how unit tests should be written within DataHelix](./developer/JUnitCookbook.md).
 
 [Cucumber](https://cucumber.io/) is used for behaviour driven development and testing, with [gherkin](https://docs.cucumber.io/gherkin/)-based tests.
 
@@ -103,7 +103,7 @@ Feature: the name of my feature
       | null |
 ```
 
-More examples can be seen in the [generator Cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/datahelix/generator/orchestrator/cucumber). An outline of how Cucumber is used within DataHelix can be found [here](./developer/CucumberCookbook.md).
+More examples can be seen in the [generator Cucumber features](https://github.com/finos/datahelix/tree/master/orchestrator/src/test/java/com/scottlogic/datahelix/generator/orchestrator/cucumber). This document shows [an outline of how Cucumber is used within DataHelix](./developer/CucumberCookbook.md).
 
 ## Contributing
 

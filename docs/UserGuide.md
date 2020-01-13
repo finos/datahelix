@@ -151,8 +151,8 @@ These sections are combined to form the [complete profile](#Example-Profile).
     }
 ```
 * See the [datahelix playground](https://finos.github.io/datahelix/playground/#ICAgIHsKICAgICJmaWVsZHMiOiBbCiAgICAgICAgewogICAgICAgICAgICAibmFtZSI6ICJDb2x1bW4gMSIsCiAgICAgICAgICAgICJ0eXBlIjogInN0cmluZyIKICAgICAgICB9LAogICAgICAgIHsKICAgICAgICAgICAgIm5hbWUiOiAiQ29sdW1uIDIiLAogICAgICAgICAgICAidHlwZSI6ICJpbnRlZ2VyIgogICAgICAgIH0KICAgIF0sCiAgICAiY29uc3RyYWludHMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgImZpZWxkIjogIkNvbHVtbiAxIiwKICAgICAgICAgICAgImVxdWFsVG8iOiAiZm9vIgogICAgICAgICAgICB9CiAgICAgICAgXQogICAgfQ%3D%3D) to run and edit this profile online.
-* For a larger profile example see [here](user/Schema.md)
-* Further examples can be found in the Examples folder [here](https://github.com/finos/datahelix/tree/master/examples)
+* For a larger profile example see [The schema documentation](user/Schema.md)
+* Further examples can be found in [the Examples folder](https://github.com/finos/datahelix/tree/master/examples)
 
 # Fields
 
@@ -398,7 +398,7 @@ Scotland, 3
 ...
 ```
 
-After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated. See [here](https://github.com/finos/datahelix/tree/master/examples/inSet) for an example showing the `inSet` constraint being used with a file.
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated. See [the inSet example](https://github.com/finos/datahelix/tree/master/examples/inSet) for an example showing the `inSet` constraint being used with a file.
 
 <div id="predicate-inmap"></div>
 
@@ -648,7 +648,7 @@ The syntax is slightly different depending on the type.
 ```
 
 Note that offsetUnit can be any of the [granularites](#DateTime-granularity) supported by datahelix.
-Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. A profile showing this can be found [here](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmlyc3QiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJzZWNvbmQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaXJzdCIsCiAgICAgICJhZnRlciI6ICI4MDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0sCiAgICB7CiAgICAgICJmaWVsZCI6ICJzZWNvbmQiLAogICAgICAiZXF1YWxUb0ZpZWxkIjogImZpcnN0IiwKICAgICAgIm9mZnNldCI6IDMsCiAgICAgICJvZmZzZXRVbml0IjogImRheXMiCiAgICB9CiAgXQp9).
+Additionally in the case that the field is a datetime then the `working days` offsetUnit can be used to specify an offset of working days. See [an example of this in the online playground](https://finos.github.io/datahelix/playground/#ewogICAgImZpZWxkcyI6IFsKICAgIHsKICAgICAgIm5hbWUiOiAiZmlyc3QiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9LAogICAgewogICAgICAibmFtZSI6ICJzZWNvbmQiLAogICAgICAidHlwZSI6ICJkYXRldGltZSIsCiAgICAgICJudWxsYWJsZSI6IGZhbHNlCiAgICB9CiAgXSwKICAiY29uc3RyYWludHMiOiBbCiAgICB7CiAgICAgICJmaWVsZCI6ICJmaXJzdCIsCiAgICAgICJhZnRlciI6ICI4MDAxLTAyLTAzVDA0OjA1OjA2LjAwNyIKICAgIH0sCiAgICB7CiAgICAgICJmaWVsZCI6ICJzZWNvbmQiLAogICAgICAiZXF1YWxUb0ZpZWxkIjogImZpcnN0IiwKICAgICAgIm9mZnNldCI6IDMsCiAgICAgICJvZmZzZXRVbml0IjogImRheXMiCiAgICB9CiAgXQp9).
 
 
 # Grammatical constraints
