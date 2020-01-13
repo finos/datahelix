@@ -99,7 +99,7 @@ public class ConstraintService {
             field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
-            field -> new FakerConstraint(field, faker -> genericFakerCall(field.getSpecificType().getFakerMethod().split("\\."), faker))); // TODO: FINISH IMPLEMENTATION
+            field -> new FakerConstraint(field, faker -> genericFakerCall(field.getSpecificType().getFakerMethod().split("\\."), faker)));
     }
 
     private static String genericFakerCall(String[] subTypes, Object invokee) {
@@ -111,7 +111,7 @@ public class ConstraintService {
                 return returnedValue.toString();
             }
             String[] tail = Arrays.copyOfRange(subTypes, 1, subTypes.length);
-            return genericFakerCall(tail, returnedValue).toString();
+            return genericFakerCall(tail, returnedValue);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
