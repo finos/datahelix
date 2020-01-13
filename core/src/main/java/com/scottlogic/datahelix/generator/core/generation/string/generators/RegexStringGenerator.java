@@ -72,7 +72,7 @@ public class RegexStringGenerator implements StringGenerator {
         if (regexPattern != null) {
             return regexPattern;
         }
-        if (regexRepresentation.contains("∩") || regexRepresentation.contains("∪")) {
+        if (regexRepresentation.contains("∩")) {
             throw new IllegalArgumentException("Faker generation does not support regexes");
         }
         String firstStripped = regexRepresentation.charAt(0) == '/'
@@ -98,10 +98,10 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     public static RegexStringGenerator createFromBlacklist(Set<String> blacklist) {
-        String[] blacklistStrings = blacklist.stream().toArray(String[]::new);
+        String[] blacklistStrings = blacklist.toArray(new String[0]);
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
 
-        return new RegexStringGenerator(automaton, String.format("NOT-IN %s", Objects.toString(blacklist)));
+        return new RegexStringGenerator(automaton, String.format("NOT-IN %s", blacklist));
     }
 
     @Override
@@ -128,16 +128,6 @@ public class RegexStringGenerator implements StringGenerator {
         return new RegexStringGenerator(merged, mergedRepresentation);
     }
 
-    RegexStringGenerator union(RegexStringGenerator otherGenerator) {
-        Automaton b = otherGenerator.automaton;
-        Automaton merged = automaton.union(b);
-        String mergedRepresentation = unionRepresentation(
-            this.regexRepresentation,
-            otherGenerator.regexRepresentation
-        );
-        return new RegexStringGenerator(merged, mergedRepresentation);
-    }
-
     @Override
     public StringGenerator complement() {
         return new RegexStringGenerator(
@@ -151,10 +141,6 @@ public class RegexStringGenerator implements StringGenerator {
 
     static String intersectRepresentation(String left, String right) {
         return String.format("(%s ∩ %s)", left, right);
-    }
-
-    static String unionRepresentation(String left, String right) {
-        return String.format("(%s ∪ %s)", left, right);
     }
 
     @Override
