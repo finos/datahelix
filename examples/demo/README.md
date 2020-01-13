@@ -8,15 +8,15 @@ This profile will generate rows with a random:
 - `units_held` (a random number (integer) of units held)
 - `unit_price` (a fake random price (to 2 decimal places) for each unit)
 - `country_of_origin` (a random country name, from Faker)
+- `is_open` (_true_ if `open_date` is before `execution_time` AND `close_date` is after `execution_time`, otherwise _false_)
 - `open_date` (a random date between  1990 and 2025)
 - `close_date` (3 years after `open_date`, or `null`)
-- `is_open` (_true_ if `open_date` is before than `exeution_time` AND `close_date` is after `execution_time`, otherwise _false_)
 
 Click _Run_ to see some of the data it can produce, or take a look at the other examples to see other types and combinations of data that can be produced.
 
 Produces data like:
 
-| execution_time | nyse_stock | units_held | price | country_of_origin | is_open | open_date | close_date |
+| execution_time | nyse_stock | units_held | unit_price | country_of_origin | is_open | open_date | close_date |
 | ---- | ---- | ----- | ----- | ---- | ---- | ---- | ----- |
 | 2020-01-13T08:13:24.111Z | AGC | 853266 | 854.38 | France | true | 2017-09-13T00:00:00Z | 4961-12-06T00:00:00Z |
 | 2020-01-13T08:13:24.111Z | RQI | 421310 | 52.79 | Iran (Islamic Republic of) | false | 1994-02-05T00:00:00Z | 2011-07-28T00:00:00Z |
