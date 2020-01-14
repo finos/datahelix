@@ -63,7 +63,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "3f:0d:d9:6c:36:06:da:f4:1b:77:22:b9:b7:b5:ab:93"
+            - "3f:77:2b:8b:bb:87:d1:ce:14:d5:be:dd:6d:6b:ef:1c"
       - checkout
       - run: gradle fatJar :output:test :profile:test :core:test :common:test :orchestrator:test
       - run: gradle release -Dorg.ajoberstar.grgit.auth.username=${GH_TOKEN} -Dorg.ajoberstar.grgit.auth.password
