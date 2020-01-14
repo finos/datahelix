@@ -58,6 +58,25 @@ dependencies {
     testCompile project(':core').sourceSets.test.output
 
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
+
+    implementation('org.jetbrains.kotlin:kotlin-stdlib') {
+        version {
+            strictly "1.3.30"
+        }
+        because "Security issue with 1.3.20"
+    }
+    implementation('org.jetbrains.kotlin:kotlin-stdlib-common') {
+        version {
+            strictly "1.3.30"
+        }
+        because "Security issue with 1.3.20"
+    }
+    implementation('org.jetbrains.kotlin:kotlin-reflect') {
+        version {
+            strictly "1.3.30"
+        }
+        because "Security issue with 1.3.20"
+    }
 }
 
 test {
