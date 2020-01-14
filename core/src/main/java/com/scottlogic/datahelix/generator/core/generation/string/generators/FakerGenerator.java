@@ -38,7 +38,7 @@ public class FakerGenerator implements StringGenerator {
 
     @Override
     public boolean matches(String string) {
-        return generateAllValues().anyMatch(fakerValue -> fakerValue.equals(string));
+        return false;
     }
 
     @Override
