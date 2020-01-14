@@ -28,12 +28,12 @@ public class AnyRegexPatterns implements RegexPattern {
 
     @Override
     public String getRepresentation() {
-        return anyPatterns.stream().map(RegexPattern::getRepresentation).collect(Collectors.joining(" AND "));
+        return anyPatterns.stream().map(RegexPattern::getRepresentation).collect(Collectors.joining(" ∪ "));
     }
 
     @Override
     public boolean matches(String input) {
-        return anyPatterns.stream().allMatch(p -> p.matches(input));
+        return anyPatterns.stream().anyMatch(p -> p.matches(input));
     }
 
     @Override
