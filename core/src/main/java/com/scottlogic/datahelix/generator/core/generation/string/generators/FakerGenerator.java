@@ -20,26 +20,25 @@ import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.util.OrderedRandom;
 
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class FakerGenerator implements StringGenerator {
 
     private final StringGenerator underlyingRegexGenerator;
-    private final Function<Faker, String> fakerFunction;
+    private final String fakerSpec;
     private final Faker randomFaker;
     private final Faker orderedFaker;
 
-    public FakerGenerator(StringGenerator underlyingRegexGenerator, Function<Faker, String> fakerFunction) {
+    public FakerGenerator(StringGenerator underlyingRegexGenerator, String fakerSpec) {
         this.underlyingRegexGenerator = underlyingRegexGenerator;
-        this.fakerFunction = fakerFunction;
+        this.fakerSpec = fakerSpec;
         randomFaker = new Faker();
         orderedFaker = new Faker(new OrderedRandom());
     }
 
     @Override
     public boolean matches(String string) {
-        return false;
+        return generateAllValues().anyMatch(fakerValue -> fakerValue.equals(string));
     }
 
     @Override
@@ -48,15 +47,15 @@ public class FakerGenerator implements StringGenerator {
             throw new UnsupportedOperationException("Cannot intersect a faker and non-faker field");
         }
         FakerGenerator other = (FakerGenerator) stringGenerator;
-        if (!fakerFunction.equals(other.fakerFunction)) {
+        if (!fakerSpec.equals(other.fakerSpec)) {
             throw new UnsupportedOperationException("Cannot merge two separate faker calls");
         }
-        return new FakerGenerator(stringGenerator.intersect(underlyingRegexGenerator), fakerFunction);
+        return new FakerGenerator(stringGenerator.intersect(underlyingRegexGenerator), fakerSpec);
     }
 
     @Override
     public boolean validate(String string) {
-        throw new IllegalArgumentException("Cannot validate against Faker results.");
+        return matches(string);
     }
 
     @Override
@@ -66,13 +65,17 @@ public class FakerGenerator implements StringGenerator {
 
     @Override
     public Stream<String> generateAllValues() {
-        return Stream.generate(() -> fakerFunction.apply(orderedFaker))
+        return Stream.generate(() -> getFakerValue(orderedFaker))
             .filter(underlyingRegexGenerator::validate);
     }
 
     @Override
     public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return Stream.generate(() -> fakerFunction.apply(randomFaker))
+        return Stream.generate(() -> getFakerValue(randomFaker))
             .filter(underlyingRegexGenerator::validate);
+    }
+
+    private String getFakerValue(Faker faker) {
+        return faker.expression("#{" + this.fakerSpec + "}");
     }
 }

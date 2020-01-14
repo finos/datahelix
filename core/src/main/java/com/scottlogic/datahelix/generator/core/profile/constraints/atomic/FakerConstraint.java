@@ -16,23 +16,20 @@
 
 package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 
-import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory;
 
-import java.util.function.Function;
-
 public class FakerConstraint implements AtomicConstraint {
 
     private final Field field;
 
-    private final Function<Faker, String> method;
+    private final String fakerSpec;
 
-    public FakerConstraint(Field field, Function<Faker, String> method) {
+    public FakerConstraint(Field field, String fakerSpec) {
         this.field = field;
-        this.method = method;
+        this.fakerSpec = fakerSpec;
     }
 
     @Override
@@ -47,6 +44,6 @@ public class FakerConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forFaker(method));
+        return FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forFaker(fakerSpec));
     }
 }
