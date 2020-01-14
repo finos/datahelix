@@ -8,7 +8,7 @@ const shareUrl = document.getElementById("shareUrl");
 const examplesDisplay = document.getElementById("examples");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
-const markdownConverter = new showdown.Converter();
+const markdownConverter = new showdown.Converter({ tables: true });
 const readmeBaseUrl = "https://github.com/finos/datahelix/tree/master/examples/";
 
 new ClipboardJS("#copyButton");
