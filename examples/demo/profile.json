@@ -1,0 +1,100 @@
+{
+    "fields": [
+    {
+      "name": "execution_time",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "nyse_stock",
+      "type": "faker.stock.nyseSymbol",
+      "nullable": false
+    },
+    {
+      "name": "units_held",
+      "type": "integer",
+      "nullable": false
+    },
+    {
+      "name": "unit_price",
+      "type": "decimal",
+      "nullable": false
+    },
+    {
+      "name": "country_of_origin",
+      "type": "faker.country.name",
+      "nullable": false
+    },
+    {
+      "name": "open_date",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "close_date",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "is_open",
+      "type": "boolean",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "execution_time",
+      "equalTo": "NOW"
+    },
+    {
+      "field": "open_date",
+      "afterOrAt": "1990-01-01T00:00:00.000"
+    },
+    {
+      "field": "open_date",
+      "beforeOrAt": "2025-01-01T00:00:00.000"
+    },
+    {
+      "field": "close_date",
+      "afterOrAtField": "open_date",
+      "offset": 3,
+      "offsetUnit": "years"
+    },
+    {
+      "if": { "allOf": [
+          { "field": "open_date", "beforeOrAt": "NOW"},
+          { "field": "close_date", "afterOrAt": "NOW"}
+        ] },
+      "then": { "field": "is_open", "equalTo": true },
+      "else": { "field": "is_open", "equalTo": false }
+    },
+    {
+      "field": "open_date",
+      "granularTo": "days"
+    },
+    {
+      "field": "close_date",
+      "granularTo": "days"
+    },
+    {
+      "field": "unit_price",
+      "granularTo": 0.01
+    },
+    {
+      "field": "unit_price",
+      "greaterThan": 0
+    },
+    {
+      "field": "unit_price",
+      "lessThan": 1000
+    },
+    {
+      "field": "units_held",
+      "greaterThanOrEqualTo": 0
+    },
+    {
+      "field": "units_held",
+      "lessThan": 1000000
+    }
+  ]
+}
