@@ -16,7 +16,6 @@
 
 package com.scottlogic.datahelix.generator.profile.services;
 
-import com.github.javafaker.Faker;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
@@ -98,11 +97,7 @@ public class ConstraintService {
             field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
-            field -> new FakerConstraint(field, faker -> genericFakerCall(field.getSpecificType().getFakerMethod(), faker)));
-    }
-
-    private static String genericFakerCall(String key, Faker faker) {
-        return faker.expression("#{" + key + "}");
+            field -> new FakerConstraint(field, field.getSpecificType().getFakerMethod()));
     }
 
     public Optional<Constraint> createSpecificTypeConstraint(Field field) {
