@@ -1,6 +1,5 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Example generation (faker)" type="Application" factoryName="Application">
-    <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
     <option name="MAIN_CLASS_NAME" value="com.scottlogic.datahelix.generator.orchestrator.App" />
     <module name="datahelix.generator.orchestrator.main" />
     <option name="PROGRAM_PARAMETERS" value="generate --profile-file=examples\faker\profile.json" />
