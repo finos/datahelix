@@ -16,41 +16,48 @@
 
 package com.scottlogic.datahelix.generator.core.generation.string.generators;
 
-import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
-import com.scottlogic.datahelix.generator.common.util.OrderedRandom;
+import com.scottlogic.datahelix.generator.core.generation.string.generators.faker.FakeValueProvider;
+import com.scottlogic.datahelix.generator.core.generation.string.generators.faker.FakerSpecFakeValueProvider;
+import com.scottlogic.datahelix.generator.core.generation.string.generators.faker.IntersectingFakeValueProvider;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class FakerGenerator implements StringGenerator {
 
     private final StringGenerator underlyingRegexGenerator;
-    private final String fakerSpec;
-    private final Faker randomFaker;
-    private final Faker orderedFaker;
+    private final FakeValueProvider fakeValuesService;
 
     public FakerGenerator(StringGenerator underlyingRegexGenerator, String fakerSpec) {
+        this(underlyingRegexGenerator, new FakerSpecFakeValueProvider(Locale.getDefault(), fakerSpec));
+    }
+
+    public FakerGenerator(StringGenerator underlyingRegexGenerator, FakeValueProvider fakeValuesService) {
         this.underlyingRegexGenerator = underlyingRegexGenerator;
-        this.fakerSpec = fakerSpec;
-        randomFaker = new Faker();
-        orderedFaker = new Faker(new OrderedRandom());
+        this.fakeValuesService = fakeValuesService;
     }
 
     @Override
     public boolean matches(String string) {
-        return false;
+        return underlyingRegexGenerator.matches(string)
+            && fakeValuesService.hasValue(string, underlyingRegexGenerator::validate);
     }
 
     @Override
     public StringGenerator intersect(StringGenerator stringGenerator) {
         if (!(stringGenerator instanceof FakerGenerator)) {
-            throw new UnsupportedOperationException("Cannot intersect a faker and non-faker field");
+            return new FakerGenerator(
+                stringGenerator.intersect(underlyingRegexGenerator),
+                fakeValuesService);
         }
+
         FakerGenerator other = (FakerGenerator) stringGenerator;
-        if (!fakerSpec.equals(other.fakerSpec)) {
-            throw new UnsupportedOperationException("Cannot merge two separate faker calls");
-        }
-        return new FakerGenerator(stringGenerator.intersect(underlyingRegexGenerator), fakerSpec);
+        return new FakerGenerator(
+            stringGenerator.intersect(underlyingRegexGenerator),
+            new IntersectingFakeValueProvider(fakeValuesService, other.fakeValuesService));
     }
 
     @Override
@@ -65,17 +72,13 @@ public class FakerGenerator implements StringGenerator {
 
     @Override
     public Stream<String> generateAllValues() {
-        return Stream.generate(() -> getFakerValue(orderedFaker))
-            .filter(underlyingRegexGenerator::validate);
+        return fakeValuesService.getAllValues(underlyingRegexGenerator::validate);
     }
 
     @Override
     public Stream<String> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
-        return Stream.generate(() -> getFakerValue(randomFaker))
-            .filter(underlyingRegexGenerator::validate);
-    }
+        List<String> allFakeValues = fakeValuesService.getAllValues(underlyingRegexGenerator::validate).collect(Collectors.toList());
 
-    private String getFakerValue(Faker faker) {
-        return faker.expression("#{" + this.fakerSpec + "}");
+        return Stream.generate(() -> allFakeValues.get(randomNumberGenerator.nextInt(allFakeValues.size() - 1)));
     }
 }
