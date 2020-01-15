@@ -3,7 +3,6 @@
     <option name="MAIN_CLASS_NAME" value="com.scottlogic.datahelix.generator.orchestrator.App" />
     <module name="datahelix.generator.orchestrator.main" />
     <option name="PROGRAM_PARAMETERS" value="generate --profile-file=examples\actorNames\profile.json" />
-    <option name="VM_PARAMETERS" value="--add-opens java.base/java.lang=ALL-UNNAMED" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
