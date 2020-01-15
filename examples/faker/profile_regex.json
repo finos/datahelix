@@ -1,0 +1,32 @@
+{
+  "fields": [
+    {
+      "name": "shortName",
+      "type": "faker.name.firstName",
+      "nullable": false
+    },
+    {
+      "name": "longName",
+      "type": "faker.name.lastName",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "shortName",
+      "shorterThan": 6
+    },
+    {
+      "field": "longName",
+      "longerThan": 9
+    },
+    {
+      "field": "shortName",
+      "matchingRegex": "[S].*"
+    },
+    {
+      "field": "shortName",
+      "matchingRegex": ".*[n]$"
+    }
+  ]
+}

@@ -16,14 +16,13 @@
 
 package com.scottlogic.datahelix.generator.core.restrictions.string;
 
-import com.github.javafaker.Faker;
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.FakerGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.NoStringsStringGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.RegexStringGenerator;
 import com.scottlogic.datahelix.generator.core.generation.string.generators.StringGenerator;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
-import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -42,7 +41,7 @@ public class StringRestrictions implements TypedRestrictions<String>
     private final Set<Pattern> notMatchingRegex;
     private final Set<Pattern> notContainingRegex;
     private StringGenerator generator;
-    private Function<Faker, String> fakerFunction;
+    private String fakerSpec;
 
     public StringRestrictions(
         Integer minLength,
@@ -52,7 +51,7 @@ public class StringRestrictions implements TypedRestrictions<String>
         Set<Integer> excludedLengths,
         Set<Pattern> notMatchingRegex,
         Set<Pattern> notContainingRegex,
-        Function<Faker, String> fakerFunction) {
+        String fakerSpec) {
         this.minLength = minLength;
         this.maxLength = maxLength;
         this.matchingRegex = matchingRegex;
@@ -60,7 +59,7 @@ public class StringRestrictions implements TypedRestrictions<String>
         this.excludedLengths = excludedLengths;
         this.notMatchingRegex = notMatchingRegex;
         this.notContainingRegex = notContainingRegex;
-        this.fakerFunction = fakerFunction;
+        this.fakerSpec = fakerSpec;
     }
 
     @Override
@@ -73,11 +72,11 @@ public class StringRestrictions implements TypedRestrictions<String>
     public FieldValueSource<String> createFieldValueSource(Set<String> blacklist) {
         StringGenerator regexFieldValueSource = createRegexFieldValueSource(blacklist);
 
-        if (fakerFunction == null) {
+        if (fakerSpec == null) {
             return regexFieldValueSource;
         }
 
-        return new FakerGenerator(regexFieldValueSource, fakerFunction);
+        return new FakerGenerator(regexFieldValueSource, fakerSpec);
     }
 
     private StringGenerator createRegexFieldValueSource(Set<String> blacklist) {
@@ -98,7 +97,7 @@ public class StringRestrictions implements TypedRestrictions<String>
             throw new IllegalArgumentException("Other StringRestrictions must not be null");
         }
 
-        if (!permittedFunctions(fakerFunction, other.fakerFunction)) {
+        if (!permittedFunctions(fakerSpec, other.fakerSpec)) {
             throw new IllegalArgumentException("Cannot combine two different faker functions");
         }
 
@@ -110,7 +109,7 @@ public class StringRestrictions implements TypedRestrictions<String>
             SetUtils.union(excludedLengths, other.excludedLengths),
             SetUtils.union(notMatchingRegex, other.notMatchingRegex),
             SetUtils.union(notContainingRegex, other.notContainingRegex),
-            combineFaker(fakerFunction, other.fakerFunction)
+            combineFaker(fakerSpec, other.fakerSpec)
         );
 
         return merged.isContradictory()
@@ -125,7 +124,7 @@ public class StringRestrictions implements TypedRestrictions<String>
         return true;
     }
 
-    private Function<Faker, String> combineFaker(Function<Faker, String> left, Function<Faker, String> right) {
+    private String combineFaker(String left, String right) {
         if (left == null) {
             return right;
         }
@@ -365,7 +364,7 @@ public class StringRestrictions implements TypedRestrictions<String>
             containingRegex.isEmpty() ? "" : " containing: " + patternsAsString(containingRegex),
             notMatchingRegex.isEmpty() ? "" : " not matching: " + patternsAsString(notMatchingRegex),
             notContainingRegex.isEmpty() ? "" : " not containing: " + patternsAsString(notContainingRegex),
-            fakerFunction != null ? fakerFunction.toString() : "");
+            fakerSpec != null ? fakerSpec : "");
     }
 
     private String patternsAsString(Set<Pattern> patterns) {
@@ -388,11 +387,11 @@ public class StringRestrictions implements TypedRestrictions<String>
             && matchingRegex.equals(that.matchingRegex)
             && notContainingRegex.equals(that.notContainingRegex)
             && notMatchingRegex.equals(that.notMatchingRegex)
-            && (fakerFunction == null && that.fakerFunction == null) || (fakerFunction != null && fakerFunction.equals(that.fakerFunction));
+            && (fakerSpec == null && that.fakerSpec == null) || (fakerSpec != null && fakerSpec.equals(that.fakerSpec));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(excludedLengths, maxLength, minLength, containingRegex, matchingRegex, notMatchingRegex, notContainingRegex, fakerFunction);
+        return Objects.hash(excludedLengths, maxLength, minLength, containingRegex, matchingRegex, notMatchingRegex, notContainingRegex, fakerSpec);
     }
 }
