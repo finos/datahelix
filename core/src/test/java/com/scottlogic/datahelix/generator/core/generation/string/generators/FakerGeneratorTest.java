@@ -15,7 +15,6 @@
  */
 package com.scottlogic.datahelix.generator.core.generation.string.generators;
 
-import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory;
@@ -23,11 +22,11 @@ import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerat
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FakerGeneratorTest {
 
@@ -35,8 +34,7 @@ class FakerGeneratorTest {
     void generateRandomValuesUnrestricted() {
         StringRestrictions restrictions = StringRestrictionsFactory.forMaxLength(Defaults.MAX_STRING_LENGTH);
         RegexStringGenerator regex = (RegexStringGenerator) restrictions.createGenerator();
-        Function<Faker, String> function = f -> f.name().firstName();
-        FakerGenerator generator = new FakerGenerator(regex, function);
+        FakerGenerator generator = new FakerGenerator(regex, "name.firstName");
 
         final int size = 10;
 
@@ -52,8 +50,7 @@ class FakerGeneratorTest {
         final int length = 9;
         StringRestrictions restrictions = StringRestrictionsFactory.forMinLength(length);
         RegexStringGenerator regex = (RegexStringGenerator) restrictions.createGenerator();
-        Function<Faker, String> function = f -> f.name().firstName();
-        FakerGenerator generator = new FakerGenerator(regex, function);
+        FakerGenerator generator = new FakerGenerator(regex, "name.firstName");
 
         final int size = 10;
 
@@ -68,8 +65,7 @@ class FakerGeneratorTest {
         final int length = 4;
         StringRestrictions restrictions = StringRestrictionsFactory.forMaxLength(length);
         RegexStringGenerator regex = (RegexStringGenerator) restrictions.createGenerator();
-        Function<Faker, String> function = f -> f.name().firstName();
-        FakerGenerator generator = new FakerGenerator(regex, function);
+        FakerGenerator generator = new FakerGenerator(regex, "name.firstName");
 
         final int size = 10;
 

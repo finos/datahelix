@@ -16,18 +16,18 @@
 
 package com.scottlogic.datahelix.generator.core.generation.string.generators;
 
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.AutomatonUtils;
-import com.scottlogic.datahelix.generator.core.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.datahelix.generator.core.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.factorys.RandomStringFactory;
+import com.scottlogic.datahelix.generator.core.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
-import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import dk.brics.automaton.Automaton;
 
 import java.util.*;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -45,15 +45,14 @@ public class RegexStringGenerator implements StringGenerator {
     private static final RegexStringGenerator DEFAULT = (RegexStringGenerator) ((StringRestrictions) FieldSpecFactory.fromType(FieldType.STRING).getRestrictions()).createGenerator();
 
     private Automaton automaton;
-    private final String regexRepresentation;
-    private Pattern regexPattern;
 
     private RandomStringFactory randomStringFactory = new RandomStringFactory();
     private InterestingStringFactory interestingStringFactory = new InterestingStringFactory();
+    private final RegexPattern regexPattern;
 
-    private RegexStringGenerator(Automaton automaton, String regexRepresentation) {
+    private RegexStringGenerator(Automaton automaton, RegexPattern regexPattern) {
         this.automaton = automaton;
-        this.regexRepresentation = regexRepresentation;
+        this.regexPattern = regexPattern;
     }
 
     public RegexStringGenerator(String regexStr, boolean matchFullString) {
@@ -62,32 +61,16 @@ public class RegexStringGenerator implements StringGenerator {
             ? cache.get(regexStr)
             : AutomatonUtils.createAutomaton(regexStr, matchFullString, cache);
 
-        String prefix = matchFullString ? "" : "*";
-        String suffix = matchFullString ? "" : "*";
-        this.regexRepresentation = String.format("%s/%s/%s", prefix, regexStr, suffix);
+        this.regexPattern = new SingleRegexPattern(regexStr, matchFullString);
         this.automaton = generatedAutomaton;
-    }
-
-    private Pattern pattern() {
-        if (regexPattern != null) {
-            return regexPattern;
-        }
-        if (regexRepresentation.contains("∩") || regexRepresentation.contains("∪")) {
-            throw new IllegalArgumentException("Faker generation does not support regexes");
-        }
-        String firstStripped = regexRepresentation.charAt(0) == '/'
-            ? regexRepresentation.substring(1)
-            : regexRepresentation;
-        String lastStripped = firstStripped.charAt(firstStripped.length() - 1) == '/'
-            ? firstStripped.substring(0, firstStripped.length() - 1)
-            : firstStripped;
-        return regexPattern = Pattern.compile(lastStripped);
     }
 
     @Override
     public String toString() {
-        if (regexRepresentation != null) {
-            return regexRepresentation;
+        String representation = regexPattern.getRepresentation();
+
+        if (representation != null && !representation.equals("")) {
+            return representation;
         }
 
         if (this.automaton != null) {
@@ -98,10 +81,13 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     public static RegexStringGenerator createFromBlacklist(Set<String> blacklist) {
-        String[] blacklistStrings = blacklist.stream().toArray(String[]::new);
+        String[] blacklistStrings = blacklist.toArray(new String[0]);
         Automaton automaton = Automaton.makeStringUnion(blacklistStrings).complement();
+        List<RegexPattern> constraints = blacklist.stream()
+            .map(regex -> new SingleRegexPattern(regex, true))
+            .collect(Collectors.toList());
 
-        return new RegexStringGenerator(automaton, String.format("NOT-IN %s", Objects.toString(blacklist)));
+        return new RegexStringGenerator(automaton, new NegatedRegexPattern(new AnyRegexPatterns(constraints)));
     }
 
     @Override
@@ -121,40 +107,19 @@ public class RegexStringGenerator implements StringGenerator {
             return new NoStringsStringGenerator("regex combination was contradictory");
         }
 
-        String mergedRepresentation = intersectRepresentation(
-            this.regexRepresentation,
-            ((RegexStringGenerator) otherGenerator).regexRepresentation);
+        RegexPattern intersectedPatterns = new AllRegexPatterns(
+            Arrays.asList(
+                this.regexPattern,
+                otherRegexGenerator.regexPattern));
 
-        return new RegexStringGenerator(merged, mergedRepresentation);
-    }
-
-    RegexStringGenerator union(RegexStringGenerator otherGenerator) {
-        Automaton b = otherGenerator.automaton;
-        Automaton merged = automaton.union(b);
-        String mergedRepresentation = unionRepresentation(
-            this.regexRepresentation,
-            otherGenerator.regexRepresentation
-        );
-        return new RegexStringGenerator(merged, mergedRepresentation);
+        return new RegexStringGenerator(merged, intersectedPatterns);
     }
 
     @Override
     public StringGenerator complement() {
         return new RegexStringGenerator(
             this.automaton.clone().complement().intersection(DEFAULT.automaton),
-            complementaryRepresentation(this.regexRepresentation));
-    }
-
-    private static String complementaryRepresentation(String representation) {
-        return String.format("¬(%s)", representation);
-    }
-
-    static String intersectRepresentation(String left, String right) {
-        return String.format("(%s ∩ %s)", left, right);
-    }
-
-    static String unionRepresentation(String left, String right) {
-        return String.format("(%s ∪ %s)", left, right);
+            this.regexPattern.complement());
     }
 
     @Override
@@ -177,7 +142,7 @@ public class RegexStringGenerator implements StringGenerator {
     }
 
     public boolean validate(String input) {
-        return pattern().asPredicate().test(input);
+        return this.regexPattern.matches(input);
     }
 
     public boolean matches(String subject) {

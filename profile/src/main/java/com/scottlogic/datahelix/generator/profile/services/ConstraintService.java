@@ -34,8 +34,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.Rel
 import com.scottlogic.datahelix.generator.profile.factories.constraint_factories.*;
 import com.scottlogic.datahelix.generator.profile.factories.relation_factories.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -99,22 +97,7 @@ public class ConstraintService {
             field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
-            field -> new FakerConstraint(field, faker -> genericFakerCall(field.getSpecificType().getFakerMethod().split("\\."), faker))); // TODO: FINISH IMPLEMENTATION
-    }
-
-    private static String genericFakerCall(String[] subTypes, Object invokee) {
-        try {
-            Class<?> clazz = invokee.getClass();
-            Method method = clazz.getMethod(subTypes[0]);
-            Object returnedValue = method.invoke(invokee);
-            if (subTypes.length == 1) {
-                return returnedValue.toString();
-            }
-            String[] tail = Arrays.copyOfRange(subTypes, 1, subTypes.length);
-            return genericFakerCall(tail, returnedValue).toString();
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+            field -> new FakerConstraint(field, field.getSpecificType().getFakerMethod()));
     }
 
     public Optional<Constraint> createSpecificTypeConstraint(Field field) {
