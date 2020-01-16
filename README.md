@@ -2,7 +2,7 @@
 
 ![DataHelix logo](docs/logo.png)
 
-The generation of representative test and simulation data is a challenging and time-consuming task. DataHelix allows you to quickly create data for the purpose of testing and validation, based on a straightforward JSON data profile document.
+The generation of representative test and simulation data is a challenging and time-consuming task. Although DataHelix was created to address a specific challenge in the financial services industry, you will find it a useful tool for the generation of realistic data for simulation and testing, regardless of industry sector. All this from a straightforward JSON data profile document.
 
 DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.finos.org/) and operates within the [FINOS Data Technologies Program](https://www.finos.org/dt).
 
@@ -17,10 +17,10 @@ DataHelix is a proud member of the [Fintech Open Source Foundation](https://www.
 * For a high level road map see [Road Map](docs/RoadMap.md).
 
 ## The Problem
-When performing a wide range of software development tasks - functional or load testing on a system, prototyping an API or pitching a service to a potential customer - sample data is a necessity, but generating and maintaining it can be difficult. The nature of the financial services industry makes it particularly difficult to cleanly manage data schemas, and sample datasets:
+When performing a wide range of software development tasks - functional or load testing on a system, prototyping an API or pitching a service to a potential customer - sample data is a necessity, but generating and maintaining it can be difficult. The nature of some industries makes it particularly difficult to cleanly manage data schemas, and sample datasets:
 
 * Regulatory and methodological change often forces data schema changes.
-* It is often difficult to completely remove legacy data due to obligations to maintain deprecated financial products.  Because of this, schemas tend to be progressively complicated with special cases and exceptions.
+* It is often difficult to completely remove legacy data due to obligations to maintain deprecated products.  Because of this, schemas tend to be progressively complicated with special cases and exceptions.
 * Errors can be costly and reputation-damaging.
 * For legal and/or privacy reasons, it is normally impossible to include real data in samples.
 
