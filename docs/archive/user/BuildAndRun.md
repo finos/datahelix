@@ -60,7 +60,7 @@ Check the setup worked with this example command:
 
 To generate valid data run the following command from the command line:
 
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+`java -jar <path to JAR file> [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
 * `[options]` - optionally a combination of [options](https://github.com/finos/datahelix/blob/master/docs/user/commandLineOptions/GenerateOptions.md) to configure how the command operates.

@@ -26,20 +26,7 @@ import java.util.stream.Collectors;
     name = "datahelix",
     version = { ProfileConfiguration.PROFILE_SCHEMA_VERSION_TEXT })
 public class App implements Runnable {
-    @CommandLine.Option(
-        names = { CommonOptionInfo.VERSION_SHORT_OPTION, CommonOptionInfo.VERSION_LONG_OPTION },
-        versionHelp = true,
-        description = CommonOptionInfo.VERSION_DESCRIPTION)
-    boolean versionRequested;
-
-    @CommandLine.Option(
-        names = { CommonOptionInfo.HELP_SHORT_OPTION, CommonOptionInfo.HELP_LONG_OPTION },
-        usageHelp = true,
-        description = CommonOptionInfo.HELP_DESCRIPTION)
-    private boolean help;
-
-    private static final CommandLine picoCliCommandLine = new CommandLine(new App())
-        .addSubcommand("generate", new GenerateCommandLine())
+    private static final CommandLine picoCliCommandLine = new CommandLine(new GenerateCommandLine())
         .setCaseInsensitiveEnumValuesAllowed(true);
 
     public static void main(String[] args) {
