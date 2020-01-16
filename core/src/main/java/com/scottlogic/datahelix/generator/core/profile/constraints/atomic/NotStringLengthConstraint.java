@@ -49,9 +49,6 @@ public class NotStringLengthConstraint implements AtomicConstraint {
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
-        if (o instanceof ViolatedAtomicConstraint) {
-            return o.equals(this);
-        }
         if (o == null || getClass() != o.getClass()) return false;
         NotStringLengthConstraint constraint = (NotStringLengthConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);

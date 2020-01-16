@@ -1,6 +1,6 @@
 # String Generation
 
-We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid (and invalid for [violation](../../user/alphaFeatures/DeliberateViolation.md)) strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
+We use a Java library called [dk.brics.automaton](http://www.brics.dk/automaton/) to analyse regexes and generate valid strings based on them. It works by representing the regex as a finite state machine. It might be worth reading about state machines for those who aren't familiar: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine). Consider the following regex: `ABC[a-z]?(A|B)`. It would be represented by the following state machine:
 
 ![](../../user/images/finite-state-machine.svg)
 
@@ -35,7 +35,7 @@ Another project that also uses dk.brics.automaton in a similar way to us might b
 
 Other than the fact that we can use the state machine to generate strings, the main benefit that we get from using this library are:
 * Finding the intersection of two regexes, used when there are multiple regex constraints on the same field.
-* Finding the complement of a regex, which we use for generating invalid regexes for violation.
+* Finding the complement of a regex, which we use for generating invalid regexes for negated conditions.
 
 Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run. 
 

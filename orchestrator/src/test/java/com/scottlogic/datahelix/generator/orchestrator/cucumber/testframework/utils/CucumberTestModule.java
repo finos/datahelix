@@ -19,10 +19,8 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.u
 import com.google.inject.AbstractModule;
 import com.scottlogic.datahelix.generator.core.generation.AbstractDataGeneratorMonitor;
 import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
-import com.scottlogic.datahelix.generator.core.generation.GenerationConfigSource;
 import com.scottlogic.datahelix.generator.core.generation.NoopDataGeneratorMonitor;
 import com.scottlogic.datahelix.generator.core.validators.ErrorReporter;
-import com.scottlogic.datahelix.generator.orchestrator.violate.manifest.ManifestWriter;
 import com.scottlogic.datahelix.generator.output.outputtarget.OutputTargetFactory;
 import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
@@ -46,18 +44,14 @@ public class CucumberTestModule extends AbstractModule {
         this.testState = testState;
     }
 
-
     @Override
     public void configure() {
-        bind(GenerationConfigSource.class).to(CucumberGenerationConfigSource.class);
-
         bind(CucumberTestState.class).toInstance(testState);
         bind(ProfileReader.class).to(CucumberProfileReader.class);
         bind(FileReader.class).to(CucumberFileReader.class);
         bind(ErrorReporter.class).toInstance(new CucumberErrorReporter(testState));
 
         bind(ConfigValidator.class).toInstance(mock(ConfigValidator.class));
-        bind(ManifestWriter.class).toInstance(mock(ManifestWriter.class));
         bind(SingleDatasetOutputTarget.class).toInstance(new InMemoryOutputTarget(testState));
         bind(AbstractDataGeneratorMonitor.class).to(NoopDataGeneratorMonitor.class);
 

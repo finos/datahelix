@@ -73,19 +73,6 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return this.set(headConstraint.negate());
     }
 
-    /**
-     * Wraps the current constraint in a ViolatedAtomicConstraint.
-     *
-     * @return New builder with the violated head constraint and the same tail.
-     */
-    public ConstraintChainBuilder<T> wrapAtomicWithViolate() {
-        if (!(headConstraint instanceof AtomicConstraint)) {
-            return this;
-        }
-
-        return this.set(new ViolatedAtomicConstraint((AtomicConstraint) headConstraint));
-    }
-
     public ConstraintChainBuilder<T> appendBuilder(ConstraintChainBuilder<? extends Constraint> builder) {
         return this.saveAndSet(builder.headConstraint, builder.tailConstraints);
     }

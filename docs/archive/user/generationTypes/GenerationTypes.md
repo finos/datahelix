@@ -11,10 +11,10 @@ Generate some random data that abides by the given set of constraints. This mode
 
 Examples:
 
-| Constraint | Emitted valid data |Emitted violating data |
-| ---- | ---- | ---- |
-| `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ | _(any values <= 10 or >= 20 ())_ |
-| `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ | _(any values except A, B or C)_ |
+| Constraint | Emitted valid data |
+| ---- | ---- |
+| `Field 1 > 10 AND Field 1 < 20` | _(any values > 10 & < 20)_ |
+| `Field 1 in set [A, B, C]` | _(A, B or C in any order, repeated as needed)_ |
 
 Notes:
 - Random generation of data is infinite and is limited to 1000 by default, use `--max-rows` to enable generation of more data.
@@ -25,10 +25,10 @@ Generate all data that can be generated in order from lowest to highest.
 
 Examples:
 
-| Constraint | Emitted valid data |Emitted violating data |
-| ---- | ---- | ---- |
-| `Field 1 > 0 AND Field 1 < 5` | _(null, 1, 2, 3, 4)_ | _(any values <= 10 or >= 20)_ |
-| `Field 1 in set [A, B, C]` | _(null, A, B, C)_ | _(any values except A, B or C)_ |
+| Constraint | Emitted valid data |
+| ---- | ---- |
+| `Field 1 > 0 AND Field 1 < 5` | _(null, 1, 2, 3, 4)_ |
+| `Field 1 in set [A, B, C]` | _(null, A, B, C)_ |
 
 Notes:
 - For more information about the behaviour of this example, see the [behaviour in detail.](../../developer/behaviour/BehaviourInDetail.md)

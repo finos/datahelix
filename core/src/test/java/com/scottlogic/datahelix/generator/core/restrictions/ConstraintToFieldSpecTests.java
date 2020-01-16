@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.RestrictionsFieldSpec;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.LongerThanConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ShorterThanConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.OfLengthConstraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ViolatedAtomicConstraint;
 import org.junit.jupiter.api.Test;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
@@ -36,16 +35,6 @@ class ConstraintToFieldSpecTests {
 
         final RestrictionsFieldSpec firstInstance = (RestrictionsFieldSpec)constraint.toFieldSpec();
         final RestrictionsFieldSpec secondInstance = (RestrictionsFieldSpec)constraint.toFieldSpec();
-
-        assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
-    }
-
-    @Test
-    void construct_stringHasLengthConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
-        ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(new OfLengthConstraint(testField,10));
-
-        final RestrictionsFieldSpec firstInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
-        final RestrictionsFieldSpec secondInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
 
         assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
     }
@@ -72,18 +61,6 @@ class ConstraintToFieldSpecTests {
     }
 
     @Test
-    void construct_isStringLongerThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
-        ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
-            new LongerThanConstraint( testField,10)
-        );
-
-        final RestrictionsFieldSpec firstInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
-        final RestrictionsFieldSpec secondInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
-
-        assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
-    }
-
-    @Test
     void construct_twoInstancesOfIsStringLongerThanConstraintCalledWithEqualValues_returnsTheSameGeneratorInstance() {
         LongerThanConstraint firstConstraint = new LongerThanConstraint(testField, 20);
         LongerThanConstraint secondConstraint = new LongerThanConstraint(testField, 20);
@@ -97,18 +74,6 @@ class ConstraintToFieldSpecTests {
     @Test
     void construct_isStringShorterThanConstraintRetrievedTwice_returnsTheSameGeneratorInstance() {
         ShorterThanConstraint constraint = new ShorterThanConstraint(testField,25);
-
-        final RestrictionsFieldSpec firstInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
-        final RestrictionsFieldSpec secondInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
-
-        assertEquals(firstInstance.getRestrictions(), secondInstance.getRestrictions());
-    }
-
-    @Test
-    void construct_isStringShorterThanConstraintViolatedTwice_returnsTheSameGeneratorInstance() {
-        ViolatedAtomicConstraint constraint = new ViolatedAtomicConstraint(
-            new ShorterThanConstraint(testField, 10)
-        );
 
         final RestrictionsFieldSpec firstInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();
         final RestrictionsFieldSpec secondInstance = (RestrictionsFieldSpec) constraint.toFieldSpec();

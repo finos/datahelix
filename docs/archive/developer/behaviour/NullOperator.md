@@ -156,6 +156,3 @@ Considering this use case, you're trying to generate data to be imported into a 
 
 * A field that has no value<br />
 `field1 is null`
-
-## Violations
-Violations are a special case for the `null` operator, see [Deliberate Violation](../../user/alphaFeatures/DeliberateViolation.md) for more details.
