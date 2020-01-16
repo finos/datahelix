@@ -39,7 +39,7 @@ docker run -ti -v mydir:/data datahelix [parameters]
 Note that the `-v` option specifies how to map your local filesystem into the Docker image, so that the DataHelix generator can access the profile file that you pass to it, and can write its output to a location you can access.  For example, if you run the image inside the profile directory, on a system with Unix-style environment variables, you can run the following command:
 
 ```
-docker run -ti -v $PWD:/data datahelix generate --profile-file=/data/examples/actor-names/profile.json
+docker run -ti -v $PWD:/data datahelix --profile-file=/data/examples/actor-names/profile.json
 ```
 
 This will map your current working directory (using the `$PWD` environment variable) to the `/data` directory in the Docker image's virtual filesystem, and uses this mapping to tell the generator to use the file `./examples/actor-names/profile.json` as its profile input.  With this example, the generator output will be output to the console, but you can write the output data to a mapped directory in the same way.

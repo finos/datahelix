@@ -9,7 +9,7 @@ For first time setup, see the [Generator setup instructions](BuildAndRun.md).
 
 To generate data run the following command from the command line
 
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+`java -jar <path to JAR file> [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` the location of generator.jar
 * `[options]` optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates
@@ -20,7 +20,7 @@ To generate data run the following command from the command line
 
 Using the [Sample Profile](ExampleProfile1.json) that was created in the [previous](CreatingAProfile.md) section, run the following command:
 
- `java -jar <path to JAR file> generate --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
+ `java -jar <path to JAR file> --profile-file="<path to ExampleProfile1.json>" --output-path="<path to desired output file>"`
 
 * `<path to desired output file>` the file path to the desired output file 
 
