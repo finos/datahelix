@@ -8,7 +8,6 @@ const shareUrl = document.getElementById("shareUrl");
 const examplesDisplay = document.getElementById("examples");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
-const markdownConverter = new showdown.Converter({ tables: true });
 const readmeBaseUrl = "https://github.com/finos/datahelix/tree/master/examples/";
 
 new ClipboardJS("#copyButton");
@@ -125,16 +124,31 @@ const createCategory = (categoryName, categoryMap) => {
 }
 
 const displayReadmeMarkdown = (markdown) => {
-  const html = markdownConverter.makeHtml(markdown);
-
   const readmeHeading = "<p>Click <i>Run</i> above to execute this example.</p>";
   const readmeFooter = "";
-  generatorOutputPanel.innerHTML = readmeHeading + html + readmeFooter;
 
-  generatorOutputPanel.querySelectorAll("table")
-  .forEach(table => {
-    table.className = "table table-striped table-bordered";
-  });
+  fetch('https://api.github.com/markdown/raw',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: markdown
+    }).then(
+      response => {
+        response.text().then(html => {
+          generatorOutputPanel.innerHTML = readmeHeading + html + readmeFooter;
+
+          generatorOutputPanel.querySelectorAll("table")
+          .forEach(table => {
+            table.className = "table table-striped table-bordered";
+          });
+        })
+      },
+      err => {
+        generatorOutputPanel.innerHTML = err.message;
+      }
+    )
 }
 
 const renderExample = (profileExample) => {
