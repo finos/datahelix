@@ -68,16 +68,6 @@ To generate valid data run the following command from the command line:
 * `<path to profile>` - the location of the JSON profile file.
 * `<desired output path>` - the location of the generated data.
 
-To generate violating data run the following command from the command line:
-
-`java -jar <path to JAR file> violate [options] --profile-file="<path to profile>" --output-path="<desired output folder>"`
-
-* `[path to JAR file]` - the location of `generator.jar`.
-* `[options]` - a combination of any (or none) of [the options documented here](../commandLineOptions/ViolateOptions.md) to configure how the command operates.
-* `<path to profile>` - the location of the JSON profile file.
-* `<desired output folder>` - the location of a folder in which to create generated data files.
-
-
 ### IntelliJ
 
 On IntelliJ's splash screen, choose "Open".
@@ -105,10 +95,4 @@ For example, run this command:
 java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv
 ```
 
-Additionally create another run configuration called GenerateViolating and add the program arguments
-
-```
-violate --profile-file="<path to an example JSON profile>" --output-path="<desired output directory path>"
-```
-
-Run both of these configurations to test that installation is successful.
+Run this configuration to test that installation is successful.

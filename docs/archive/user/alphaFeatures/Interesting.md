@@ -51,12 +51,4 @@ It would be more useful for the generator to emit data that matches some data th
 
 The above generation strategy is called _interesting_ generation in the generator. The above list is indicative and designed to give a flavour of what the strategy is trying to achieve. 
 
-The user may also want to generate data that [deliberately violates](DeliberateViolation.md) the given rules for the field, to test that the other product exhibits the expected behaviour when it is provided invalid data. If this was the case you might expect to test the system with the following data:
-
-* no value (otherwise represented as `null`)
-* a string of 5 characters
-* a numeric value
-* a temporal value
-* a boolean value
-
 The values that the generator will emit for various scenarios are [documented here](../generationTypes/GenerationTypes.md#interesting). Some of the scenarios above are not met, see the linked document for their details.

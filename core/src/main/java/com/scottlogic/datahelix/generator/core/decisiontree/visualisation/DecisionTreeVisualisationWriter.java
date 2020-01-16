@@ -215,10 +215,6 @@ class NodeVisualiser {
     }
 
     private String determineNodeColour(Node node){
-        if (node.hasMarking(NodeMarking.VIOLATED)){
-            return "[color=\"green\"]";
-        }
-
         if (node.hasMarking(NodeMarking.CONTRADICTORY)) {
             return "[color=\"red\"]";
         }

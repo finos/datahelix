@@ -12,7 +12,6 @@ Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you c
 
 ## Examples
 * `java -jar generator.jar generate profile.json profile.csv`
-* `java -jar generator.jar violate profile.json violated-data-files/`
 
 Example profiles can be found in the [examples folder](../../../examples).
 
@@ -26,16 +25,6 @@ Generates data to a specified endpoint.
 * `<output path>`, a file path to where the data should be emitted to. This will be a UTF-8 encoded CSV file or directory, option dependent.
 
 The full list of generate options can be viewed [here](../commandLineOptions/GenerateOptions.md).
-
-### Violate
-#### `violate [options] <profile path> <output directory>`
-
-Generates violating data to a specified folder/directory.
-
-* `<profile path>`, a path to the profile JSON file.
-* `<output directory>`, a path to a directory into which the data should be emitted.  This will consist of a set of output files, and a `manifest.json` file describing which constraints are violated by which output file.
-
-The full list of violate options can be viewed [here](../commandLineOptions/ViolateOptions.md)
 
 ### Visualise
 #### `visualise [options] <profile path> <output path>`
