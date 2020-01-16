@@ -1,6 +1,6 @@
 const generatorEndpoint = "https://1551npsbdh.execute-api.eu-west-2.amazonaws.com/api/generator";
 const runButton = document.getElementById("run");
-const generatorOutput = document.getElementById("output");
+const generatorOutputPanel = document.getElementById("output-panel");
 const profileArea = document.getElementById("profile");
 const editorPanel = document.getElementById("editor-panel");
 const spinner = document.getElementById("spinner");
@@ -8,7 +8,6 @@ const shareUrl = document.getElementById("shareUrl");
 const examplesDisplay = document.getElementById("examples");
 const examplesRootUrl = "examples.json";
 const examplesContentUrl = "https://api.github.com/repos/finos/datahelix/contents/examples/";
-const markdownConverter = new showdown.Converter();
 const readmeBaseUrl = "https://github.com/finos/datahelix/tree/master/examples/";
 
 new ClipboardJS("#copyButton");
@@ -56,7 +55,7 @@ const mapToElements = (arr, element, fn = v => v) =>
     arr.map(value => "<" + element + ">" + fn(value) + "</" + element + ">").join("");
 
 runButton.addEventListener("click", () => {
-  generatorOutput.innerHTML = "";
+  generatorOutputPanel.innerHTML = "";
   const profile = editor.getValue();
 
   hideAlert();
@@ -98,7 +97,7 @@ runButton.addEventListener("click", () => {
       const table = "<thead><tr>" + mapToElements(columns, "th") + "</tr></thead>" +
         "<tbody>" + mapToElements(rows, "tr", row => mapToElements(row, "td")) + "</tbody>";
 
-      generatorOutput.innerHTML = table;
+      generatorOutputPanel.innerHTML = `<table id=output" class="table table-striped table-bordered">${table}</table>`;
     })
     .catch(() => {
       showAlert("There was a problem in reaching the DataHelix API endpoint");
@@ -125,11 +124,31 @@ const createCategory = (categoryName, categoryMap) => {
 }
 
 const displayReadmeMarkdown = (markdown) => {
-  const html = markdownConverter.makeHtml(markdown);
-
   const readmeHeading = "<p>Click <i>Run</i> above to execute this example.</p>";
   const readmeFooter = "";
-  generatorOutput.innerHTML = readmeHeading + html + readmeFooter;
+
+  fetch('https://api.github.com/markdown/raw',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain'
+      },
+      body: markdown
+    }).then(
+      response => {
+        response.text().then(html => {
+          generatorOutputPanel.innerHTML = readmeHeading + html + readmeFooter;
+
+          generatorOutputPanel.querySelectorAll("table")
+          .forEach(table => {
+            table.className = "table table-striped table-bordered";
+          });
+        })
+      },
+      err => {
+        generatorOutputPanel.innerHTML = err.message;
+      }
+    )
 }
 
 const renderExample = (profileExample) => {
@@ -141,7 +160,7 @@ const renderExample = (profileExample) => {
   const readmeContentPath = profilePath + "/README.md";
 
   editor.setValue("Loading profile...");
-  generatorOutput.innerHTML = "Loading profile...";
+  generatorOutputPanel.innerHTML = "Loading profile...";
 
   fetch(profileContentPath)
     .then(response => {
@@ -170,10 +189,10 @@ const renderExample = (profileExample) => {
           throw new Error("Unknown encoding for profile content: " + apiData.encoding);
         }
       }, err => {
-        generatorOutput.innerHTML = "Error loading readme. " + err.message;
+        generatorOutputPanel.innerHTML = "Error loading readme. " + err.message;
       })
     }, err => {
-      generatorOutput.innerHTML = "Error getting readme. " + err.message;
+      generatorOutputPanel.innerHTML = "Error getting readme. " + err.message;
     });
 }
 
@@ -234,7 +253,7 @@ const loadExamples = () => {
   });
 };
 
-generatorOutput.addEventListener("click", (e) => {
+generatorOutputPanel.addEventListener("click", (e) => {
   if (e.target.tagName !== "A" || !e.target.getAttribute("href")) {
     return;
   }

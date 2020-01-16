@@ -55,10 +55,15 @@
       "category": "Logical"
     },
     {
-      "profileDirectory": "faker",
-      "description": "Faker",
+      "profileDirectory": "demo",
+      "description": "DataHelix demo",
       "category": "Data Types",
       "default": true
+    },
+    {
+      "profileDirectory": "faker",
+      "description": "Faker",
+      "category": "Data Types"
     },
     {
       "profileDirectory": "formatting",
