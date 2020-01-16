@@ -57,11 +57,11 @@ Build the tool with all its dependencies:
 
 Check the setup worked with this example command:
 
-`java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv`
+`java -jar orchestrator\build\libs\generator.jar --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv`
 
 To generate valid data run the following command from the command line:
 
-`java -jar <path to JAR file> generate [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
+`java -jar <path to JAR file> [options] --profile-file="<path to profile>" --output-path="<desired output path>"`
 
 * `[path to JAR file]` - the location of `generator.jar`.
 * `[options]` - optionally a combination of [options](../commandLineOptions/GenerateOptions.md) to configure how the command operates.
@@ -87,12 +87,12 @@ Navigate to the [`App.java` file](../../../orchestrator/src/main/java/com/scottl
 Now edit the run configuration on the top toolbar created by the initial run. Name the run configuration 'Generate' and under 'Program Arguments' enter the following, replacing the paths with your desired files:
 
 ```
-generate --profile-file="<path to an example JSON profile>" --output-path="<desired output file path>"
+--profile-file="<path to an example JSON profile>" --output-path="<desired output file path>"
 ```
 
 For example, run this command:
 ```
-java -jar orchestrator\build\libs\generator.jar generate --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv
+java -jar orchestrator\build\libs\generator.jar --replace --profile-file=docs/user/gettingStarted/ExampleProfile1.json --output-path=out.csv
 ```
 
 Run this configuration to test that installation is successful.

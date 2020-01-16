@@ -2,22 +2,21 @@
 
 Once [Java v1.8](https://www.java.com/en/download/manual.jsp) is installed you can run the generator with the following command:
 
-`java -jar <path to JAR file> <command> [options] <arguments>`
+`java -jar <path to JAR file> [options] <arguments>`
 
-* `<command>` one of the commands described below, `generate`, `visualise` etc which are **case sensitive**
 * `[options]` optionally a combination of options to configure how the command operates
 * `<arguments>` required inputs for the command to operate
 
 **Note:** Do not include a trailing \ in directory paths
 
 ## Examples
-* `java -jar generator.jar generate profile.json profile.csv`
+* `java -jar generator.jar profile.json profile.csv`
 
 Example profiles can be found in the [examples folder](../../../examples).
 
 ## Commands
 ### Generate
-#### `generate [options] <profile path> <output path>`
+#### `[options] <profile path> <output path>`
 
 Generates data to a specified endpoint.
 
