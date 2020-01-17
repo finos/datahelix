@@ -294,7 +294,7 @@ The [transitions](http://www.brics.dk/automaton/doc/index.html) represent adding
 
 Other than the fact that we can use the state machine to generate strings, the main benefit that we get from using this library are:
 * Finding the intersection of two regexes, used when there are multiple regex constraints on the same field.
-* Finding the complement of a regex, which we use for generating invalid regexes for negated conditions.
+* Finding the complement of a regex, which we use for generating regexes for negated conditions.
 
 Due to the way that the generator computes textual data internally the generation of strings is not deterministic and may output valid values in a different order with each generation run.
 
