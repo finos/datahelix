@@ -68,6 +68,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @CommandLine.Option(
+        names = { "generate" },
+        description = "Included for backward compatibility with command-based invocation",
+        hidden = true
+    )
+    boolean generateCommandUsed;
+
+    @CommandLine.Option(
         names = { CommonOptionInfo.VERSION_SHORT_OPTION, CommonOptionInfo.VERSION_LONG_OPTION },
         versionHelp = true,
         description = CommonOptionInfo.VERSION_DESCRIPTION)
