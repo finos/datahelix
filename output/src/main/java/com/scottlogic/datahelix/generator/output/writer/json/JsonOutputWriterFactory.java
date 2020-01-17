@@ -31,18 +31,19 @@ import java.io.OutputStream;
 import java.util.Optional;
 
 public class JsonOutputWriterFactory implements OutputWriterFactory {
-    private boolean useNdJson;
+    private boolean streamOutput;
     private static final String NEW_LINE_DELIMITER = "\n";
+
     @Inject
-    public JsonOutputWriterFactory(@Named("config:useNdJson") boolean useNdJson) {
-        this.useNdJson = useNdJson;
+    public JsonOutputWriterFactory(@Named("config:streamOutput") boolean streamOutput) {
+        this.streamOutput = streamOutput;
     }
 
     @Override
     public DataSetWriter createWriter(OutputStream stream, Fields fields) throws IOException {
         ObjectWriter objectWriter = new ObjectMapper().writer(new DefaultPrettyPrinter(NEW_LINE_DELIMITER));
         SequenceWriter writer = objectWriter.writeValues(stream);
-        writer.init(!useNdJson);
+        writer.init(!streamOutput);
 
         return new JsonDataSetWriter(writer, fields);
     }

@@ -168,11 +168,6 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public boolean useNdJson() {
-        return useStdOut() && getOutputFormat() == OutputFormat.JSON;
-    }
-
-    @Override
     public Path getOutputPath() {
         return outputPath;
     }
