@@ -27,8 +27,6 @@ The full list of generate options can be viewed [here](../commandLineOptions/Gen
 #### Options
 Options are optional and case-insensitive
 
-* `--partition`
-   * Enables tree partitioning during transformation.
 * `--optimise`
    * Enables tree optimisation during transformation. See [Decision tree optimiser](../../developer/algorithmsAndDataStructures/OptimisationProcess.md) for more details.
 
