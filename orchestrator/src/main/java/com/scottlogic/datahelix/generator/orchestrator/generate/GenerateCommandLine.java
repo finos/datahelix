@@ -43,7 +43,7 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
  * This class holds the generate specific command line options.
  */
 @picocli.CommandLine.Command(
-    name = "generate",
+    name = "",
     description = "Produces data using any options provided.",
     descriptionHeading = "%nDescription:%n",
     parameterListHeading = "%nParameters:%n",
