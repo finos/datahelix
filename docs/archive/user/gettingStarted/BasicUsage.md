@@ -55,8 +55,6 @@ There may be other visualisers that are suitable to use. The requirements for a 
 #### Options
 Options are optional and case-insensitive
 
-* `--partition`
-   * Enables tree partitioning during transformation.
 * `--optimise`
    * Enables tree optimisation during transformation. See [Decision tree optimiser](../../developer/algorithmsAndDataStructures/OptimisationProcess.md) for more details.
 
