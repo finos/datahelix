@@ -62,7 +62,6 @@ public class JarExecuteTests {
             "java",
             "-jar",
             "build/libs/generator.jar",
-            "generate",
             profile,
             "--max-rows=1",
             "--quiet");

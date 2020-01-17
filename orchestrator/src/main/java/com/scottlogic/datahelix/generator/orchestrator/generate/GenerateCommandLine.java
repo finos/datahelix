@@ -43,7 +43,7 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
  * This class holds the generate specific command line options.
  */
 @picocli.CommandLine.Command(
-    name = "generate",
+    name = "",
     description = "Produces data using any options provided.",
     descriptionHeading = "%nDescription:%n",
     parameterListHeading = "%nParameters:%n",
@@ -66,6 +66,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
             printAlphaFeatureWarning("Generation Type of INTERESTING");
         }
     }
+
+    @CommandLine.Option(
+        names = { "generate" },
+        description = "Included for backward compatibility with command-based invocation",
+        hidden = true
+    )
+    boolean generateCommandUsed;
 
     @CommandLine.Option(
         names = { CommonOptionInfo.VERSION_SHORT_OPTION, CommonOptionInfo.VERSION_LONG_OPTION },
