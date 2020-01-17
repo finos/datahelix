@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.orchestrator;
 
 import com.scottlogic.datahelix.generator.orchestrator.generate.GenerateCommandLine;
-import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateCommandLine;
 import com.scottlogic.datahelix.generator.profile.ProfileConfiguration;
 import picocli.CommandLine;
 
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
     version = { ProfileConfiguration.PROFILE_SCHEMA_VERSION_TEXT })
 public class App implements Runnable {
     private static final CommandLine picoCliCommandLine = new CommandLine(new GenerateCommandLine())
-        .addSubcommand("violate", new ViolateCommandLine())
         .setCaseInsensitiveEnumValuesAllowed(true);
 
     public static void main(String[] args) {

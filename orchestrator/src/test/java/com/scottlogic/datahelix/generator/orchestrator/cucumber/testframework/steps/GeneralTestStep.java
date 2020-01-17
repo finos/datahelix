@@ -78,25 +78,6 @@ public class GeneralTestStep {
         this.state.combinationStrategyType = strategy;
     }
 
-    @When("we do not violate any {operator} constraints")
-    public void constraintTypeIsNotViolated(String operator) {
-        this.state.addConstraintToNotViolate(ConstraintType.fromName(operator));
-    }
-
-    @Given("the data requested is {generationMode}")
-    public void setTheGenerationMode(CucumberGenerationMode generationMode) {
-        switch (generationMode) {
-            case VIOLATING:
-                state.shouldViolate = true;
-                break;
-            case VALIDATING:
-                state.shouldViolate = false;
-                break;
-            default:
-                throw new IllegalArgumentException("Specified generation mode not supported");
-        }
-    }
-
     @And("^(.+) is null$")
     public void fieldIsNull(String fieldName) throws Exception {
         this.state.addConstraint(fieldName, ConstraintType.IS_NULL, true);

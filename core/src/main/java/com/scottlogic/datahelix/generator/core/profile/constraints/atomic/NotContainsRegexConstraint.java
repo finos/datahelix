@@ -50,9 +50,6 @@ public class NotContainsRegexConstraint implements AtomicConstraint {
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
-        if (o instanceof ViolatedAtomicConstraint) {
-            return o.equals(this);
-        }
         if (o == null || getClass() != o.getClass()) return false;
         NotContainsRegexConstraint constraint = (NotContainsRegexConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(regex.toString(), constraint.regex.toString());

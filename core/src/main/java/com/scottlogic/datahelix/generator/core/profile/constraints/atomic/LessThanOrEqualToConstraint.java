@@ -56,9 +56,6 @@ public class LessThanOrEqualToConstraint implements AtomicConstraint {
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
-        if (o instanceof ViolatedAtomicConstraint) {
-            return o.equals(this);
-        }
         if (o == null || getClass() != o.getClass()) return false;
         LessThanOrEqualToConstraint constraint = (LessThanOrEqualToConstraint) o;
         return Objects.equals(field, constraint.field) && Objects.equals(referenceValue, constraint.referenceValue);

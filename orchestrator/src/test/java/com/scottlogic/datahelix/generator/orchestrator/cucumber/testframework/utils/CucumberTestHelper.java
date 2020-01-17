@@ -22,8 +22,7 @@ import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.orchestrator.generate.GenerateExecute;
-import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateExecute;
-import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateModule;
+import com.scottlogic.datahelix.generator.orchestrator.guice.AllModule;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import org.junit.Assert;
 
@@ -72,16 +71,12 @@ public class CucumberTestHelper {
         }
 
         Module concatenatedModule =
-            Modules.override(new ViolateModule(new CucumberGenerationConfigSource(testState)))
+            Modules.override(new AllModule(new CucumberGenerationConfigSource(testState)))
                 .with(new CucumberTestModule(testState));
 
         Injector injector = Guice.createInjector(concatenatedModule);
 
-        if (testState.shouldViolate) {
-            injector.getInstance(ViolateExecute.class).execute();
-        } else {
-            injector.getInstance(GenerateExecute.class).execute();
-        }
+        injector.getInstance(GenerateExecute.class).execute();
 
         testState.generationHasAlreadyOccured = true;
     }

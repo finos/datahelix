@@ -18,19 +18,30 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.u
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
-import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.*;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.GeneratorConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.*;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.*;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.*;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.*;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.*;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.*;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanOrEqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanOrEqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.BeforeOrAtConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
 
 import java.io.IOException;
@@ -44,7 +55,6 @@ public class CucumberTestState {
     public DataGenerationType dataGenerationType = DataGenerationType.FULL_SEQUENTIAL;
     public CombinationStrategyType combinationStrategyType = CombinationStrategyType.PINNING;
 
-    public boolean shouldViolate;
     public boolean expectExceptions;
     public boolean shouldSkipGeneration;
     boolean generationHasAlreadyOccured;
@@ -57,8 +67,6 @@ public class CucumberTestState {
     Map<String, List<List<String>>> inMapFiles = new HashMap<>();
 
     Deque<NestedConstraint> nestedConstraints = new ArrayDeque<>();
-
-    private final List<ConstraintType> contstraintsToNotViolate = new ArrayList<>();
 
     public void startCreatingIfConstraint(int total) {
         nestedConstraints.push(new NestedConstraint("if", total));
@@ -124,14 +132,6 @@ public class CucumberTestState {
 
     public void addException(Exception e) {
         this.testExceptions.add(e);
-    }
-
-    public void addConstraintToNotViolate(ConstraintType constraintType) {
-        contstraintsToNotViolate.add(constraintType);
-    }
-
-    public List<ConstraintType> getConstraintsToNotViolate() {
-        return contstraintsToNotViolate;
     }
 
     private ConstraintDTO createConstraint(String fieldName, ConstraintType type, Object _value) {

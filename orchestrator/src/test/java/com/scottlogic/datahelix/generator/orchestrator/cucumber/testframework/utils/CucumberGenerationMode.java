@@ -20,6 +20,5 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.u
  * Enum to represent the possible generation modes in cucumber tests.
  */
 public enum CucumberGenerationMode {
-    VIOLATING,
     VALIDATING
 }
