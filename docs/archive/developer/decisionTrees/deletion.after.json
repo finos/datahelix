@@ -1,9 +1,0 @@
-{
-    "fields": [
-		{ "name": "x" },
-		{ "name": "y" }
-    ],
-    "constraints": [
-		{ "field": "x", "equalTo": 3 }
-	]
-}
