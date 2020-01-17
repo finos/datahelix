@@ -50,7 +50,6 @@ public class GeneratorModule extends AbstractModule {
         bind(AbstractDataGeneratorMonitor.class).toProvider(MonitorProvider.class).in(Singleton.class);
         bind(CombinationStrategy.class).toProvider(CombinationStrategyProvider.class);
         bind(OptionPicker.class).toProvider(OptionPickerProvider.class);
-        // bind(VisualiserFactory.class).toProvider(VisualiserFactoryProvider.class);
 
         // bind config directly
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());

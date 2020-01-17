@@ -9,7 +9,6 @@ The generator will then be run from the command line using the commands detailed
 ## Contents
 
 1. [Build and Run](BuildAndRun.md)
-1. [ Creating a Profile. ](CreatingAProfile.md)
+1. [Creating a Profile](CreatingAProfile.md)
 1. [Using a profile to Generate data](GeneratingData.md)
-1. [Visualising the Decision Tree](Visualise.md)
 1. [Basic Usage](BasicUsage.md)
