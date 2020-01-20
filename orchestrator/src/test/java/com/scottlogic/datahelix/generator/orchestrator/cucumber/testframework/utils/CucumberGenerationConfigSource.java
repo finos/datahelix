@@ -76,11 +76,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource {
     }
 
     @Override
-    public boolean useNdJson() {
-        return false;
-    }
-
-    @Override
     public OutputFormat getOutputFormat() {
         return null;
     }

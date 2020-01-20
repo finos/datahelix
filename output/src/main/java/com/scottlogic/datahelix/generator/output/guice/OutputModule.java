@@ -43,7 +43,7 @@ public class OutputModule extends AbstractModule {
             .toInstance(outputConfigSource.overwriteOutputFiles());
 
         bind(boolean.class)
-            .annotatedWith(Names.named("config:useNdJson"))
-            .toInstance(outputConfigSource.useNdJson());
+            .annotatedWith(Names.named("config:streamOutput"))
+            .toInstance(outputConfigSource.useStdOut());
     }
 }

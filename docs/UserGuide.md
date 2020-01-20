@@ -791,8 +791,7 @@ Option switches are case-sensitive, arguments are case-insensitive
     * Determines the type of combination strategy used in full sequential mode. Supported options are `MINIMAL`(default), `EXHAUSTIVE` and `PINNING`.
 * `--output-format`
     * Determines the output format. Supported options are `csv`(default) and `json`.
-* `--ndjson`
-    * When combined with the `--output-format=json` flag sets the output format to [ndjson](http://ndjson.org/). Defaults to true if the `--output-flag` is not set and to false if it is set.
+    * If no `output-path` is provided then the JSON data will be streamed in [ndjson](http://ndjson.org/) format
 * `--visualiser-level`
     * Determines level of visualisation using.  Supported options are `OFF` (default), `STANDARD` and `DETAILED`
 * `--visualiser-output-folder`

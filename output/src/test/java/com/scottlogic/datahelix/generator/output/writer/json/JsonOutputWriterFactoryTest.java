@@ -38,7 +38,7 @@ import static org.mockito.Mockito.when;
 
 class JsonOutputWriterFactoryTest {
     @Test
-    void writer_withNDJSONTrue__shouldOutputNewLineDelimiterRows() throws IOException {
+    void writer_whereStreamingJson__shouldOutputNewLineDelimiterRows() throws IOException {
         Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
@@ -48,7 +48,7 @@ class JsonOutputWriterFactoryTest {
     }
 
     @Test
-    void writer_withNDJSONFalse__shouldOutputRowsWrappedInAnArray() throws IOException {
+    void writer_whereNotStreamingJson__shouldOutputRowsWrappedInAnArray() throws IOException {
         Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
@@ -72,20 +72,20 @@ class JsonOutputWriterFactoryTest {
         );
     }
 
-    private static void expectJson(Fields fields, boolean useNdJson, Matcher<String> matcher) throws IOException {
+    private static void expectJson(Fields fields, boolean streamOutput, Matcher<String> matcher) throws IOException {
         // Act
         GeneratedObject mockGeneratedObject = mock(GeneratedObject.class);
         when(mockGeneratedObject.getFormattedValue(eq(fields.iterator().next()))).thenReturn("my_value");
-        String generateJson = generateJson(fields, mockGeneratedObject, useNdJson);
+        String generateJson = generateJson(fields, mockGeneratedObject, streamOutput);
 
         // Assert
         Assert.assertThat(generateJson, matcher);
     }
 
-    private static String generateJson(Fields fields, GeneratedObject generatedObject, boolean useNdJson) throws IOException {
+    private static String generateJson(Fields fields, GeneratedObject generatedObject, boolean streamOutput) throws IOException {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
-        try (DataSetWriter writer = new JsonOutputWriterFactory(useNdJson).createWriter(stream, fields)) {
+        try (DataSetWriter writer = new JsonOutputWriterFactory(streamOutput).createWriter(stream, fields)) {
             writer.writeRow(generatedObject);
             writer.writeRow(generatedObject);
         }
