@@ -22,15 +22,12 @@ import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
 import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.datahelix.generator.orchestrator.guice.AllConfigSource;
-import com.scottlogic.datahelix.generator.orchestrator.violate.ViolateConfigSource;
 import com.scottlogic.datahelix.generator.output.guice.OutputFormat;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 
-public class CucumberGenerationConfigSource implements AllConfigSource, ViolateConfigSource {
+public class CucumberGenerationConfigSource implements AllConfigSource {
     private final CucumberTestState state;
 
     @Inject
@@ -46,11 +43,6 @@ public class CucumberGenerationConfigSource implements AllConfigSource, ViolateC
     @Override
     public CombinationStrategyType getCombinationStrategyType() {
         return state.combinationStrategyType;
-    }
-
-    @Override
-    public List<ConstraintType> getConstraintsToNotViolate() {
-        return state.getConstraintsToNotViolate();
     }
 
     @Override

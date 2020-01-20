@@ -17,6 +17,5 @@
 package com.scottlogic.datahelix.generator.core.decisiontree;
 
 public enum NodeMarking {
-    CONTRADICTORY,
-    VIOLATED
+    CONTRADICTORY
 }

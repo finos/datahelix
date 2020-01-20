@@ -398,7 +398,7 @@ Scotland, 3
 ...
 ```
 
-After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated or violated. See [the inSet example](https://github.com/finos/datahelix/tree/master/examples/inSet) for an example showing the `inSet` constraint being used with a file.
+After loading the set from the file, this constraint behaves identically to the [inSet](#predicate-inset) constraint. This includes its behaviour when negated. See [the inSet example](https://github.com/finos/datahelix/tree/master/examples/inSet) for an example showing the `inSet` constraint being used with a file.
 
 <div id="predicate-inmap"></div>
 

@@ -59,7 +59,7 @@ public class UpfrontTreePruner {
         } else if (isPartiallyContradictory(markedTree.getRootNode())) {
             monitor.addLineToPrintAtEndOfGeneration("");
             monitor.addLineToPrintAtEndOfGeneration("The provided profile is partially contradictory!");
-            monitor.addLineToPrintAtEndOfGeneration("Run the visualise command for more information.");
+            monitor.addLineToPrintAtEndOfGeneration("Run the generator with the visualiser enabled for more information.");
             return new DecisionTree(prunedNode.get(), tree.getFields());
 
         }

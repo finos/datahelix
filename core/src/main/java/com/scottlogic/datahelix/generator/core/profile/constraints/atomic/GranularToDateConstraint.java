@@ -60,9 +60,6 @@ public class GranularToDateConstraint implements AtomicConstraint {
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
-        if (o instanceof ViolatedAtomicConstraint) {
-            return o.equals(this);
-        }
         if (o == null || getClass() != o.getClass()) return false;
         GranularToDateConstraint constraint = (GranularToDateConstraint) o;
         return (field.equals(constraint.field) && Objects.equals(granularity, constraint.granularity));
