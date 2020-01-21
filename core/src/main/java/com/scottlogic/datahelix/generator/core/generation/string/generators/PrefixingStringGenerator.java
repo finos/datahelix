@@ -42,12 +42,6 @@ public class PrefixingStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Stream<String> generateInterestingValues() {
-        return innerGenerator.generateInterestingValues()
-            .map(string -> prefix + string);
-    }
-
-    @Override
     public boolean matches(String string) {
         if (string.length() < prefix.length()) {
             return false;

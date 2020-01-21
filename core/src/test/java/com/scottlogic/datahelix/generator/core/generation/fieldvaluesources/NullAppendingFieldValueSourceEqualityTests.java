@@ -65,11 +65,6 @@ class NullAppendingFieldValueSourceEqualityTests {
         }
 
         @Override
-        public Stream<Object> generateInterestingValues() {
-            throw new UnsupportedOperationException("Not supported");
-        }
-
-        @Override
         public Stream<Object> generateAllValues() {
             throw new UnsupportedOperationException("Not supported");
         }

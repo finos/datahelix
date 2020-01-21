@@ -30,13 +30,6 @@ public class NullAppendingValueSource<T> implements FieldValueSource<T> {
     }
 
     @Override
-    public Stream<T> generateInterestingValues() {
-        return Stream.concat(
-            underlyingSource.generateInterestingValues(),
-            nullOnly.stream());
-    }
-
-    @Override
     public Stream<T> generateAllValues() {
         return Stream.concat(
             underlyingSource.generateAllValues(),

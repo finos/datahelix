@@ -16,48 +16,44 @@
 
 package com.scottlogic.datahelix.generator.core.generation;
 
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
+import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullAppendingValueSource;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullOnlySource;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.*;
-import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
-import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MAX;
-import static com.scottlogic.datahelix.generator.common.util.Defaults.NUMERIC_MIN;
 import static com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
-import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
-import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MIN_LIMIT;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class FieldSpecGetFieldValueSourceTests {
     @Test
     public void shouldReturnNullSourceOnlyWithMustBeNullRestrictions() {
         FieldSpec fieldSpecMustBeNull = FieldSpecFactory.nullOnly();
 
-        FieldValueSource sources = fieldSpecMustBeNull.getFieldValueSource();
+        FieldValueSource<?> sources = fieldSpecMustBeNull.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
-
 
     @Test
     public void shouldReturnNullSourceLastWithNoRestrictions() {
         FieldSpec fieldSpecWithNoRestrictions = FieldSpecFactory.fromType(FieldType.STRING);
 
-        FieldValueSource sources = fieldSpecWithNoRestrictions.getFieldValueSource();
+        FieldValueSource<?> sources = fieldSpecWithNoRestrictions.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -66,7 +62,7 @@ public class FieldSpecGetFieldValueSourceTests {
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
         FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
 
-        FieldValueSource sources = fieldSpecInSetAndNullNotDisallowed.getFieldValueSource();
+        FieldValueSource<?> sources = fieldSpecInSetAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -78,7 +74,7 @@ public class FieldSpecGetFieldValueSourceTests {
             new Limit<>(new BigDecimal(30), false));
         FieldSpec fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(numericRestrictions);
 
-        FieldValueSource sources = fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed.getFieldValueSource();
+        FieldValueSource<?> sources = fieldSpecWithTypedNumericRestrictionsAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
     }
@@ -91,33 +87,9 @@ public class FieldSpecGetFieldValueSourceTests {
         );
         FieldSpec fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed = FieldSpecFactory.fromRestriction(dateTimeRestrictions);
 
-        FieldValueSource sources = fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed.getFieldValueSource();
+        FieldValueSource<?> sources = fieldSpecInSetWithTypedDateTimeRestrictionsAndNullNotDisallowed.getFieldValueSource();
 
         AssertLastSourceIsNullOnlySource(sources);
-    }
-
-    @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithValueTooLargeForInteger_generatesExpectedValues() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
-            createNumericRestrictions(new Limit<>(new BigDecimal(0), false),
-                new Limit<>(new BigDecimal("1E+18"), false))
-        ).withNotNull(
-
-        );
-
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
-
-        Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
-        List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
-        }
-
-        final List<BigDecimal> expectedValues = Arrays.asList(
-            new BigDecimal("1E-20"),
-            new BigDecimal("999999999999999999.99999999999999999999")
-        );
-        Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
     @Test
@@ -128,9 +100,9 @@ public class FieldSpecGetFieldValueSourceTests {
                 new Limit<>(new BigDecimal("15.00000000000000000010"), false))
         ).withNotNull();
 
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
+        final FieldValueSource<?> result = fieldSpec.getFieldValueSource();
 
-        Iterator allValuesIterator = result.generateAllValues().iterator();
+        Iterator<?> allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
         while (allValuesIterator.hasNext()) {
             valuesFromResult.add((BigDecimal) allValuesIterator.next());
@@ -150,68 +122,6 @@ public class FieldSpecGetFieldValueSourceTests {
     }
 
     @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithNoScaleAndGranularityHasRestrictionOfTwo_generatesValuesWithTwoDecimalPlaces() {
-        LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(
-            new Limit<>(new BigDecimal("15"), false),
-            new Limit<>(new BigDecimal("16"), false),
-            new NumericGranularity(2));
-        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(restrictions).withNotNull();
-
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
-
-        Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
-        List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
-        }
-
-        final List<BigDecimal> expectedValues = Arrays.asList(
-            new BigDecimal("15.01"),
-            new BigDecimal("15.99")
-        );
-        Assert.assertEquals(expectedValues, valuesFromResult);
-    }
-
-    @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionsWithMinAndMaxNull_generatesBoundaryValues() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
-            LinearRestrictionsFactory.createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT)
-        ).withNotNull();
-
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
-
-        Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
-        List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add(new BigDecimal(interestingValuesIterator.next().toString()));
-        }
-
-        final List<BigDecimal> expectedValues = Arrays.asList(
-            NUMERIC_MIN,
-            NUMERIC_MAX
-        );
-        Assert.assertEquals(expectedValues, valuesFromResult);
-    }
-
-    @Test
-    void getFieldValueSources_fieldSpecContainsNumericRestrictionWithNullMinAndMaxIsDecimal_generatesDecimalValues() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
-            createNumericRestrictions(NUMERIC_MIN_LIMIT, new Limit<>(new BigDecimal("150.5"), false))
-        ).withNotNull();
-
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
-
-        Iterator interestingValuesIterator = result.generateInterestingValues().iterator();
-        List<BigDecimal> valuesFromResult = new ArrayList<>();
-        while (interestingValuesIterator.hasNext()) {
-            valuesFromResult.add((BigDecimal) interestingValuesIterator.next());
-        }
-
-        Assert.assertTrue(valuesFromResult.size() > 0);
-        Assert.assertTrue(valuesFromResult.stream().allMatch(Objects::nonNull));
-    }
-
-    @Test
     void getFieldValueSources_fieldSpecContainsNegativeMinAndPositiveMax_generatesExpectedNegativeToPositiveValues() {
         FieldSpec fieldSpec = FieldSpecFactory.fromRestriction(
             createNumericRestrictions(
@@ -219,9 +129,9 @@ public class FieldSpecGetFieldValueSourceTests {
                 new Limit<>(new BigDecimal("3E-20"), false))
         ).withNotNull();
 
-        final FieldValueSource result = fieldSpec.getFieldValueSource();
+        final FieldValueSource<?> result = fieldSpec.getFieldValueSource();
 
-        Iterator allValuesIterator = result.generateAllValues().iterator();
+        Iterator<?> allValuesIterator = result.generateAllValues().iterator();
         List<BigDecimal> valuesFromResult = new ArrayList<>();
         while (allValuesIterator.hasNext()) {
             valuesFromResult.add((BigDecimal) allValuesIterator.next());
@@ -237,17 +147,42 @@ public class FieldSpecGetFieldValueSourceTests {
         Assert.assertEquals(expectedValues, valuesFromResult);
     }
 
-    private void AssertLastSourceIsNullOnlySource(FieldValueSource source) {
+    private void AssertLastSourceIsNullOnlySource(FieldValueSource<?> source) {
         if (source instanceof NullOnlySource){
             return;
         }
-        NullAppendingValueSource combi = (NullAppendingValueSource) source;
-        List<Object> sources = (List<Object>) combi.generateInterestingValues().collect(Collectors.toList());
-        int lastSourceIndex = sources.size() - 1;
-        Assert.assertTrue(sources.get(sources.size()-1) == null);
-    }
+        NullAppendingValueSource<?> combi = (NullAppendingValueSource<?>) source;
 
-    private static StringRestrictions matchesRegex(String regex, boolean negate){
-        return new StringRestrictionsFactory().forStringMatching(Pattern.compile(regex), negate);
+        final int randomValueThatWillYieldNull = 1;
+        RandomNumberGenerator rng = new RandomNumberGenerator() {
+            @Override
+            public int nextInt() {
+                return randomValueThatWillYieldNull;
+            }
+
+            @Override
+            public int nextInt(int bound) {
+                return randomValueThatWillYieldNull;
+            }
+
+            @Override
+            public long nextLong(long lowerInclusive, long upperInclusive) {
+                return randomValueThatWillYieldNull;
+            }
+
+            @Override
+            public double nextDouble(double lowerInclusive, double upperExclusive) {
+                return randomValueThatWillYieldNull;
+            }
+
+            @Override
+            public BigDecimal nextBigDecimal(BigDecimal lowerInclusive, BigDecimal upperExclusive) {
+                return BigDecimal.valueOf(randomValueThatWillYieldNull);
+            }
+        };
+
+        Iterator<?> shouldBeNullValueIterator = combi.generateRandomValues(rng).iterator();
+        Assert.assertThat(shouldBeNullValueIterator.hasNext(), is(true));
+        Assert.assertThat(shouldBeNullValueIterator.next(), is(nullValue()));
     }
 }

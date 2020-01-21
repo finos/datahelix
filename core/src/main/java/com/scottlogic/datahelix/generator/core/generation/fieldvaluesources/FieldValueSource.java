@@ -21,8 +21,6 @@ import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import java.util.stream.Stream;
 
 public interface FieldValueSource<T> {
-    Stream<T> generateInterestingValues();
-
     Stream<T> generateAllValues();
 
     Stream<T> generateRandomValues(RandomNumberGenerator randomNumberGenerator);

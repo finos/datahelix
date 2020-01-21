@@ -20,7 +20,6 @@ import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.AutomatonUtils;
-import com.scottlogic.datahelix.generator.core.generation.string.factorys.InterestingStringFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.factorys.RandomStringFactory;
 import com.scottlogic.datahelix.generator.core.generation.string.iterators.FiniteStringAutomatonIterator;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
@@ -47,7 +46,6 @@ public class RegexStringGenerator implements StringGenerator {
     private Automaton automaton;
 
     private RandomStringFactory randomStringFactory = new RandomStringFactory();
-    private InterestingStringFactory interestingStringFactory = new InterestingStringFactory();
     private final RegexPattern regexPattern;
 
     private RegexStringGenerator(Automaton automaton, RegexPattern regexPattern) {
@@ -120,11 +118,6 @@ public class RegexStringGenerator implements StringGenerator {
         return new RegexStringGenerator(
             this.automaton.clone().complement().intersection(DEFAULT.automaton),
             this.regexPattern.complement());
-    }
-
-    @Override
-    public Stream<String> generateInterestingValues() {
-        return StreamSupport.stream(interestingStringFactory.generateInterestingValues(automaton).spliterator(), false);
     }
 
     @Override

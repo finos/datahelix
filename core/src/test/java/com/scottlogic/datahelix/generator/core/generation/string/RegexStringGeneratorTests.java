@@ -106,56 +106,6 @@ class RegexStringGeneratorTests {
     }
 
     @Test
-    void generateInterestingValuesShouldGenerateShortestAndLongestValues() {
-        StringGenerator generator = new RegexStringGenerator("Test_(\\d{3}|[A-Z]{5})_(banana|apple)", true);
-
-        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
-
-        assertThat(
-            results,
-            containsInAnyOrder(
-                "Test_000_apple",
-                "Test_AAAAA_banana"));
-    }
-
-    @Test
-    void interestingValuesShouldBePrintable() {
-        StringGenerator generator = new RegexStringGenerator("Test.Test", true);
-
-        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
-
-        for (String interestingValue : results) {
-            for (char character : interestingValue.toCharArray()) {
-                assertThat(character, greaterThanOrEqualTo((char)32));
-            }
-        }
-    }
-
-    @Test
-    void interestingValuesShouldBeBounds() {
-        StringGenerator generator = new RegexStringGenerator(".{10,20}", true);
-
-        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
-
-        assertThat(results.size(), Is.is(2));
-        assertThat(results.get(0).length(), Is.is(10));
-        assertThat(results.get(1).length(), Is.is(20));
-    }
-
-    @Test
-    void shouldCreateZeroLengthInterestingValue() {
-        StringGenerator generator = new RegexStringGenerator("(Test)?", true);
-
-        List<String> results = generator.generateInterestingValues().collect(Collectors.toList());
-
-        assertThat(
-                results,
-                containsInAnyOrder(
-                        "",
-                        "Test"));
-    }
-
-    @Test
     void shouldCorrectlySampleInfiniteResults() {
         StringGenerator generator = StringRestrictionsFactory.forStringMatching(Pattern.compile("[a]+"), false).createGenerator();
 
@@ -388,31 +338,6 @@ class RegexStringGeneratorTests {
 
         assertFalse(StringUtils.isCharValidUtf8(invalidChar));
         assertTrue(StringUtils.isCharValidUtf8(validChar));
-    }
-
-    @Test
-    void generateInterestingValues_withShorterThanAndContainingAndMatchingRegex_shouldBeAbleToCreateAString(){
-        RegexStringGenerator matchingRegex = new RegexStringGenerator("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$", true);
-        RegexStringGenerator containingRegex = new RegexStringGenerator("\\@", false);
-        RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,20}$", true);
-
-        StringGenerator intersected = shorterThan.intersect(matchingRegex).intersect(containingRegex);
-
-        List<String> results = intersected.generateInterestingValues().collect(Collectors.toList());
-
-        assertThat(results, not(empty()));
-    }
-
-    @Test
-    void generateInterestingValues_withShorterThanAndMatchingRegex_shouldBeAbleToCreateAString(){
-        RegexStringGenerator matchingRegex = new RegexStringGenerator("^[a-z0-9]+\\@[a-z0-9]+\\.co(m|\\.uk)$", true);
-        RegexStringGenerator shorterThan = new RegexStringGenerator("^.{0,255}$", true);
-
-        StringGenerator intersected = shorterThan.intersect(matchingRegex);
-
-        List<String> results = intersected.generateInterestingValues().collect(Collectors.toList());
-
-        assertThat(results, not(empty()));
     }
 
     @Test

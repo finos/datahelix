@@ -47,11 +47,6 @@ public class NoStringsStringGenerator implements StringGenerator {
     }
 
     @Override
-    public Stream<String> generateInterestingValues() {
-        return Stream.empty();
-    }
-
-    @Override
     public Stream<String> generateAllValues() {
         return Stream.empty();
     }

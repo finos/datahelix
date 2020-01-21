@@ -17,9 +17,10 @@
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources;
 
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
-import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.*;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -136,53 +137,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void shouldSupplyInterestingValues() {
-        givenLowerBound(-10, true);
-        givenUpperBound(10, true);
-        givenScale(1);
-
-        expectInterestingValues("-10", "10");
-    }
-
-    @Test
-    void shouldSupplySmallNonZeroInterestingValues() {
-        givenLowerBound("1.9", true);
-        givenUpperBound("2.59", true);
-        givenScale(2);
-
-        expectInterestingValues("1.9", "2.59");
-    }
-
-    @Test
-    void shouldSupplyInterestingValuesWhenBoundariesAreInclusiveAndClose() {
-        givenLowerBound("1.55555", true);
-        givenUpperBound("1.55555", true);
-        givenScale(5);
-
-        expectInterestingValues("1.55555");
-    }
-
-    @Test
-    void shouldSupplyInterestingValuesWhenBoundariesAreExclusiveAndClose() {
-        givenLowerBound("1.55555", false);
-        givenUpperBound("1.55557", false);
-        givenScale(5);
-
-        expectInterestingValues("1.55556");
-    }
-
-    @Test
-    void shouldSupplyInterestingNonBlacklistedValues() {
-        givenLowerBound(-10, true);
-        givenUpperBound(10, true);
-        givenScale(1);
-
-        givenBlacklist(-10, 0, 9.9);
-
-        expectInterestingValues(10);
-    }
-
-    @Test
     void shouldGenerateRandomValues() {
         givenLowerBound(-10, true);
         givenUpperBound(10, true);
@@ -221,60 +175,11 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void shouldSupplyToUpperBoundary() {
-        givenLowerBound(4, true);
-
-        expectInterestingValues(
-            4,
-            Defaults.NUMERIC_MAX);
-    }
-
-    @Test
-    void shouldSupplyToLowerBoundary() {
-        givenUpperBound(4, true);
-
-        expectInterestingValues(
-            Defaults.NUMERIC_MIN, 4);
-    }
-
-    @Test
-    void shouldSupplyToBoundary() {
-        expectInterestingValues(
-            Defaults.NUMERIC_MIN,
-            Defaults.NUMERIC_MAX
-        );
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitManyValuesIncluding0(){
-        givenLowerBound(0, true);
-        givenUpperBound(Integer.MAX_VALUE, false);
-
-        expectInterestingValues(0, Integer.MAX_VALUE - 1);
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitOnlyTwoValuesIncluding0(){
-        givenLowerBound(-1, true);
-        givenUpperBound(1, false);
-
-        expectInterestingValues(-1, 0);
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitOnlyOneValueIncluding0(){
-        givenLowerBound(0, true);
-        givenUpperBound(1, false);
-
-        expectInterestingValues(0);
-    }
-
-    @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
 
@@ -284,10 +189,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchBlacklistInDifferentOrder(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(2, 1)));
 
@@ -297,10 +202,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchBlacklistEmpty(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             Collections.emptySet());
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             Collections.emptySet());
 
@@ -310,10 +215,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMinMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(5, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
 
@@ -326,10 +231,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMaxMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 20, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
 
@@ -338,10 +243,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptBlacklistMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(3, 4)));
 
@@ -350,10 +255,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptScaleMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 2),
             toBlacklist(Arrays.asList(1, 2)));
 
@@ -362,10 +267,10 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesExceptMinAndMaxMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(5, 20, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 1),
             toBlacklist(Arrays.asList(1, 2)));
 
@@ -374,23 +279,14 @@ class RealNumberFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesDontMatch(){
-        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> a = new LinearFieldValueSource<>(
             numericRestrictions(5, 20, 1),
             toBlacklist(Arrays.asList(1, 2)));
-        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<BigDecimal>(
+        LinearFieldValueSource<BigDecimal> b = new LinearFieldValueSource<>(
             numericRestrictions(1, 10, 2),
             toBlacklist(Arrays.asList(3, 4)));
 
         Assert.assertThat(a, not(equalTo(b)));
-    }
-
-    @Test
-    public void interestingValuesInclusively_UpperLimitLargerThanConfig_IncludesConfigMax() {
-        givenLowerBound(-10, true);
-        givenUpperBound(1e30, true);
-        givenScale(0);
-
-        expectInterestingValues(new BigDecimal("1e20"), "-10");
     }
 
     @Test
@@ -404,15 +300,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    public void interestingValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
-        givenLowerBound(-10, false);
-        givenUpperBound(1e30, false);
-        givenScale(0);
-
-        expectInterestingValues("100000000000000000000", "-9");
-    }
-
-    @Test
     public void exhaustiveValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
         givenLowerBound(new BigDecimal("99999999999999999995"), false);
         givenUpperBound(1e30, false);
@@ -420,15 +307,6 @@ class RealNumberFieldValueSourceTests {
 
         expectAllValues("100000000000000000000", "99999999999999999999", "99999999999999999998", "99999999999999999997",
             "99999999999999999996");
-    }
-
-    @Test
-    public void interestingValuesInclusively_LowerLimitSmallerThanConfig_IncludesConfigMin() {
-        givenLowerBound(-1e30, true);
-        givenUpperBound(10, true);
-        givenScale(0);
-
-        expectInterestingValues(new BigDecimal("-1e20"), "10");
     }
 
     @Test
@@ -486,14 +364,10 @@ class RealNumberFieldValueSourceTests {
         blacklist = new HashSet<>(Arrays.asList(values));
     }
     private void expectAllValues(Object... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateAllValues(), true, expectedValuesArray);
+        expectValues(getObjectUnderTest().generateAllValues(), expectedValuesArray);
     }
 
-    private void expectInterestingValues(Object... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateInterestingValues(), false, expectedValuesArray);
-    }
-
-    private void expectValues(Stream<Object> values, boolean assertCount, Object... expectedValuesArray) {
+    private void expectValues(Stream<Object> values, Object... expectedValuesArray) {
         Collection<Matcher<? super BigDecimal>> expectedValuesMatchers = Stream.of(expectedValuesArray)
             .map(NumberUtils::coerceToBigDecimal)
             .map(Matchers::comparesEqualTo) // we have to use compare otherwise it fails if the scale is different
@@ -513,7 +387,7 @@ class RealNumberFieldValueSourceTests {
         if (objectUnderTest == null) {
             LinearRestrictions<BigDecimal> restrictions = createNumericRestrictions(lowerLimit, upperLimit, new NumericGranularity(scale));
             restrictions = (LinearRestrictions<BigDecimal>) new LinearRestrictionsMerger().merge(restrictions, createNumericRestrictions(NUMERIC_MIN_LIMIT, NUMERIC_MAX_LIMIT), false).get();
-            objectUnderTest = new LinearFieldValueSource<BigDecimal>(restrictions, toBlacklist(blacklist));
+            objectUnderTest = new LinearFieldValueSource<>(restrictions, toBlacklist(blacklist));
         }
 
         return objectUnderTest;

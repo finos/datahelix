@@ -92,7 +92,7 @@ Below is an example of a Cucumber test:
 Feature: the name of my feature
 
   Background:
-    Given the generation strategy is interesting
+    Given the generation strategy is random
     And there is a non nullable field foo
 
   Scenario: Running the generator should emit the correct data
