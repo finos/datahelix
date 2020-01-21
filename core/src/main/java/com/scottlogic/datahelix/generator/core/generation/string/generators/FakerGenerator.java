@@ -59,11 +59,6 @@ public class FakerGenerator implements StringGenerator {
     }
 
     @Override
-    public Stream<String> generateInterestingValues() {
-        throw new IllegalArgumentException("Cannot deterministically generate from faker");
-    }
-
-    @Override
     public Stream<String> generateAllValues() {
         return Stream.generate(() -> getFakerValue(orderedFaker))
             .filter(underlyingRegexGenerator::validate);

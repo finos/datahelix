@@ -53,18 +53,11 @@ import static com.scottlogic.datahelix.generator.output.guice.OutputFormat.CSV;
 public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @Override
     public Integer call() throws Exception {
-        checkForAlphaGenerationDataTypes();
         Module container = new AllModule(this);
         Injector injector = Guice.createInjector(container);
 
         injector.getInstance(GenerateExecute.class).execute();
         return 0;
-    }
-
-    private void checkForAlphaGenerationDataTypes() {
-        if (generationType.equals(DataGenerationType.INTERESTING)) {
-            printAlphaFeatureWarning("Generation Type of INTERESTING");
-        }
     }
 
     @CommandLine.Option(

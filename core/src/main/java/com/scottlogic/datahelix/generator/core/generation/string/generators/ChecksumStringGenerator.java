@@ -43,12 +43,6 @@ public class ChecksumStringGenerator implements StringGenerator {
             .map(addChecksum());
     }
 
-    @Override
-    public Stream<String> generateInterestingValues() {
-        return checksumlessGenerator.generateInterestingValues()
-            .map(addChecksum());
-    }
-
     private Function<String, String> addChecksum() {
         return string -> string + checksumMaker.makeChecksum(string);
     }

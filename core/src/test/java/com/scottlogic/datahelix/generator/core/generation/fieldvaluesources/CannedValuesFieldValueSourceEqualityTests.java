@@ -28,16 +28,17 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 
 class CannedValuesFieldValueSourceEqualityTests {
-    private FieldValueSource valueSourceOf(Object... elements) {
+    private FieldValueSource<Object> valueSourceOf(String... elements) {
         Set<Object> set = Arrays.stream(elements).collect(Collectors.toSet());
         DistributedList<Object> whitelist = DistributedList.uniform(set);
+        //noinspection unchecked
         return new CannedValuesFieldValueSource(whitelist);
     }
 
     @Test
     public void shouldBeEqualIfAllAndInterestingValuesMatch(){
-        FieldValueSource a = valueSourceOf("a", "b", "c");
-        FieldValueSource b = valueSourceOf("a", "b", "c");
+        FieldValueSource<Object> a = valueSourceOf("a", "b", "c");
+        FieldValueSource<Object> b = valueSourceOf("a", "b", "c");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -45,16 +46,16 @@ class CannedValuesFieldValueSourceEqualityTests {
 
     @Test
     public void shouldBeUnequalIfAllOrInterestingValuesDiffer(){
-        FieldValueSource a = valueSourceOf("a", "b", "c");
-        FieldValueSource b = valueSourceOf("a", "b");
+        FieldValueSource<Object> a = valueSourceOf("a", "b", "c");
+        FieldValueSource<Object> b = valueSourceOf("a", "b");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
 
     @Test
     public void emptyCollectionsShouldBeEqual(){
-        FieldValueSource a = valueSourceOf();
-        FieldValueSource b = valueSourceOf();
+        FieldValueSource<Object> a = valueSourceOf();
+        FieldValueSource<Object> b = valueSourceOf();
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));

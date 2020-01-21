@@ -25,11 +25,6 @@ public class NullOnlySource implements FieldValueSource {
     private final Set nullOnly = Collections.singleton(null);
     
     @Override
-    public Stream<Object> generateInterestingValues() {
-        return nullOnly.stream();
-    }
-
-    @Override
     public Stream<Object> generateAllValues() {
         return nullOnly.stream();
     }
