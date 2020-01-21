@@ -751,7 +751,6 @@ You can also use custom generators as constraints
 ```javascript
 { "field": "field1", "generator": "lorem ipsum" }
 ```
-
 Custom generators can be used in "anyOf" grammatical constraints, as well as in the "then" and "else" parts of conditional constraints
 
 To combine generators with sets and equalTo, you will need to create a 'matchingFunction' when building the custom generator. Which should be a function that returns true if a value is one the custom generator could produce.
@@ -768,9 +767,24 @@ Profiles can be run against a jar using the command line.
 
 Currently the only mode fully supported by the data helix is generate mode. An example command would be something like
 
-`java -jar generator.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv`
+```shell script
+java -jar generator.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+```
 
-### Command Line Arguments for Generate Mode
+it is also possible to execute the generator using a wrapper script:
+
+on windows:
+
+```powershell
+generator.ps1 --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+```
+
+and on linux
+```shell script
+generator.sh --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+```
+
+### Command Line Arguments
 <div id="Command-Line-Arguments-for-Generate-Mode"></div>
 Option switches are case-sensitive, arguments are case-insensitive
 
