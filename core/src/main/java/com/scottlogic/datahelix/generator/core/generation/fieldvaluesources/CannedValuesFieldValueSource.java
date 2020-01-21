@@ -30,11 +30,6 @@ public class CannedValuesFieldValueSource implements FieldValueSource {
     }
 
     @Override
-    public Stream<Object> generateInterestingValues() {
-        return generateAllValues();
-    }
-
-    @Override
     public Stream<Object> generateAllValues() {
         return allValues.stream();
     }

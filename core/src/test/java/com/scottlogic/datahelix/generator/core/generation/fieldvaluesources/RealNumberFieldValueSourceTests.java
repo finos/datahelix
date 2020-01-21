@@ -17,9 +17,10 @@
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources;
 
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
-import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.*;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsMerger;
 import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerator;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -136,53 +137,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    void shouldSupplyInterestingValues() {
-        givenLowerBound(-10, true);
-        givenUpperBound(10, true);
-        givenScale(1);
-
-        expectInterestingValues("-10", "10");
-    }
-
-    @Test
-    void shouldSupplySmallNonZeroInterestingValues() {
-        givenLowerBound("1.9", true);
-        givenUpperBound("2.59", true);
-        givenScale(2);
-
-        expectInterestingValues("1.9", "2.59");
-    }
-
-    @Test
-    void shouldSupplyInterestingValuesWhenBoundariesAreInclusiveAndClose() {
-        givenLowerBound("1.55555", true);
-        givenUpperBound("1.55555", true);
-        givenScale(5);
-
-        expectInterestingValues("1.55555");
-    }
-
-    @Test
-    void shouldSupplyInterestingValuesWhenBoundariesAreExclusiveAndClose() {
-        givenLowerBound("1.55555", false);
-        givenUpperBound("1.55557", false);
-        givenScale(5);
-
-        expectInterestingValues("1.55556");
-    }
-
-    @Test
-    void shouldSupplyInterestingNonBlacklistedValues() {
-        givenLowerBound(-10, true);
-        givenUpperBound(10, true);
-        givenScale(1);
-
-        givenBlacklist(-10, 0, 9.9);
-
-        expectInterestingValues(10);
-    }
-
-    @Test
     void shouldGenerateRandomValues() {
         givenLowerBound(-10, true);
         givenUpperBound(10, true);
@@ -218,55 +172,6 @@ class RealNumberFieldValueSourceTests {
         givenBlacklist(6, 8);
 
         expectCorrectRandomValues();
-    }
-
-    @Test
-    void shouldSupplyToUpperBoundary() {
-        givenLowerBound(4, true);
-
-        expectInterestingValues(
-            4,
-            Defaults.NUMERIC_MAX);
-    }
-
-    @Test
-    void shouldSupplyToLowerBoundary() {
-        givenUpperBound(4, true);
-
-        expectInterestingValues(
-            Defaults.NUMERIC_MIN, 4);
-    }
-
-    @Test
-    void shouldSupplyToBoundary() {
-        expectInterestingValues(
-            Defaults.NUMERIC_MIN,
-            Defaults.NUMERIC_MAX
-        );
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitManyValuesIncluding0(){
-        givenLowerBound(0, true);
-        givenUpperBound(Integer.MAX_VALUE, false);
-
-        expectInterestingValues(0, Integer.MAX_VALUE - 1);
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitOnlyTwoValuesIncluding0(){
-        givenLowerBound(-1, true);
-        givenUpperBound(1, false);
-
-        expectInterestingValues(-1, 0);
-    }
-
-    @Test
-    void shouldNotEmitInterestingValueTwiceWhenBoundsPermitOnlyOneValueIncluding0(){
-        givenLowerBound(0, true);
-        givenUpperBound(1, false);
-
-        expectInterestingValues(0);
     }
 
     @Test
@@ -385,15 +290,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    public void interestingValuesInclusively_UpperLimitLargerThanConfig_IncludesConfigMax() {
-        givenLowerBound(-10, true);
-        givenUpperBound(1e30, true);
-        givenScale(0);
-
-        expectInterestingValues(new BigDecimal("1e20"), "-10");
-    }
-
-    @Test
     public void exhaustiveValuesInclusively_UpperLimitLargerThanConfig_IncludesConfigMax() {
         givenLowerBound(new BigDecimal("99999999999999999995"), true);
         givenUpperBound(1e30, true);
@@ -404,15 +300,6 @@ class RealNumberFieldValueSourceTests {
     }
 
     @Test
-    public void interestingValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
-        givenLowerBound(-10, false);
-        givenUpperBound(1e30, false);
-        givenScale(0);
-
-        expectInterestingValues("100000000000000000000", "-9");
-    }
-
-    @Test
     public void exhaustiveValuesExclusively_UpperLimitLargerThanConfig_IncludesConfigMaxMinusOne() {
         givenLowerBound(new BigDecimal("99999999999999999995"), false);
         givenUpperBound(1e30, false);
@@ -420,15 +307,6 @@ class RealNumberFieldValueSourceTests {
 
         expectAllValues("100000000000000000000", "99999999999999999999", "99999999999999999998", "99999999999999999997",
             "99999999999999999996");
-    }
-
-    @Test
-    public void interestingValuesInclusively_LowerLimitSmallerThanConfig_IncludesConfigMin() {
-        givenLowerBound(-1e30, true);
-        givenUpperBound(10, true);
-        givenScale(0);
-
-        expectInterestingValues(new BigDecimal("-1e20"), "10");
     }
 
     @Test
@@ -487,10 +365,6 @@ class RealNumberFieldValueSourceTests {
     }
     private void expectAllValues(Object... expectedValuesArray) {
         expectValues(getObjectUnderTest().generateAllValues(), expectedValuesArray);
-    }
-
-    private void expectInterestingValues(Object... expectedValuesArray) {
-        expectValues(getObjectUnderTest().generateInterestingValues(), expectedValuesArray);
     }
 
     private void expectValues(Stream<Object> values, Object... expectedValuesArray) {

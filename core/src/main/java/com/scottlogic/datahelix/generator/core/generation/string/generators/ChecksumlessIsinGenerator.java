@@ -50,11 +50,6 @@ public class ChecksumlessIsinGenerator implements StringGenerator {
     }
 
     @Override
-    public Stream<String> generateInterestingValues() {
-        return generateAllValues().limit(2);
-    }
-
-    @Override
     public boolean matches(String string) {
         Stream<StringGenerator> isinStringGenerators =
             Arrays.stream(IsinCountryCode.values())

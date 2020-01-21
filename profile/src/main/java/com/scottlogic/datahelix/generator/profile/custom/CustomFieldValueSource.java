@@ -32,11 +32,6 @@ public class CustomFieldValueSource<T> implements FieldValueSource<T> {
     }
 
     @Override
-    public Stream<T> generateInterestingValues() {
-        return generateAllValues().limit(2);
-    }
-
-    @Override
     public Stream<T> generateAllValues() {
         if (negated){
             return customGenerator.generateNegatedSequential();

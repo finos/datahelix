@@ -44,13 +44,6 @@ public class LinearFieldValueSource<T extends Comparable<T>> implements FieldVal
     }
 
     @Override
-    public Stream<T> generateInterestingValues() {
-        return Stream.of(restrictions.getMin(), restrictions.getMax())
-            .distinct()
-            .filter(this::notInBlacklist);
-    }
-
-    @Override
     public Stream<T> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() -> restrictions.getGranularity()
                 .getRandom(

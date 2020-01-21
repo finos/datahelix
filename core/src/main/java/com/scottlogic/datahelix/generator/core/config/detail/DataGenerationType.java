@@ -18,6 +18,5 @@ package com.scottlogic.datahelix.generator.core.config.detail;
 
 public enum DataGenerationType {
     FULL_SEQUENTIAL,
-    INTERESTING,
     RANDOM
 }

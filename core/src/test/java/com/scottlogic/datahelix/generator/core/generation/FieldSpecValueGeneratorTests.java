@@ -17,12 +17,11 @@
 package com.scottlogic.datahelix.generator.core.generation;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
@@ -40,7 +39,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
-import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.*;
+import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.FULL_SEQUENTIAL;
+import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.RANDOM;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.mockito.Mockito.*;
@@ -51,10 +51,10 @@ class FieldSpecValueGeneratorTests {
         WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            INTERESTING,
-            new JavaUtilRandomNumberGenerator());
+            RANDOM,
+            new DeterministicRandomForSet(Arrays.asList(0, 1, 2), false));
 
-        final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
+        final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).limit(3).collect(Collectors.toSet());
 
         Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().list()
             .stream()
@@ -71,11 +71,16 @@ class FieldSpecValueGeneratorTests {
                     new Limit<>(new BigDecimal(10), false),
                     new Limit<>(new BigDecimal(30), false)));
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-            INTERESTING,
-            new JavaUtilRandomNumberGenerator());
+            RANDOM,
+            new DeterministicRandomForSet(Stream.of(0, 1).collect(Collectors.toList()), true));
 
         final Set<DataBagValue> result =
-            fieldSpecFulfiller.generate(createField(null, StandardSpecificFieldType.DECIMAL.toSpecificFieldType()), fieldSpec).collect(Collectors.toSet());
+            fieldSpecFulfiller
+                .generate(
+                    createField(null, StandardSpecificFieldType.DECIMAL.toSpecificFieldType()),
+                    fieldSpec)
+                .limit(3)
+                .collect(Collectors.toSet());
 
         Set<DataBagValue> expectedDataBags = new HashSet<>(
             Arrays.asList(
@@ -106,7 +111,6 @@ class FieldSpecValueGeneratorTests {
             randomNumberGenerator = mock(JavaUtilRandomNumberGenerator.class);
             when(fieldSpec.getFieldValueSource()).thenReturn(fieldValueSource);
             when(fieldValueSource.generateAllValues()).thenReturn(Stream.empty());
-            when(fieldValueSource.generateInterestingValues()).thenReturn(Stream.empty());
             when(fieldValueSource.generateRandomValues(randomNumberGenerator)).thenReturn(Stream.empty());
         }
 
@@ -120,7 +124,6 @@ class FieldSpecValueGeneratorTests {
             fieldSpecFulfiller.generate(new Field(null, StandardSpecificFieldType.STRING.toSpecificFieldType(), true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
-            verify(fieldValueSource, times(0)).generateInterestingValues();
             verify(fieldValueSource, times(0)).generateRandomValues(randomNumberGenerator);
         }
 
@@ -134,36 +137,7 @@ class FieldSpecValueGeneratorTests {
             fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(0)).generateAllValues();
-            verify(fieldValueSource, times(0)).generateInterestingValues();
             verify(fieldValueSource, times(1)).generateRandomValues(randomNumberGenerator);
-        }
-
-        @Test
-        void generateInteresting_uniqueFieldSpec_returnsAllValues() {
-            FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-                INTERESTING,
-                randomNumberGenerator
-            );
-
-            fieldSpecFulfiller.generate(new Field(null, StandardSpecificFieldType.STRING.toSpecificFieldType(), true, null, false, false, null), fieldSpec).collect(Collectors.toSet());
-
-            verify(fieldValueSource, times(1)).generateAllValues();
-            verify(fieldValueSource, times(0)).generateInterestingValues();
-            verify(fieldValueSource, times(0)).generateRandomValues(randomNumberGenerator);
-        }
-
-        @Test
-        void generateInteresting_notUniqueFieldSpec_returnsInterestingValues() {
-            FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
-                INTERESTING,
-                randomNumberGenerator
-            );
-
-            fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
-
-            verify(fieldValueSource, times(0)).generateAllValues();
-            verify(fieldValueSource, times(1)).generateInterestingValues();
-            verify(fieldValueSource, times(0)).generateRandomValues(randomNumberGenerator);
         }
 
         @Test
@@ -176,7 +150,6 @@ class FieldSpecValueGeneratorTests {
             fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
-            verify(fieldValueSource, times(0)).generateInterestingValues();
             verify(fieldValueSource, times(0)).generateRandomValues(randomNumberGenerator);
         }
 
@@ -190,8 +163,8 @@ class FieldSpecValueGeneratorTests {
             fieldSpecFulfiller.generate(createField(null), fieldSpec).collect(Collectors.toSet());
 
             verify(fieldValueSource, times(1)).generateAllValues();
-            verify(fieldValueSource, times(0)).generateInterestingValues();
             verify(fieldValueSource, times(0)).generateRandomValues(randomNumberGenerator);
         }
     }
 }
+

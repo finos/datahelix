@@ -16,12 +16,12 @@
 
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.datetime;
 
+import com.scottlogic.datahelix.generator.common.TestRandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.LinearFieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
-import com.scottlogic.datahelix.generator.common.TestRandomNumberGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,6 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MAX_DATE;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.ISO_MIN_DATE;
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.DATETIME_MAX_LIMIT;
 import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.DATETIME_MIN_LIMIT;
@@ -49,36 +48,6 @@ public class DateTimeFieldValueSourceTests {
     private Limit<OffsetDateTime> upperLimit = DATETIME_MAX_LIMIT;
     private Set<OffsetDateTime> blackList = new HashSet<>();
     private LinearFieldValueSource<OffsetDateTime> fieldSource;
-
-    @Test
-    public void whenGeneratingUnboundSet() {
-        expectInterestingValues(
-                ISO_MIN_DATE,
-                ISO_MAX_DATE);
-    }
-
-    @Test
-    public void whenGeneratingUnboundSetWithBlacklist() {
-        givenBlacklist(ISO_MAX_DATE);
-        expectInterestingValues(
-                ISO_MIN_DATE);
-    }
-
-    @Test
-    public void whenGivenUpperBound() {
-        givenUpperBound(createDate(2018, 1, 1), true);
-        expectInterestingValues(
-                ISO_MIN_DATE,
-                createDate(2018, 1, 1));
-    }
-
-    @Test
-    public void whenGivenLowerBound() {
-        givenLowerBound(createDate(2018, 1, 1), true);
-        expectInterestingValues(
-                createDate(2018, 1, 1),
-                ISO_MAX_DATE);
-    }
 
     @Test
     public void whenGivenMultiHourRange() {
@@ -368,10 +337,6 @@ public class DateTimeFieldValueSourceTests {
         upperLimit = new Limit<>(value, inclusive);
     }
 
-    private void givenBlacklist(OffsetDateTime... list) {
-        blackList = new HashSet<>(Arrays.asList(list));
-    }
-
     private void expectAllValues(Object... expectedValuesArray) {
         List<Object> expectedValues = Arrays.asList(expectedValuesArray);
         List<Object> actualValues = new ArrayList<>();
@@ -382,23 +347,5 @@ public class DateTimeFieldValueSourceTests {
         fieldSource.generateAllValues().forEach(actualValues::add);
 
         Assert.assertThat(actualValues, equalTo(expectedValues));
-    }
-
-    private void expectInterestingValues(Object... expectedValuesArray) {
-        List<Object> expectedValues = Arrays.asList(expectedValuesArray);
-        List<Object> actualValues = new ArrayList<>();
-
-        LinearRestrictions<OffsetDateTime> restrictions = LinearRestrictionsFactory.createDateTimeRestrictions(lowerLimit, upperLimit);
-
-        fieldSource = new LinearFieldValueSource<>(restrictions, blackList);
-
-        fieldSource.generateInterestingValues().forEach(actualValues::add);
-
-        Assert.assertThat(actualValues, equalTo(expectedValues));
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private OffsetDateTime createDate(int year, int month, int day) {
-        return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
     }
 }

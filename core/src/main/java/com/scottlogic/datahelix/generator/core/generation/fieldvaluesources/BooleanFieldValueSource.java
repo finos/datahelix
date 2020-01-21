@@ -35,11 +35,6 @@ public class BooleanFieldValueSource implements FieldValueSource<Boolean>
     }
 
     @Override
-    public Stream<Boolean> generateInterestingValues() {
-        return generateAllValues();
-    }
-
-    @Override
     public Stream<Boolean> generateRandomValues(RandomNumberGenerator randomNumberGenerator) {
         return Stream.generate(() -> randomNumberGenerator.nextInt() % 2 == 0).filter(this::notInBlacklist);
     }
