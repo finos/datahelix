@@ -17,9 +17,10 @@
 package com.scottlogic.datahelix.generator.core.generation;
 
 import com.google.inject.Inject;
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
+import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerator;
@@ -28,11 +29,17 @@ import java.util.stream.Stream;
 
 public class FieldSpecValueGenerator {
     private final DataGenerationType dataType;
-    private final JavaUtilRandomNumberGenerator randomNumberGenerator;
+    private final RandomNumberGenerator randomNumberGenerator;
 
     @Inject
     public FieldSpecValueGenerator(DataGenerationType dataGenerationType,
                                    JavaUtilRandomNumberGenerator randomNumberGenerator) {
+        this.dataType = dataGenerationType;
+        this.randomNumberGenerator = randomNumberGenerator;
+    }
+
+    public FieldSpecValueGenerator(DataGenerationType dataGenerationType,
+                                   RandomNumberGenerator randomNumberGenerator) {
         this.dataType = dataGenerationType;
         this.randomNumberGenerator = randomNumberGenerator;
     }

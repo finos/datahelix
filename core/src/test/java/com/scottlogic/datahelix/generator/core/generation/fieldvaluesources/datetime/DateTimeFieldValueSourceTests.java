@@ -217,10 +217,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatch(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
@@ -230,10 +230,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistInDifferentOrder(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MAX, OffsetDateTime.MIN)));
 
@@ -243,10 +243,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeEqualWhenAllPropertiesMatchWhenBlacklistEmpty(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             Collections.emptySet());
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             Collections.emptySet());
 
@@ -256,10 +256,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMin(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-28", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
@@ -268,10 +268,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptMax(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-30"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
@@ -280,10 +280,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesMatchExceptBlacklist(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Collections.singletonList(OffsetDateTime.MIN)));
 
@@ -292,10 +292,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenOnlyBlacklistMatches(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-28", "2010-11-30"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
 
@@ -304,10 +304,10 @@ public class DateTimeFieldValueSourceTests {
 
     @Test
     public void shouldBeUnequalWhenAllPropertiesDontMatch(){
-        LinearFieldValueSource a = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> a = new LinearFieldValueSource<>(
             restrictions("2001-02-28", "2010-11-30"),
             new HashSet<>(Arrays.asList(OffsetDateTime.MIN, OffsetDateTime.MAX)));
-        LinearFieldValueSource b = new LinearFieldValueSource<>(
+        LinearFieldValueSource<OffsetDateTime> b = new LinearFieldValueSource<>(
             restrictions("2001-02-03", "2010-11-12"),
             new HashSet<>(Collections.singletonList(OffsetDateTime.MIN)));
 
@@ -322,10 +322,10 @@ public class DateTimeFieldValueSourceTests {
             DATETIME_MAX_LIMIT
         );
 
-        LinearFieldValueSource datesAfterLastPermittedDate = new LinearFieldValueSource<>(min, Collections.emptySet());
+        LinearFieldValueSource<OffsetDateTime> datesAfterLastPermittedDate = new LinearFieldValueSource<>(min, Collections.emptySet());
 
         //Act
-        Iterator iterator = datesAfterLastPermittedDate.generateAllValues().iterator();
+        Iterator<OffsetDateTime> iterator = datesAfterLastPermittedDate.generateAllValues().iterator();
         //Assert
         Assert.assertThat(iterator.hasNext(), is(false));
     }
@@ -337,10 +337,10 @@ public class DateTimeFieldValueSourceTests {
             DATETIME_MIN_LIMIT,
             new Limit<>(ISO_MIN_DATE, false)
         );
-        LinearFieldValueSource datesBeforeFirstPermittedDate = new LinearFieldValueSource<>(max, Collections.emptySet());
+        LinearFieldValueSource<OffsetDateTime> datesBeforeFirstPermittedDate = new LinearFieldValueSource<>(max, Collections.emptySet());
 
         //Act
-        Iterator iterator = datesBeforeFirstPermittedDate.generateAllValues().iterator();
+        Iterator<OffsetDateTime> iterator = datesBeforeFirstPermittedDate.generateAllValues().iterator();
         //Assert
         Assert.assertThat(iterator.hasNext(), is(false));
     }
@@ -397,6 +397,7 @@ public class DateTimeFieldValueSourceTests {
         Assert.assertThat(actualValues, equalTo(expectedValues));
     }
 
+    @SuppressWarnings("SameParameterValue")
     private OffsetDateTime createDate(int year, int month, int day) {
         return OffsetDateTime.of(year, month, day, 0, 0, 0, 0, ZoneOffset.UTC);
     }
