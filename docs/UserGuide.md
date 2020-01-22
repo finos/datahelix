@@ -776,12 +776,12 @@ it is also possible to execute the generator using a wrapper script:
 on windows:
 
 ```shell script
-generator --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+datahelix --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 and on linux
 ```shell script
-generator.sh --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+datahelix.sh --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 ### Command Line Arguments
