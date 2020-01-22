@@ -775,8 +775,8 @@ it is also possible to execute the generator using a wrapper script:
 
 on windows:
 
-```powershell
-generator.ps1 --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+```shell script
+generator --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 and on linux
@@ -790,32 +790,35 @@ Option switches are case-sensitive, arguments are case-insensitive
 
 * `--version` (or `-V`)
     * Displays generator version information.
-* `--profile-file=<path>` (or `-p <path>`)
+* `--profile-file=<PATH>` (or `-p <PATH>`)
     * Path to the input profile file.
-* `--output-path=<path>` (or `-o <path>`)
+* `--output-path=<PATH>` (or `-o <PATH>`)
     * Path to the output file.  If not specified, output will be to standard output.
 * `--replace`
     * Overwrite/replace existing output files. Defaults to false.
-* `-n <rows>` or `--max-rows <rows>`
-   * Emit at most `<rows>` rows to the output file, if not specified will limit to 10,000,000 rows.
+* `-n <rows>` or `--max-rows=<ROWS>`
+   * Emit at most `<ROWS>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.
-* `--generation-type`
-    * Determines the type of (data generation)[Link] performed. Supported options are `FULL_SEQUENTIAL` and `RANDOM`(default).
-* `--combination-strategy`
-    * Determines the type of combination strategy used in full sequential mode. Supported options are `MINIMAL`(default), `EXHAUSTIVE` and `PINNING`.
-* `--output-format`
-    * Determines the output format. Supported options are `csv`(default) and `json`.
-    * If no `output-path` is provided then the JSON data will be streamed in [ndjson](http://ndjson.org/) format
-* `--visualiser-level`
-    * Determines level of visualisation using.  Supported options are `OFF` (default), `STANDARD` and `DETAILED`
-* `--visualiser-output-folder`
-    * The path to the folder to write the generated visualiser files to (defaults to current directory (`.`).  Its only used if `visualiser-level` != `OFF`.
+* `--generation-type=<GENERATION_TYPE>`
+    * Determines the type of (data generation)[Link] performed. 
+    Where `<GENERATION_TYPE>` can be one of `FULL_SEQUENTIAL` or `RANDOM`(default).
+* `--combination-strategy=<COMBINATION_STRATEGY>`
+    * Determines the type of combination strategy used in full sequential mode. 
+    `<COMBINATION_STRATEGY>` can be one of `MINIMAL`(default), `EXHAUSTIVE` or `PINNING`.
+* `--output-format=<OUTPUT_FORMAT>`
+    * Determines the output format. `<OUTPUT_FORMAT>` can be one of `csv`(default) or `json`.
+    * If no `output-path` is provided then the JSON data will be streamed in [ndjson](http://ndjson.org/) format.
+* `--visualiser-level=<VISUAL_LEVEL>`
+    * Determines level of visualisation using. Where `<VISUAL_LEVEL>` can be one of `OFF` (default), `STANDARD` or `DETAILED`.
+* `--visualiser-output-folder=<PATH>`
+    * The path to the folder to write the generated visualiser files to (defaults to current directory (`.`).
+      Its only used if `visualiser-level` != `OFF`.
 
 By default the generator will report how much data has been generated over time, the other options are below:
 * `--verbose`
-    * Will report in-depth detail of data generation
+    * Will report in-depth detail of data generation.
 * `--quiet`
-    * Will disable velocity reporting
+    * Will disable velocity reporting.
 
 `--quiet` will be ignored if `--verbose` is supplied.
 
