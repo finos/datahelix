@@ -765,10 +765,10 @@ Profiles can be run against a jar using the command line.
 ## Command Line Arguments
 <div id="Command-Line-Arguments"></div>
 
-Currently the only mode fully supported by the data helix is generate mode. An example command would be something like
+An example command would be something like
 
 ```shell script
-datahelix --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+java -jar datahelix.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 it is also possible to execute the generator using a wrapper script:
@@ -783,6 +783,8 @@ and on linux
 ```shell script
 datahelix.sh --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
+
+These presume that the scripts (datahelix.zip\bin) are in the path, or you're currently working in the bin directory.
 
 ### Command Line Arguments
 <div id="Command-Line-Arguments-for-Generate-Mode"></div>
