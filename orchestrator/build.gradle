@@ -17,6 +17,7 @@
 plugins {
     id "java"
     id "de.gliderpilot.semantic-release" version "1.4.0"
+    id "application"
 }
 
 group "com.scottlogic.datahelix.generator"
@@ -96,27 +97,29 @@ task fatJar(type: Jar) {
     archiveName = "${baseName}.${extension}"
 }
 
-task releaseZip(type: Zip) {
-    dependsOn("fatJar")
-
-    archiveFileName = "generator.zip"
-    
-    from("$buildDir/libs") {
-        include "generator.jar"
-    }
-}
-
 jar {
     manifest {
         attributes 'Main-Class': 'com.scottlogic.datahelix.generator.orchestrator.App'
     }
 }
 
+application {
+    mainClassName = 'com.scottlogic.datahelix.generator.orchestrator.App'
+}
+
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null
+
+distZip {
+    archiveName "generator.zip"
+}
+
+startScripts {
+    applicationName = 'datahelix'
+}
 
 semanticRelease {
     repo {
         ghToken = project.ghToken
-        releaseAsset releaseZip
+        releaseAsset distZip
     }
 }
