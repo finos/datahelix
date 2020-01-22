@@ -18,6 +18,6 @@ RUN gradle fatJar
 FROM openjdk:8u212-jre-alpine
 
 WORKDIR /root
-COPY --from=build /root/orchestrator/build/libs/generator.jar .
+COPY --from=build /root/orchestrator/build/libs/datahelix.jar .
 
-ENTRYPOINT ["java", "-jar", "generator.jar"]
+ENTRYPOINT ["java", "-jar", "datahelix.jar"]

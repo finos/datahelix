@@ -51,10 +51,10 @@ When manually writing profiles, we recommend using a text editor which can valid
 
 ## Running the generator
 
-Now place the `generator.jar` file (downloaded from the [GitHub releases page](https://github.com/finos/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
+Now place the `datahelix.jar` file (downloaded from the [GitHub releases page](https://github.com/finos/datahelix/releases/)) in the same folder as the profile, open up a terminal, and execute the following:
 
 ```
-$ java -jar generator.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+$ java -jar datahelix.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 The generator is a command line tool which reads a profile, and outputs data in CSV or JSON format. The `--max-rows=100` option tells the generator to create 100 rows of data, and the `--replace` option tells it to overwrite previously generated files. The compulsory `--profile-file` option specifies the name of the input profile, and the `--output-path` option specifies the location to write the output to. In `generate` mode `--output-path` is optional; the generator will default to standard output if it is not supplied. By default the generator outputs progress, in rows per second, to the standard error output. This can be useful when generating large volumes of data.
@@ -62,7 +62,7 @@ The generator is a command line tool which reads a profile, and outputs data in 
 Use
 
 ```
-$ java -jar generator.jar --help
+$ java -jar datahelix.jar --help
 ```
 
 or see [the User Guide](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
@@ -248,7 +248,7 @@ The mode is specified via the `--generation-type` option.
 The generator has been designed to be fast and efficient, allowing you to generate large quantities of test and simulation data. If you supply a large number for the `--max-rows` option, the data will be streamed to the output file, with the progress / velocity reported during generation.
 
 ```
-$ java -jar generator.jar --max-rows=10000 --replace --profile-file=profile.json --output-path=output.csv
+$ java -jar datahelix.jar --max-rows=10000 --replace --profile-file=profile.json --output-path=output.csv
 Generation started at: 16:41:44
 
 Number of rows | Velocity (rows/sec) | Velocity trend

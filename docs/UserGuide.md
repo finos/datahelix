@@ -768,7 +768,7 @@ Profiles can be run against a jar using the command line.
 Currently the only mode fully supported by the data helix is generate mode. An example command would be something like
 
 ```shell script
-java -jar generator.jar --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
+datahelix --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
 it is also possible to execute the generator using a wrapper script:
