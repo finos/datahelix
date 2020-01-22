@@ -5,6 +5,8 @@ node_modules/
 classes/
 profiler/
 target/
+bin/generator.jar
+.idea/sonarlint
 
 # Eclipse files
 **/*.cache-main
