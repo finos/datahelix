@@ -16,7 +16,7 @@
 
 package com.scottlogic.datahelix.generator.output.writer.json;
 
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
+import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SequenceWriter;
@@ -41,7 +41,7 @@ public class JsonOutputWriterFactory implements OutputWriterFactory {
 
     @Override
     public DataSetWriter createWriter(OutputStream stream, Fields fields) throws IOException {
-        ObjectWriter objectWriter = new ObjectMapper().writer(new DefaultPrettyPrinter(NEW_LINE_DELIMITER));
+        ObjectWriter objectWriter = new ObjectMapper().writer(new MinimalPrettyPrinter(NEW_LINE_DELIMITER));
         SequenceWriter writer = objectWriter.writeValues(stream);
         writer.init(!streamOutput);
 

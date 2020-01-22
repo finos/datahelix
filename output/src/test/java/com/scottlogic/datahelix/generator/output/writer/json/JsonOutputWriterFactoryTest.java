@@ -44,7 +44,7 @@ class JsonOutputWriterFactoryTest {
         expectJson(
             fields,
             true,
-            Matchers.equalTo("{\n  \"my_field\" : \"my_value\"\n}\n{\n  \"my_field\" : \"my_value\"\n}"));
+            Matchers.equalTo("{\"my_field\":\"my_value\"}\n{\"my_field\":\"my_value\"}"));
     }
 
     @Test
@@ -54,7 +54,7 @@ class JsonOutputWriterFactoryTest {
         expectJson(
             fields,
             false,
-            Matchers.equalTo("[ {\n  \"my_field\" : \"my_value\"\n}, {\n  \"my_field\" : \"my_value\"\n} ]"));
+            Matchers.equalTo("[{\"my_field\":\"my_value\"},{\"my_field\":\"my_value\"}]"));
     }
 
     @Test
@@ -68,7 +68,7 @@ class JsonOutputWriterFactoryTest {
         expectJson(
             fields,
             true,
-            Matchers.equalTo("{\n  \"External\" : \"my_value\"\n}\n{\n  \"External\" : \"my_value\"\n}")
+            Matchers.equalTo("{\"External\":\"my_value\"}\n{\"External\":\"my_value\"}")
         );
     }
 
