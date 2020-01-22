@@ -784,7 +784,7 @@ and on linux
 datahelix.sh --max-rows=100 --replace --profile-file=profile.json --output-path=output.csv
 ```
 
-These presume that the scripts (datahelix.zip\bin) are in the path, or you're currently working in the bin directory.
+These presume that the scripts (datahelix.zip\datahelix\bin) are in the path, or you're currently working in the bin directory.
 
 ### Command Line Arguments
 <div id="Command-Line-Arguments-for-Generate-Mode"></div>
