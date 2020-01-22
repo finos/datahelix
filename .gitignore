@@ -5,7 +5,7 @@ node_modules/
 classes/
 profiler/
 target/
-bin/generator.jar
+bin/datahelix.jar
 .idea/sonarlint
 
 # Eclipse files

@@ -61,7 +61,7 @@ public class JarExecuteTests {
         ProcessBuilder pb = new ProcessBuilder(
             "java",
             "-jar",
-            "build/libs/generator.jar",
+            "build/libs/datahelix.jar",
             profile,
             "--max-rows=1",
             "--quiet");
