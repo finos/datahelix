@@ -812,7 +812,7 @@ Option switches are case-sensitive, arguments are case-insensitive
     * Determines level of visualisation using. Where `<VISUAL_LEVEL>` can be one of `OFF` (default), `STANDARD` or `DETAILED`.
 * `--visualiser-output-folder=<PATH>`
     * The path to the folder to write the generated visualiser files to (defaults to current directory (`.`).
-      Its only used if `visualiser-level` != `OFF`.
+      Its only used if `visualiser-level` is not set to`OFF`.
 
 By default the generator will report how much data has been generated over time, the other options are below:
 * `--verbose`
