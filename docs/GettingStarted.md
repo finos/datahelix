@@ -12,7 +12,7 @@ For more comprehensive documentation please refer to the [user guide](UserGuide.
 
 # Contents
 
-  - [Downloading the JAR file](#Downloading-the-JAR-file)
+  - [Downloading the release](#Downloading-the-release)
   - [Creating your first profile](#Creating-your-first-profile)
   - [Running the generator](#Running-the-generator)
   - [Adding constraints](#Adding-constraints)
@@ -21,10 +21,41 @@ For more comprehensive documentation please refer to the [user guide](UserGuide.
   - [Generating large datasets](#Generating-large-datasets)
   - [Next steps](#Next-steps)
 
-## Downloading the release
+## Getting DataHelix
 
-The datahelix is distributed as a zip file, with the latest release always available from the [GitHub releases page](https://github.com/finos/datahelix/releases/). You will need Java v1.8 installed to run the datahelix (you can run `java -version` to check whether you meet this requirement), it can be [downloaded here](https://www.java.com/en/download/manual.jsp).
+You can get a copy of DataHelix by one of the following means:
+- Install via Chocolatey
+- Download the zip file
+- Clone and build the project
 
+### Install via Chocolatey
+
+[Chocolatey](https://chocolatey.org/) is a Windows package manager for applications, Data Helix - since v2.1.9 - has been released as a community package.
+As such you can install the DataHelix generator by running
+
+```
+choco install datahelix --version=2.1.9
+```
+
+This will install the Java runtime environment as required, and setup 'shortcuts' allowing you to type `datahelix` from any directory. 
+
+### Download the zip file
+
+From version 2.1.8 DataHelix has been published as a zip file this contains:
+1. The DataHelix generator (.jar file)
+1. A series of scripts to simplify running on Windows or Unix systems
+
+You can download the latest release any time from the [GitHub releases page](https://github.com/finos/datahelix/releases/). Extract the contents to a folder to be able to use the generator. You will need to install the Java Runtime Environment (at least 1.8) manually, see the [Java downloads page](https://www.java.com/en/download/manual.jsp). You can run `java -version` to detect which version of java you have installed currently.
+
+The extracted folder will contain 2 sub-folders:
+- `datahelix\bin` - this contains the helper scripts
+- `datahelix\lib` - this contains the DataHelix program
+
+If you add `datahelix\bin` to [your PATH environment variable](https://www.java.com/en/download/help/path.xml) then you'll be able to type `datahelix` from any directory.
+
+Prior to 2.1.8 the .jar file was published directly, without any scripts or being bundled in a zip file.
+
+### Clone and build the project
 You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md#Building).
 
 Datahelix is under active development so expect new features and bug fixes. Please feel free to share any issues, feature requests, or ideas via the [GitHub issues page](https://github.com/finos/datahelix/issues).
@@ -65,7 +96,7 @@ Use
 $ datahelix/bin/datahelix --help
 ```
 
-or see [the User Guide](UserGuide.md#command-line-arguments) to find the full range of command line arguments.
+or see [the User Guide](UserGuide.md#Command-Line-Arguments) to find the full range of command line arguments.
 
 Alternatively you can use the [datahelix playground](https://finos.github.io/datahelix/playground/) to get a feel for what it is like to run the profile without downloading the JAR. Although the playground supports almost all features, there are some it does not, and we don't intend it to be a substitute for downloading and running the Datahelix Generator yourself.
 

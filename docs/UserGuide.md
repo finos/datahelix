@@ -68,7 +68,6 @@
 
 8. [Running a Profile](#Running-a-Profile)
     1. [Command Line Arguments](#Command-Line-Arguments)
-        1. [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode)
     2. [Generation Strategies](#Generation-strategies)
         1. [Random Mode](#Random-Mode)
         2. [Full Sequential Mode](#Full-Sequential-Mode)
@@ -787,7 +786,6 @@ datahelix.sh --max-rows=100 --replace --profile-file=profile.json --output-path=
 These presume that the scripts (datahelix.zip\datahelix\bin) are in the path, or you're currently working in the bin directory.
 
 ### Command Line Arguments
-<div id="Command-Line-Arguments-for-Generate-Mode"></div>
 Option switches are case-sensitive, arguments are case-insensitive
 
 * `--version` (or `-V`)
@@ -920,7 +918,7 @@ If use the `--visualiser-level` and `--visualiser-output-folder` command line op
 you can get visualisations of the decision tree outputted as graphs in DOT files.
 
 * See [Developer Guide](DeveloperGuide.md) for more information on the decision tree structure.
-* See [Command Line Arguments for Generate Mode](#Command-Line-Arguments-for-Generate-Mode) for more information on the command line arguments.
+* See [Command Line Arguments](#Command-Line-Arguments) for more information on the command line arguments.
 
 The visualiser levels can have the following values:
 * OFF - the default and it means no graphs outputted
