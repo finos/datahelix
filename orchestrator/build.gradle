@@ -96,6 +96,16 @@ task fatJar(type: Jar) {
     archiveName = "${baseName}.${extension}"
 }
 
+task releaseZip(type: Zip) {
+    dependsOn("fatJar")
+
+    archiveFileName = "generator.zip"
+    
+    from("$buildDir/libs") {
+        include "generator.jar"
+    }
+}
+
 jar {
     manifest {
         attributes 'Main-Class': 'com.scottlogic.datahelix.generator.orchestrator.App'
@@ -107,6 +117,6 @@ project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghTo
 semanticRelease {
     repo {
         ghToken = project.ghToken
-        releaseAsset fatJar
+        releaseAsset releaseZip
     }
 }
