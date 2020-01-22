@@ -794,9 +794,9 @@ Option switches are case-sensitive, arguments are case-insensitive
     * Path to the input profile file.
 * `--output-path=<PATH>` (or `-o <PATH>`)
     * Path to the output file.  If not specified, output will be to standard output.
-* `--replace`
+* `--replace=<true|false>`
     * Overwrite/replace existing output files. Defaults to false.
-* `-n <rows>` or `--max-rows=<ROWS>`
+* `-n <ROWS>` or `--max-rows=<ROWS>`
    * Emit at most `<ROWS>` rows to the output file, if not specified will limit to 10,000,000 rows.
    * Mandatory in `RANDOM` mode.
 * `--generation-type=<GENERATION_TYPE>`
