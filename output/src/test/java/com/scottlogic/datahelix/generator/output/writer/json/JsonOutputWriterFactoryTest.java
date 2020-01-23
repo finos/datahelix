@@ -54,7 +54,7 @@ class JsonOutputWriterFactoryTest {
         expectJson(
             fields,
             false,
-            Matchers.equalTo("[{\"my_field\":\"my_value\"},{\"my_field\":\"my_value\"}]"));
+            Matchers.equalTo("[ {\n  \"my_field\" : \"my_value\"\n}, {\n  \"my_field\" : \"my_value\"\n} ]"));
     }
 
     @Test
