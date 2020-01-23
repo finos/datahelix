@@ -1,19 +1,3 @@
-/*
- * Copyright 2019 Scott Logic Ltd
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
@@ -23,26 +7,29 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public final class CsvInputStreamReader {
-    private CsvInputStreamReader() {
-        throw new UnsupportedOperationException("No instantiation of static class");
+public class CsvStreamInputReader implements CsvInputReader {
+    private final InputStream stream;
+    private final String path;
+
+    public CsvStreamInputReader(InputStream stream, String path) {
+        this.stream = stream;
+        this.path = path;
     }
 
-    public static DistributedList<String> retrieveLines(InputStream stream) {
+    public DistributedList<String> retrieveLines() {
         List<CSVRecord> records = parse(stream);
         return new DistributedList<>(records.stream()
-            .map(CsvInputStreamReader::createWeightedElementFromRecord)
+            .map(this::createWeightedElementFromRecord)
             .collect(Collectors.toList()));
     }
 
-    public static DistributedList<String> retrieveLines(InputStream stream, String key) {
+    public DistributedList<String> retrieveLines(String key) {
         List<CSVRecord> records = parse(stream);
 
         int index = getIndexForKey(records.get(0), key);
@@ -67,11 +54,20 @@ public final class CsvInputStreamReader {
         throw new ValidationException("unable to find data for key " + key);
     }
 
-    private static WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
-        return createWeightedElement(record.get(0),
-            record.size() == 1 ? Optional.empty() : Optional.of(Double.parseDouble(record.get(1))));
-    }
+    private WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
+        try {
+            Optional<Double> weighting = record.size() == 1
+                ? Optional.empty()
+                : Optional.of(Double.parseDouble(record.get(1)));
 
+            return createWeightedElement(record.get(0), weighting);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(
+                "Weighting '" + record.get(1) + "' is not a valid number\n" +
+                "CSV lines containing 2 columns must hold a weighting (double) in the second column, e.g. <value>,0.5\n" +
+                "Value: '" + record.get(0) + "', File: '" + this.path + "', Line " + record.getRecordNumber(), e);
+        }
+    }
 
     private static WeightedElement<String> createWeightedElement(String element, Optional<Double> weight) {
         return weight.map(integer -> new WeightedElement<>(element, integer))

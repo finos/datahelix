@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile.reader.file.names;
 
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,21 +31,30 @@ public class NameRetrievalServiceTest
 {
     @Test
     public void testLoadingFirstNames() {
-        DistributedList<Object> names = NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST);
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
+
+        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
 
         assertEquals(704, names.distributedList().size());
     }
 
     @Test
     public void testLoadingLastNames() {
-        DistributedList<Object> names = NameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST);
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
+
+        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
 
         assertEquals(280, names.distributedList().size());
     }
 
     @Test
     public void testLoadingFullNames() {
-        DistributedList<Object> names = NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL);
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
+
+        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
 
         assertEquals(197120, names.distributedList().size());
     }
@@ -52,7 +62,10 @@ public class NameRetrievalServiceTest
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
-        DistributedList<Object> result = NameRetrievalService.loadNamesFromFile(config);
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
+
+        DistributedList<Object> result = service.loadNamesFromFile(config);
 
         assertNotNull(result);
     }

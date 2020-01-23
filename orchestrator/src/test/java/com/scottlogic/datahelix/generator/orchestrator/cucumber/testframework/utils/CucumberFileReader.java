@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public class CucumberFileReader extends FileReader {
 
     @Inject
     public CucumberFileReader(CucumberTestState testState) {
-        super("");
+        super(new CsvInputStreamReaderFactory(""));
         this.testState = testState;
     }
 

@@ -16,10 +16,11 @@
 
 package com.scottlogic.datahelix.generator.profile.services;
 
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
+import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReader;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,13 +29,16 @@ import java.util.stream.Collectors;
 
 import static com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes.*;
 
-public final class NameRetrievalService
+public class NameRetrievalService
 {
-    private NameRetrievalService() {
-        throw new UnsupportedOperationException("No static class instantiation");
+    private final CsvInputStreamReaderFactory csvReaderFactory;
+
+    @Inject
+    public NameRetrievalService(CsvInputStreamReaderFactory csvReaderFactory) {
+        this.csvReaderFactory = csvReaderFactory;
     }
 
-    public static DistributedList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public DistributedList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -52,15 +56,13 @@ public final class NameRetrievalService
                 .collect(Collectors.toList()));
     }
 
-    private static DistributedList<String> generateNamesFromSingleFile(String source) {
-        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source);
-        DistributedList<String> result = CsvInputStreamReader.retrieveLines(stream);
-        try {
-            stream.close();
+    private DistributedList<String> generateNamesFromSingleFile(String source) {
+        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source))
+        {
+            return csvReaderFactory.getReaderForStream(stream, source).retrieveLines();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-        return result;
     }
 
     private static DistributedList<String> combineFirstWithLastNames(DistributedList<String> firstNames,
@@ -79,5 +81,4 @@ public final class NameRetrievalService
         double frequency = first.weight() + last.weight();
         return new WeightedElement<>(name, frequency);
     }
-
 }
