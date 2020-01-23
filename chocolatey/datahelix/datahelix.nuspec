@@ -9,7 +9,7 @@
     <title>DataHelix (generator)</title>
     <authors>Scott Logic</authors>
     <projectUrl>https://finos.github.io/datahelix</projectUrl>
-    <iconUrl>https://finos.github.io/datahelix/favicon.png</iconUrl>
+    <iconUrl>https://finos.github.io/datahelix/chocolatey-package.png</iconUrl>
     <licenseUrl>https://github.com/finos/datahelix/blob/master/LICENSE</licenseUrl>
     <packageSourceUrl>https://chocolatey.org/packages</packageSourceUrl>
     <projectSourceUrl>https://github.com/finos/datahelix</projectSourceUrl>
