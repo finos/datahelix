@@ -6,7 +6,7 @@
     <id>datahelix</id>
     <version>0.0.0</version>
     <owners>FINOS</owners>
-    <title>datahelix (Generator)</title>
+    <title>DataHelix (generator)</title>
     <authors>Scott Logic</authors>
     <projectUrl>https://finos.github.io/datahelix</projectUrl>
     <iconUrl>https://finos.github.io/datahelix/favicon.png</iconUrl>

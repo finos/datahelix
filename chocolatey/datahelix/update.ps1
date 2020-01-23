@@ -4,7 +4,7 @@ function global:au_GetLatest() {
      $releases = "https://github.com/finos/datahelix/releases/latest"
 
      $download_page = Invoke-WebRequest -Uri $releases -UseBasicParsing #1
-     $regex   = '.jar$'
+     $regex   = '.zip$'
      $url     = $download_page.links | ? href -match $regex | select -First 1 -expand href #2
      $version = [System.Text.RegularExpressions.Regex]::Match($url, "v(\d+\.\d+\.\d+)").Groups[1].Value
 
