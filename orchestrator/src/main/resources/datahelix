@@ -1,0 +1,3 @@
+#!/bin/bash
+# Launch script to kick off Java JAR (/usr/bin/datahelix)
+java -jar /usr/share/datahelix/datahelix.jar "$@"
