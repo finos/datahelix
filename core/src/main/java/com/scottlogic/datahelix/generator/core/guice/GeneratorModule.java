@@ -61,7 +61,7 @@ public class GeneratorModule extends AbstractModule {
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(AbstractDataGeneratorMonitor.class);
-        bind(DataGenerator.class).to(DecisionTreeDataGenerator.class);
+        bind(DataGenerator.class).toProvider(DataGeneratorProvider.class);
 
         bind(JavaUtilRandomNumberGenerator.class)
             .toInstance(new JavaUtilRandomNumberGenerator(OffsetDateTime.now().getNano()));
