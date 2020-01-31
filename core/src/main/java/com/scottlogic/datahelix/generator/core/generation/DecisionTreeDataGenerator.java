@@ -17,9 +17,7 @@
 package com.scottlogic.datahelix.generator.core.generation;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
-import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.config.detail.VisualiserLevel;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTreeFactory;
@@ -29,6 +27,7 @@ import com.scottlogic.datahelix.generator.core.generation.combinationstrategies.
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.Visualiser;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.VisualiserFactory;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.walker.DecisionTreeWalker;
 
 import java.util.function.Supplier;
@@ -45,7 +44,6 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final CombinationStrategy partitionCombiner;
     private final UpfrontTreePruner upfrontTreePruner;
     private final VisualiserFactory visualiserFactory;
-    private final long maxRows;
 
     @Inject
     public DecisionTreeDataGenerator(
@@ -56,8 +54,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         DataGeneratorMonitor monitor,
         CombinationStrategy combinationStrategy,
         UpfrontTreePruner upfrontTreePruner,
-        VisualiserFactory visualiserFactory,
-        @Named("config:maxRows") long maxRows) {
+        VisualiserFactory visualiserFactory) {
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
@@ -66,13 +63,10 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         this.partitionCombiner = combinationStrategy;
         this.upfrontTreePruner = upfrontTreePruner;
         this.visualiserFactory = visualiserFactory;
-        this.maxRows = maxRows;
     }
 
     @Override
     public Stream<GeneratedObject> generateData(Profile profile) {
-        monitor.generationStarting();
-
         DecisionTree decisionTree = decisionTreeGenerator.analyse(profile);
         visualiseTree(decisionTree,  INITIAL_TREE_VISUALISER_TITLE);
 
@@ -87,10 +81,9 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(treeOptimiser::optimiseTree)
             .map(tree -> () -> treeWalker.walk(tree));
 
+        //noinspection RedundantCast
         return partitionCombiner.permute(partitionedDataBags)
-            .map(d->(GeneratedObject)d)
-            .limit(maxRows)
-            .peek(monitor::rowEmitted);
+            .map(d-> (GeneratedObject)d);
     }
 
     private void visualiseTree(DecisionTree decisionTree, String title) {

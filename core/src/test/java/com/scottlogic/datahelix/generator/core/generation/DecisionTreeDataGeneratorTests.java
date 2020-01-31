@@ -63,7 +63,6 @@ class DecisionTreeDataGeneratorTests {
         combinationStrategy = Mockito.mock(CombinationStrategy.class);
         upfrontTreePruner = Mockito.mock(UpfrontTreePruner.class);
         visualiserFactory = Mockito.mock(VisualiserFactory.class);
-        long maxRows = 10;
         generator = new DecisionTreeDataGenerator(
             factory,
             treeWalker,
@@ -72,8 +71,7 @@ class DecisionTreeDataGeneratorTests {
             monitor,
             combinationStrategy,
             upfrontTreePruner,
-            visualiserFactory,
-            maxRows
+            visualiserFactory
         );
     }
 
