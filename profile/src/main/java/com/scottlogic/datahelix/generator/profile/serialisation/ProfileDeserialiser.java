@@ -16,7 +16,6 @@
 
 package com.scottlogic.datahelix.generator.profile.serialisation;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
