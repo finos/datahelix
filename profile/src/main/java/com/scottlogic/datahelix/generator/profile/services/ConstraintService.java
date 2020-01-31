@@ -48,7 +48,7 @@ public class ConstraintService {
     private final Map<String, Function<Field, Constraint>> fieldTypeToConstraint;
 
     @Inject
-    public ConstraintService(CustomConstraintFactory customConstraintFactory) {
+    public ConstraintService(CustomConstraintFactory customConstraintFactory, NameRetrievalService nameRetrievalService) {
         this.customConstraintFactory = customConstraintFactory;
         atomicConstraintFactoryMap = new EnumMap<>(FieldType.class);
         atomicConstraintFactoryMap.put(FieldType.DATETIME, new DateTimeConstraintFactory());
@@ -88,13 +88,13 @@ public class ConstraintService {
             field -> new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FIRST_NAME.getType(),
-            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.LAST_NAME.getType(),
-            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FULL_NAME.getType(),
-            field -> new InSetConstraint(field, NameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
             field -> new FakerConstraint(field, field.getSpecificType().getFakerMethod()));

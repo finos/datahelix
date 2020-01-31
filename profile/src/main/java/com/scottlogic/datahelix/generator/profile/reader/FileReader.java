@@ -16,29 +16,22 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 
-import java.io.*;
 import java.util.stream.Collectors;
 
 public class FileReader {
-    private final String filePath;
+    private final CsvInputStreamReaderFactory csvReaderFactory;
 
     @Inject
-    public FileReader(@Named("config:filePath") String filePath) {
-        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty()
-            ? filePath
-            : filePath + File.separator;
+    public FileReader(CsvInputStreamReaderFactory csvReaderFactory) {
+        this.csvReaderFactory = csvReaderFactory;
     }
 
     public DistributedList<Object> setFromFile(String file) {
-        InputStream streamFromPath = createStreamFromPath(filePath + file);
-
-        DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
-        closeStream(streamFromPath);
+        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        DistributedList<String> names = reader.retrieveLines();
 
         return new DistributedList<>(
             names.distributedList().stream()
@@ -48,30 +41,12 @@ public class FileReader {
     }
 
     public DistributedList<String> listFromMapFile(String file, String key) {
-        InputStream streamFromPath = createStreamFromPath(filePath + file);
-
-        DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath, key);
-        closeStream(streamFromPath);
+        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        DistributedList<String> names = reader.retrieveLines(key);
 
         return new DistributedList<>(
             names.distributedList().stream()
                 .map(holder -> new WeightedElement<>(holder.element(), holder.weight()))
                 .collect(Collectors.toList()));
-    }
-
-    private static InputStream createStreamFromPath(String path) {
-        try {
-            return new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            throw new ValidationException(e.getMessage());
-        }
-    }
-
-    private static void closeStream(InputStream stream) {
-        try {
-            stream.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
     }
 }
