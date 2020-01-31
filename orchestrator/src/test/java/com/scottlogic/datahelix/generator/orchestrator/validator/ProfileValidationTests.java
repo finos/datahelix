@@ -19,11 +19,13 @@ package com.scottlogic.datahelix.generator.orchestrator.validator;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
 import com.scottlogic.datahelix.generator.profile.reader.ProfileCommandBus;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
+import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
@@ -47,13 +49,21 @@ public class ProfileValidationTests {
                 .listFiles(File::isDirectory);
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
-           CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
+            CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
+            CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory(profileFile.getParent());
+
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
-                    new ProfileCommandBus(new FieldService(), new ConstraintService(customConstraintFactory),
-                        customConstraintFactory,
-                        new CreateProfileValidator(new ProfileValidator(null)))).read());
+                () -> new JsonProfileReader(
+                        profileFile,
+                        new ConfigValidator(new FileUtils()),
+                        new FileReader(csvReaderFactory),
+                        new ProfileCommandBus(
+                            new FieldService(),
+                            new ConstraintService(customConstraintFactory, new NameRetrievalService(csvReaderFactory)),
+                            customConstraintFactory,
+                            new CreateProfileValidator(new ProfileValidator(null))))
+                    .read());
             dynamicTests.add(test);
         }
         return dynamicTests;

@@ -22,7 +22,7 @@ import java.util.Collections;
 
 public class TestFileReader extends FileReader {
     public TestFileReader() {
-        super("");
+        super(null);
     }
 
     @Override
