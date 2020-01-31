@@ -9,7 +9,7 @@
   "constraints": [
     {
       "field": "foo",
-      "inSet": "testfile.csv"
+      "inSet": "subfolder/testfile.csv"
     }
   ]
 }

@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
@@ -29,11 +30,15 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
+import com.scottlogic.datahelix.generator.profile.reader.FileReader;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
@@ -190,6 +195,18 @@ public class GrammaticalConstraintDeserialiserTests {
     }
 
     private ConstraintDTO deserialiseJsonString(String json) throws IOException {
-        return new ObjectMapper().readerFor(ConstraintDTO.class).readValue(json);
+        ObjectMapper mapper = new ObjectMapper();
+
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(
+            ConstraintDTO.class,
+            new ConstraintDeserializer(
+                new FileReader(new CsvInputStreamReaderFactory()),
+                Paths.get("test")));
+        mapper.registerModule(module);
+
+        return mapper
+            .readerFor(ConstraintDTO.class)
+            .readValue(json);
     }
 }

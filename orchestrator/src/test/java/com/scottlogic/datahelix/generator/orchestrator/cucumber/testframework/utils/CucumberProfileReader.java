@@ -22,21 +22,33 @@ import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.serialisation.ProfileSerialiser;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
+
+import java.io.File;
+import java.nio.file.Paths;
 
 public class CucumberProfileReader extends JsonProfileReader {
     private final CucumberTestState state;
 
     @Inject
     public CucumberProfileReader(CucumberTestState state, CommandBus commandBus) {
-        super(null, new ConfigValidator(new FileUtils()), new CucumberFileReader(state), commandBus);
+        super(
+            commandBus,
+            new ProfileDeserialiser(
+                new ConfigValidator(new FileUtils()),
+                new ConstraintDeserializerFactory(
+                    new CucumberFileReader(state)
+                )
+            ));
         this.state = state;
     }
 
     @Override
-    public Profile read() {
-        return super.read(createJson());
+    public Profile read(File profileFile) {
+        return super.read(Paths.get("test"), createJson());
     }
 
     private String createJson() {
@@ -45,6 +57,4 @@ public class CucumberProfileReader extends JsonProfileReader {
         profileDTO.constraints = state.constraints;
         return new ProfileSerialiser().serialise(profileDTO);
     }
-
-
 }

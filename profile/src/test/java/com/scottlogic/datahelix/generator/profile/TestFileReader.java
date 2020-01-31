@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.profile;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
+import java.io.File;
 import java.util.Collections;
 
 public class TestFileReader extends FileReader {
@@ -26,11 +27,11 @@ public class TestFileReader extends FileReader {
     }
 
     @Override
-    public DistributedList<Object> setFromFile(String file) {
+    public DistributedList<Object> setFromFile(File file) {
         return DistributedList.uniform(Collections.singleton("test"));
     }
     @Override
-    public DistributedList<String> listFromMapFile(String file, String key) {
+    public DistributedList<String> listFromMapFile(File file, String key) {
         return DistributedList.uniform(Collections.singleton("test"));
     }
 

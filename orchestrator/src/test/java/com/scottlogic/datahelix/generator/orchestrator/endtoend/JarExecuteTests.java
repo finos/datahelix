@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,15 +47,27 @@ public class JarExecuteTests {
             "Either load from file no longer works, or ");
     }
 
+    @Test
+    void generateSuccessfullyFromJarAndLoadFileWithinSubDirectory() throws Exception {
+        Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/loadfiletest-subfolder.profile.json");
+
+        List<String> collectedOutput = collectOutputAndCloseProcess(p);
+
+        assertOnOutputs(collectedOutput,
+            "Generated successfully from file",
+            "Either load from file no longer works, or ");
+    }
+
     private void assertOnOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
         String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
             "1) You have not built the jar. \n Try running Gradle Build. \n" +
             "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
-            "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n";
+            "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n" +
+            outputs.stream().limit(5).collect(Collectors.joining("\n"));
         String fullErrorMessage = extraErrorMessage + errorMessageOnFailure;
         assertTrue(outputs.size() >= 2, fullErrorMessage);
-        assertEquals(outputs.get(outputs.size() - 2), "foo", fullErrorMessage);
-        assertEquals(outputs.get(outputs.size() - 1), expectedFinalMessage, fullErrorMessage);
+        assertEquals("foo", outputs.get(outputs.size() - 2), fullErrorMessage);
+        assertEquals(expectedFinalMessage, outputs.get(outputs.size() - 1), fullErrorMessage);
     }
 
     private Process setupProcess(final String profile) throws IOException {

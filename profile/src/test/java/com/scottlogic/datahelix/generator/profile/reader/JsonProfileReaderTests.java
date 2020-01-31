@@ -33,6 +33,8 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.O
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraint;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
@@ -43,6 +45,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -60,18 +64,18 @@ public class JsonProfileReaderTests {
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
     private class MockFromFileReader extends FileReader {
-        MockFromFileReader() {
+        public MockFromFileReader() {
             super(null);
         }
 
         @Override
-        public DistributedList<Object> setFromFile(String file)
+        public DistributedList<Object> setFromFile(File file)
         {
             return inSetReaderReturnValue;
         }
 
         @Override
-        public DistributedList<String> listFromMapFile(String file, String Key)
+        public DistributedList<String> listFromMapFile(File file, String Key)
         {
             return fromFileReaderReturnValue;
         }
@@ -79,24 +83,31 @@ public class JsonProfileReaderTests {
 
     private String json;
 
+    private final CsvInputStreamReaderFactory csvInputStreamReaderFactory = new CsvInputStreamReaderFactory();
+    private final ConstraintService constraintService = new ConstraintService(
+        new CustomConstraintFactory(new CustomGeneratorList()),
+        new NameRetrievalService(csvInputStreamReaderFactory));
+    private final ConfigValidator configValidator = new ConfigValidator(new FileUtils());
+    private final ProfileDeserialiser profileDeserialiser = new ProfileDeserialiser(
+        configValidator,
+        new ConstraintDeserializerFactory(
+            new MockFromFileReader()
+        ));
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
-        null,
-        new ConfigValidator(new FileUtils()),
-        new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),
-                new ConstraintService(
-                    new CustomConstraintFactory(new CustomGeneratorList()),
-                    new NameRetrievalService(new CsvInputStreamReaderFactory(""))),
-                new CustomConstraintFactory(new CustomGeneratorList()),
-            new CreateProfileValidator(new ProfileValidator(null))));
+            constraintService,
+            new CustomConstraintFactory(new CustomGeneratorList()),
+            new CreateProfileValidator(
+                new ProfileValidator(null))),
+        profileDeserialiser);
 
     private void givenJson(String json) {
         this.json = json;
     }
 
     private Profile getResultingProfile() {
-        return jsonProfileReader.read(json);
+        return jsonProfileReader.read(Paths.get("test"), json);
     }
     
     private void expectValidationException(String message) {
@@ -113,8 +124,7 @@ public class JsonProfileReaderTests {
         return constraint -> {
             Assert.assertThat(constraint, instanceOf(constraintType));
 
-            //noinspection unchecked
-            asserter.accept((T) constraint);
+            asserter.accept(constraintType.cast(constraint));
         };
     }
 

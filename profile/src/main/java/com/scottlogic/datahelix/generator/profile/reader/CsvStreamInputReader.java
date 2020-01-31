@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
 
 public class CsvStreamInputReader implements CsvInputReader {
     private final InputStream stream;
-    private final String path;
+    private final String file;
 
-    public CsvStreamInputReader(InputStream stream, String path) {
+    public CsvStreamInputReader(InputStream stream, String file) {
         this.stream = stream;
-        this.path = path;
+        this.file = file;
     }
 
     public DistributedList<String> retrieveLines() {
@@ -81,7 +81,7 @@ public class CsvStreamInputReader implements CsvInputReader {
             throw new RuntimeException(
                 "Weighting '" + record.get(1) + "' is not a valid number\n" +
                 "CSV lines containing 2 columns must hold a weighting (double) in the second column, e.g. <value>,0.5\n" +
-                "Value: '" + record.get(0) + "', File: '" + this.path + "', Line " + record.getRecordNumber(), e);
+                "Value: '" + record.get(0) + "', File: '" + this.file + "', Line " + record.getRecordNumber(), e);
         }
     }
 

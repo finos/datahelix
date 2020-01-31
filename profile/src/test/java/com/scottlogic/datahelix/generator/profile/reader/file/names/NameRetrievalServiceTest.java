@@ -31,7 +31,7 @@ public class NameRetrievalServiceTest
 {
     @Test
     public void testLoadingFirstNames() {
-        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
         DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
@@ -41,7 +41,7 @@ public class NameRetrievalServiceTest
 
     @Test
     public void testLoadingLastNames() {
-        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
         DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
@@ -51,7 +51,7 @@ public class NameRetrievalServiceTest
 
     @Test
     public void testLoadingFullNames() {
-        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
         DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
@@ -62,7 +62,7 @@ public class NameRetrievalServiceTest
     @ParameterizedTest
     @EnumSource(NameConstraintTypes.class)
     public void testAllValuesGiveValidResult(NameConstraintTypes config) {
-        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory("");
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
         DistributedList<Object> result = service.loadNamesFromFile(config);

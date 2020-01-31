@@ -19,6 +19,7 @@ import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 
+import java.io.File;
 import java.util.stream.Collectors;
 
 public class FileReader {
@@ -29,7 +30,7 @@ public class FileReader {
         this.csvReaderFactory = csvReaderFactory;
     }
 
-    public DistributedList<Object> setFromFile(String file) {
+    public DistributedList<Object> setFromFile(File file) {
         CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
         DistributedList<String> names = reader.retrieveLines();
 
@@ -40,7 +41,7 @@ public class FileReader {
                 .collect(Collectors.toList()));
     }
 
-    public DistributedList<String> listFromMapFile(String file, String key) {
+    public DistributedList<String> listFromMapFile(File file, String key) {
         CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
         DistributedList<String> names = reader.retrieveLines(key);
 

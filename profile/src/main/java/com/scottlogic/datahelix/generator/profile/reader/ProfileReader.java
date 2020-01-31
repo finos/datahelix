@@ -18,11 +18,12 @@ package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
  * Defines an interface for a class to take in a filepath, read the specified profile and produce a Profile object.
  */
 public interface ProfileReader {
-    Profile read() throws IOException;
+    Profile read(File profileFile) throws IOException;
 }

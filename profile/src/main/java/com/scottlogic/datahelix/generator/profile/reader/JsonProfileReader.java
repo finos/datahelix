@@ -17,50 +17,53 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.commands.CommandResult;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
-import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * JsonProfileReader is responsible for reading and validating a profile from a path to a profile JSON file.
  * It returns a Profile object for consumption by a generator
  */
 public class JsonProfileReader implements ProfileReader {
-    private final File profileFile;
-    private final ConfigValidator configValidator;
-    private final FileReader fileReader;
     private final CommandBus commandBus;
+    private final ProfileDeserialiser profileDeserialiser;
 
     @Inject
-    public JsonProfileReader(@Named("config:profileFile") File profileFile, ConfigValidator configValidator, FileReader fileReader, CommandBus commandBus) {
-        this.profileFile = profileFile;
-        this.configValidator = configValidator;
-        this.fileReader = fileReader;
+    public JsonProfileReader(
+        CommandBus commandBus,
+        ProfileDeserialiser profileDeserialiser) {
         this.commandBus = commandBus;
+        this.profileDeserialiser = profileDeserialiser;
     }
 
-    public Profile read() throws IOException {
-        configValidator.validate(profileFile);
-        byte[] encoded = Files.readAllBytes(profileFile.toPath());
-        String profileJson = new String(encoded, StandardCharsets.UTF_8);
-        return read(profileJson);
+    public Profile read(File profileFile) throws IOException {
+        return createFromDto(
+            Paths.get(profileFile.getParent()),
+            profileDeserialiser.deserialise(profileFile));
     }
 
-    public Profile read(String profileJson) {
-        ProfileDTO profileDTO = ProfileDeserialiser.deserialise(profileJson, fileReader);
-        CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDTO));
-        if(!createProfileResult.isSuccess) throw new ValidationException(createProfileResult.errors);
+    public Profile read(Path profileDirectory, String profileJson) {
+        ProfileDTO profileDTO = profileDeserialiser.deserialise(profileDirectory, profileJson);
+        return createFromDto(profileDirectory, profileDTO);
+    }
+
+    private Profile createFromDto(Path profileDirectory, ProfileDTO profileDTO) {
+        CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDirectory, profileDTO));
+
+        if (!createProfileResult.isSuccess){
+            throw new ValidationException(createProfileResult.errors);
+        }
+
         return createProfileResult.value;
     }
 }

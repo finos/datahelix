@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.profile;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
@@ -34,6 +35,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.tempor
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
+import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -41,6 +43,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -101,9 +104,8 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInSetCsvFileWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inSet\": \"countries.csv\" }";
-        ConstraintDeserializer.fileReader = new TestFileReader();
         // Act
-        ConstraintDTO actual = deserialiseJsonString(json);
+        ConstraintDTO actual = deserialiseJsonString(new TestFileReader(), json);
 
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
@@ -117,10 +119,9 @@ public class AtomicConstraintDeserialiserTests {
     public void shouldDeserialiseInMapWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inMap\": \"countries.csv\", \"key\": \"Country\" }";
-        ConstraintDeserializer.fileReader = new TestFileReader();
 
         // Act
-        ConstraintDTO actual = deserialiseJsonString(json);
+        ConstraintDTO actual = deserialiseJsonString(new TestFileReader(), json);
 
         // Assert
         InMapConstraintDTO expected = new InMapConstraintDTO();
@@ -542,6 +543,18 @@ public class AtomicConstraintDeserialiserTests {
     }
 
     private ConstraintDTO deserialiseJsonString(String json) throws IOException {
-        return new ObjectMapper().readerFor(ConstraintDTO.class).readValue(json);
+        return deserialiseJsonString(null, json);
+    }
+
+    private ConstraintDTO deserialiseJsonString(FileReader fileReader, String json) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(ConstraintDTO.class, new ConstraintDeserializer(fileReader, Paths.get("test")));
+        mapper.registerModule(module);
+
+        return mapper
+            .readerFor(ConstraintDTO.class)
+            .readValue(json);
     }
 }

@@ -22,15 +22,15 @@ import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import java.io.*;
 
 public class CsvFileInputReader implements CsvInputReader {
-    private final String path;
+    private final File path;
 
-    public CsvFileInputReader(String path) {
+    public CsvFileInputReader(File path) {
         this.path = path;
     }
 
     public DistributedList<String> retrieveLines() {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path).retrieveLines();
+            return new CsvStreamInputReader(stream, path.getName()).retrieveLines();
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
@@ -38,7 +38,7 @@ public class CsvFileInputReader implements CsvInputReader {
 
     public DistributedList<String> retrieveLines(String key) {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path).retrieveLines(key);
+            return new CsvStreamInputReader(stream, path.getName()).retrieveLines(key);
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }

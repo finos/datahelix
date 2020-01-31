@@ -20,12 +20,16 @@ import com.scottlogic.datahelix.generator.common.commands.Command;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 
+import java.nio.file.Path;
+
 public class CreateProfile extends Command<Profile>
 {
     public final ProfileDTO profileDTO;
+    public final Path profileDirectory;
 
-    public CreateProfile(ProfileDTO profileDTO)
+    public CreateProfile(Path profileDirectory, ProfileDTO profileDTO)
     {
+        this.profileDirectory = profileDirectory;
         this.profileDTO = profileDTO;
     }
 }
