@@ -19,20 +19,19 @@ import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import javax.inject.Inject;
+import java.io.File;
 
 public class CucumberFileReader extends FileReader {
     private final CucumberTestState testState;
 
     @Inject
     public CucumberFileReader(CucumberTestState testState) {
-        super("");
         this.testState = testState;
     }
 
     @Override
-    public DistributedList<String> listFromMapFile(String file, String key) {
-        return DistributedList.uniform(testState.getValuesFromMap(file, key));
+    public DistributedList<String> listFromMapFile(File file, String key) {
+        return DistributedList.uniform(testState.getValuesFromMap(file.getName(), key));
     }
-
 }
 

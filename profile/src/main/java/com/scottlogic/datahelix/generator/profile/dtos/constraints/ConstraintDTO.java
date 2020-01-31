@@ -17,10 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.dtos.constraints;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 
-@JsonDeserialize(using = ConstraintDeserializer.class)
 public abstract class ConstraintDTO
 {
     private final ConstraintType type = ConstraintType.fromClass(getClass());

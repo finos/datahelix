@@ -27,9 +27,18 @@ import com.scottlogic.datahelix.generator.profile.services.FieldService;
 public class ProfileCommandBus extends CommandBus
 {
     @Inject
-    public ProfileCommandBus(FieldService fieldService, ConstraintService constraintService
-        , CustomConstraintFactory customConstraintFactory, Validator<CreateProfile> validator)
+    public ProfileCommandBus(
+        FieldService fieldService,
+        ConstraintService constraintService,
+        CustomConstraintFactory customConstraintFactory,
+        Validator<CreateProfile> validator)
     {
-        register(CreateProfile.class, new CreateProfileHandler(fieldService, constraintService, customConstraintFactory, validator));
+        register(
+            CreateProfile.class,
+            new CreateProfileHandler(
+                fieldService,
+                constraintService,
+                customConstraintFactory,
+                validator));
     }
 }

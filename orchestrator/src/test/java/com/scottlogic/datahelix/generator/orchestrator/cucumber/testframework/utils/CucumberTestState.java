@@ -17,7 +17,9 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
@@ -43,8 +45,11 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -371,6 +376,14 @@ public class CucumberTestState {
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+
+        JsonDeserializer<ConstraintDTO> constraintDeserializer = new ConstraintDeserializerFactory(null)
+            .createDeserialiser(Paths.get(""));
+
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(ConstraintDTO.class, constraintDeserializer);
+        mapper.registerModule(module);
+
         return mapper.readerFor(ConstraintHolder.class).readValue(json);
     }
 

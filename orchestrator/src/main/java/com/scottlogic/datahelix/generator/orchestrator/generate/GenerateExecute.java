@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.generate;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
 import com.scottlogic.datahelix.generator.core.generation.DataGeneratorMonitor;
@@ -25,6 +26,7 @@ import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutpu
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 import com.scottlogic.datahelix.generator.profile.reader.ProfileReader;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 
@@ -33,19 +35,24 @@ public class GenerateExecute {
     private final ProfileReader profileReader;
     private final DataGenerator dataGenerator;
     private final DataGeneratorMonitor monitor;
-
+    private final File profileFile;
 
     @Inject
-    GenerateExecute(DataGenerator dataGenerator, SingleDatasetOutputTarget singleDatasetOutputTarget,
-                    ProfileReader profileReader,DataGeneratorMonitor monitor) {
+    GenerateExecute(
+        DataGenerator dataGenerator,
+        SingleDatasetOutputTarget singleDatasetOutputTarget,
+        ProfileReader profileReader,
+        DataGeneratorMonitor monitor,
+        @Named("config:profileFile") File profileFile) {
         this.dataGenerator = dataGenerator;
         this.singleDatasetOutputTarget = singleDatasetOutputTarget;
         this.profileReader = profileReader;
         this.monitor = monitor;
+        this.profileFile = profileFile;
     }
 
     public void execute() throws IOException {
-        Profile profile = profileReader.read();
+        Profile profile = profileReader.read(profileFile);
         Stream<GeneratedObject> generatedDataItems = dataGenerator.generateData(profile);
 
         outputData(profile, generatedDataItems);

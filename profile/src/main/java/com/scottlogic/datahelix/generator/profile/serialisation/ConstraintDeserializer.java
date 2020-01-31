@@ -31,13 +31,22 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetF
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
-    public static FileReader fileReader;
+    private final FileReader fileReader;
+    private final Path profileDirectory;
+
+    public ConstraintDeserializer(FileReader fileReader, Path profileDirectory) {
+        this.fileReader = fileReader;
+        this.profileDirectory = profileDirectory;
+    }
 
     @Override
     public ConstraintDTO deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException
@@ -65,7 +74,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InMapConstraintDTO map(InMapFromFileConstraintDTO dto)
     {
-        List<Object> values = fileReader.listFromMapFile(dto.file, dto.key).stream().collect(Collectors.toList());
+        List<Object> values = fileReader.listFromMapFile(getFile(dto.file), dto.key).stream().collect(Collectors.toList());
         InMapConstraintDTO inMapConstraintDTO = new InMapConstraintDTO();
         inMapConstraintDTO.field = dto.field;
         inMapConstraintDTO.otherField = dto.file;
@@ -75,10 +84,14 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InSetConstraintDTO map(InSetFromFileConstraintDTO dto)
     {
-        List<Object> values = fileReader.setFromFile(dto.file).stream().collect(Collectors.toList());
+        List<Object> values = fileReader.setFromFile(getFile(dto.file)).stream().collect(Collectors.toList());
         InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
         inSetConstraintDTO.field = dto.field;
         inSetConstraintDTO.values = values;
         return inSetConstraintDTO;
+    }
+
+    private File getFile(String fileName) {
+        return Paths.get(profileDirectory.toString(), fileName).toFile();
     }
 }

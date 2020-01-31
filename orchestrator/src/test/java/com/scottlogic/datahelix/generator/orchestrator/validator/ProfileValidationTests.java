@@ -16,17 +16,22 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.validator;
 
+import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
 import com.scottlogic.datahelix.generator.profile.reader.ProfileCommandBus;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
+import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -35,6 +40,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class ProfileValidationTests {
     @TestFactory
@@ -45,15 +54,29 @@ public class ProfileValidationTests {
             Paths.get("..", "examples")
                 .toFile()
                 .listFiles(File::isDirectory);
+
+        CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
+        ConstraintService constraintService = new ConstraintService(customConstraintFactory);
+        ProfileDeserialiser profileDeserialiser = new ProfileDeserialiser(
+            new ConfigValidator(new FileUtils()),
+            new ConstraintDeserializerFactory(new FileReader()));
+        CommandBus commandBus = new ProfileCommandBus(
+            new FieldService(),
+            constraintService,
+            customConstraintFactory,
+            new CreateProfileValidator(new ProfileValidator(null)));
+
+        JsonProfileReader profileReader = new JsonProfileReader(commandBus, profileDeserialiser);
+
         for (File dir : directoriesArray) {
             File profileFile = Paths.get(dir.getCanonicalPath(), "profile.json").toFile();
-           CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
+
             DynamicTest test = DynamicTest.dynamicTest(
                 dir.getName(),
-                () -> new JsonProfileReader(profileFile, new ConfigValidator(new FileUtils()),new FileReader(profileFile.getParent()),
-                    new ProfileCommandBus(new FieldService(), new ConstraintService(customConstraintFactory),
-                        customConstraintFactory,
-                        new CreateProfileValidator(new ProfileValidator(null)))).read());
+                () -> {
+                    Profile profile = profileReader.read(profileFile);
+                    Assert.assertThat(profile, is(not(nullValue())));
+                });
             dynamicTests.add(test);
         }
         return dynamicTests;

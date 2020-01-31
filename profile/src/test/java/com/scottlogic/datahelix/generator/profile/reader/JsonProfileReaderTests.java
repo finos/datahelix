@@ -33,6 +33,8 @@ import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.O
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraint;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
@@ -42,7 +44,8 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.io.File;
+import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -60,18 +63,14 @@ public class JsonProfileReaderTests {
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
     private class MockFromFileReader extends FileReader {
-        MockFromFileReader() {
-            super("");
-        }
-
         @Override
-        public DistributedList<Object> setFromFile(String file)
+        public DistributedList<Object> setFromFile(File file)
         {
             return inSetReaderReturnValue;
         }
 
         @Override
-        public DistributedList<String> listFromMapFile(String file, String Key)
+        public DistributedList<String> listFromMapFile(File file, String Key)
         {
             return fromFileReaderReturnValue;
         }
@@ -79,22 +78,28 @@ public class JsonProfileReaderTests {
 
     private String json;
 
+    private final ConstraintService constraintService = new ConstraintService(new CustomConstraintFactory(new CustomGeneratorList()));
+    private final ConfigValidator configValidator = new ConfigValidator(new FileUtils());
+    private final ProfileDeserialiser profileDeserialiser = new ProfileDeserialiser(
+        configValidator,
+        new ConstraintDeserializerFactory(
+            new MockFromFileReader()
+        ));
     private JsonProfileReader jsonProfileReader = new JsonProfileReader(
-        null,
-        new ConfigValidator(new FileUtils()),
-        new MockFromFileReader(),
         new ProfileCommandBus(
             new FieldService(),
-                new ConstraintService(new CustomConstraintFactory(new CustomGeneratorList())),
-                new CustomConstraintFactory(new CustomGeneratorList()),
-            new CreateProfileValidator(new ProfileValidator(null))));
+            constraintService,
+            new CustomConstraintFactory(new CustomGeneratorList()),
+            new CreateProfileValidator(
+                new ProfileValidator(null))),
+        profileDeserialiser);
 
     private void givenJson(String json) {
         this.json = json;
     }
 
-    private Profile getResultingProfile() throws IOException {
-        return jsonProfileReader.read(json);
+    private Profile getResultingProfile() {
+        return jsonProfileReader.read(Paths.get("test"), json);
     }
     
     private void expectValidationException(String message) {
@@ -103,7 +108,7 @@ public class JsonProfileReaderTests {
     }
 
     @SafeVarargs
-    private final void expectConstraints(Consumer<Constraint>... constraintAssertions) throws IOException {
+    private final void expectConstraints(Consumer<Constraint>... constraintAssertions) {
         expectMany(this.getResultingProfile().getConstraints(), constraintAssertions);
     }
 
@@ -111,7 +116,7 @@ public class JsonProfileReaderTests {
         return constraint -> {
             Assert.assertThat(constraint, instanceOf(constraintType));
 
-            asserter.accept((T) constraint);
+            asserter.accept(constraintType.cast(constraint));
         };
     }
 
@@ -120,7 +125,7 @@ public class JsonProfileReaderTests {
     }
 
     @SafeVarargs
-    private final void expectFields(Consumer<Field>... fieldAssertions) throws IOException {
+    private final void expectFields(Consumer<Field>... fieldAssertions) {
         expectMany(this.getResultingProfile().getFields(), fieldAssertions);
     }
 
@@ -146,7 +151,7 @@ public class JsonProfileReaderTests {
 
 
     @Test
-    public void shouldDeserialiseSingleField() throws IOException {
+    public void shouldDeserialiseSingleField() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
@@ -157,7 +162,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseMultipleFields() throws IOException {
+    public void shouldDeserialiseMultipleFields() {
         givenJson(
                 "{" +
                         "    \"fields\": [ " +
@@ -198,7 +203,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsOfTypeConstraint() throws IOException {
+    public void shouldDeserialiseIsOfTypeConstraint() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
@@ -214,7 +219,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsOfTypeConstraint_whenInteger() throws IOException {
+    public void shouldDeserialiseIsOfTypeConstraint_whenInteger() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\", \"nullable\": true } ]," +
@@ -230,7 +235,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsEqualToConstraint() throws IOException {
+    public void shouldDeserialiseIsEqualToConstraint() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
@@ -247,7 +252,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseFormatConstraint() throws IOException {
+    public void shouldDeserialiseFormatConstraint() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { " +
@@ -267,7 +272,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIsOfLengthConstraint() throws IOException {
+    public void shouldDeserialiseIsOfLengthConstraint() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"id\", \"type\": \"string\" , \"nullable\": true} ]," +
@@ -281,7 +286,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseNotWrapper() throws IOException {
+    public void shouldDeserialiseNotWrapper() {
         // Arrange
         givenJson(
                 "{" +
@@ -296,7 +301,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseOrConstraint() throws IOException {
+    public void shouldDeserialiseOrConstraint() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
@@ -315,7 +320,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseAndConstraint() throws IOException {
+    public void shouldDeserialiseAndConstraint() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
@@ -334,7 +339,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIfConstraint() throws IOException {
+    public void shouldDeserialiseIfConstraint() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
@@ -364,7 +369,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseIfConstraintWithoutElse() throws IOException {
+    public void shouldDeserialiseIfConstraintWithoutElse() {
         givenJson(
                 "{" +
                         "    \"fields\": [ { \"name\": \"foo\", \"type\": \"string\", \"nullable\": true } ]," +
@@ -393,7 +398,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseOneAsNumericGranularToConstraint() throws IOException {
+    public void shouldDeserialiseOneAsNumericGranularToConstraint() {
         givenJson(
             "{" +
             "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
@@ -407,7 +412,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDeserialiseTenthAsNumericGranularToConstraint() throws IOException {
+    public void shouldDeserialiseTenthAsNumericGranularToConstraint() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
@@ -421,7 +426,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldDisregardTrailingZeroesInNumericGranularities() throws IOException {
+    public void shouldDisregardTrailingZeroesInNumericGranularities() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"decimal\", \"nullable\": true } ]," +
@@ -435,7 +440,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldAllowValidISO8601DateTime() throws IOException {
+    public void shouldAllowValidISO8601DateTime() {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\", \"nullable\": true } ]," +
@@ -545,7 +550,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void unique_setsFieldPropertyToTrue_whenSetToTrue() throws IOException {
+    public void unique_setsFieldPropertyToTrue_whenSetToTrue() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -565,7 +570,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void unique_setsFieldPropertyToFalse_whenOmitted() throws IOException {
+    public void unique_setsFieldPropertyToFalse_whenOmitted() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -583,7 +588,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void unique_setsFieldPropertyToFalse_whenSetToFalse() throws IOException {
+    public void unique_setsFieldPropertyToFalse_whenSetToFalse() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -603,7 +608,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_addsConstraintForField_whenSetToFalse() throws IOException {
+    public void nullable_addsConstraintForField_whenSetToFalse() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -620,7 +625,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_DoesNotAddConstraintForField_whenSetToTrue() throws IOException
+    public void nullable_DoesNotAddConstraintForField_whenSetToTrue()
     {
         givenJson(
             "{" +
@@ -636,7 +641,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_addsConstraintForFields_whenSetToFalse() throws IOException  {
+    public void nullable_addsConstraintForFields_whenSetToFalse()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -660,7 +665,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_addsConstraintForFields_whenOneSetToFalse() throws IOException  {
+    public void nullable_addsConstraintForFields_whenOneSetToFalse()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -681,7 +686,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void type_setsFieldTypeProperty_whenSetInFieldDefinition() throws IOException  {
+    public void type_setsFieldTypeProperty_whenSetInFieldDefinition()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -704,7 +709,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    void parser_createsInternalField_whenProfileHasAnInMapConstraint() throws IOException {
+    void parser_createsInternalField_whenProfileHasAnInMapConstraint() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -737,7 +742,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    void parser_createsInternalField_whenProfileHasANestedInMapConstraint() throws IOException {
+    void parser_createsInternalField_whenProfileHasANestedInMapConstraint() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -786,7 +791,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateType_shouldSetCorrectGranularity() throws IOException  {
+    public void formatting_withDateType_shouldSetCorrectGranularity()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -802,7 +807,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateType_shouldSetCorrectFormatting() throws IOException  {
+    public void formatting_withDateType_shouldSetCorrectFormatting()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -816,7 +821,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting() throws IOException  {
+    public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -831,7 +836,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void addsConstraintForGenerator() throws IOException  {
+    public void addsConstraintForGenerator()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -850,7 +855,7 @@ public class JsonProfileReaderTests {
 
 
     @Test
-    public void exceptionWhenGeneratorDoesNotExist() throws IOException  {
+    public void exceptionWhenGeneratorDoesNotExist()  {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +

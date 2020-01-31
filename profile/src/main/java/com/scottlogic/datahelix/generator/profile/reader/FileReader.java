@@ -25,17 +25,8 @@ import java.io.*;
 import java.util.stream.Collectors;
 
 public class FileReader {
-    private final String filePath;
-
-    @Inject
-    public FileReader(@Named("config:filePath") String filePath) {
-        this.filePath = filePath.endsWith(File.separator) || filePath.isEmpty()
-            ? filePath
-            : filePath + File.separator;
-    }
-
-    public DistributedList<Object> setFromFile(String file) {
-        InputStream streamFromPath = createStreamFromPath(filePath + file);
+    public DistributedList<Object> setFromFile(File file) {
+        InputStream streamFromPath = createStreamFromPath(file);
 
         DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
         closeStream(streamFromPath);
@@ -47,8 +38,8 @@ public class FileReader {
                 .collect(Collectors.toList()));
     }
 
-    public DistributedList<String> listFromMapFile(String file, String key) {
-        InputStream streamFromPath = createStreamFromPath(filePath + file);
+    public DistributedList<String> listFromMapFile(File file, String key) {
+        InputStream streamFromPath = createStreamFromPath(file);
 
         DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath, key);
         closeStream(streamFromPath);
@@ -59,7 +50,7 @@ public class FileReader {
                 .collect(Collectors.toList()));
     }
 
-    private static InputStream createStreamFromPath(String path) {
+    private static InputStream createStreamFromPath(File path) {
         try {
             return new FileInputStream(path);
         } catch (FileNotFoundException e) {
