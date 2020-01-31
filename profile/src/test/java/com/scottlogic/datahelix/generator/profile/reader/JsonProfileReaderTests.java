@@ -37,6 +37,7 @@ import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeseri
 import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
+import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
@@ -63,6 +64,10 @@ public class JsonProfileReaderTests {
     private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
 
     private class MockFromFileReader extends FileReader {
+        public MockFromFileReader() {
+            super(null);
+        }
+
         @Override
         public DistributedList<Object> setFromFile(File file)
         {
@@ -78,7 +83,10 @@ public class JsonProfileReaderTests {
 
     private String json;
 
-    private final ConstraintService constraintService = new ConstraintService(new CustomConstraintFactory(new CustomGeneratorList()));
+    private final CsvInputStreamReaderFactory csvInputStreamReaderFactory = new CsvInputStreamReaderFactory();
+    private final ConstraintService constraintService = new ConstraintService(
+        new CustomConstraintFactory(new CustomGeneratorList()),
+        new NameRetrievalService(csvInputStreamReaderFactory));
     private final ConfigValidator configValidator = new ConfigValidator(new FileUtils());
     private final ProfileDeserialiser profileDeserialiser = new ProfileDeserialiser(
         configValidator,
@@ -625,8 +633,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_DoesNotAddConstraintForField_whenSetToTrue()
-    {
+    public void nullable_DoesNotAddConstraintForField_whenSetToTrue() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -641,7 +648,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_addsConstraintForFields_whenSetToFalse()  {
+    public void nullable_addsConstraintForFields_whenSetToFalse() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -665,7 +672,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void nullable_addsConstraintForFields_whenOneSetToFalse()  {
+    public void nullable_addsConstraintForFields_whenOneSetToFalse() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -686,7 +693,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void type_setsFieldTypeProperty_whenSetInFieldDefinition()  {
+    public void type_setsFieldTypeProperty_whenSetInFieldDefinition() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -791,7 +798,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateType_shouldSetCorrectGranularity()  {
+    public void formatting_withDateType_shouldSetCorrectGranularity() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -807,7 +814,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateType_shouldSetCorrectFormatting()  {
+    public void formatting_withDateType_shouldSetCorrectFormatting() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -821,7 +828,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting()  {
+    public void formatting_withDateTypeAndFormatting_shouldSetCorrectFormatting() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -836,7 +843,7 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void addsConstraintForGenerator()  {
+    public void addsConstraintForGenerator() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +
@@ -855,7 +862,7 @@ public class JsonProfileReaderTests {
 
 
     @Test
-    public void exceptionWhenGeneratorDoesNotExist()  {
+    public void exceptionWhenGeneratorDoesNotExist() {
         givenJson(
             "{" +
                 "    \"fields\": [ { " +

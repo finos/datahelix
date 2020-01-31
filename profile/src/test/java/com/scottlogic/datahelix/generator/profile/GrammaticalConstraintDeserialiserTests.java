@@ -30,6 +30,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
@@ -197,7 +198,11 @@ public class GrammaticalConstraintDeserialiserTests {
         ObjectMapper mapper = new ObjectMapper();
 
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(ConstraintDTO.class, new ConstraintDeserializer(new FileReader(), Paths.get("test")));
+        module.addDeserializer(
+            ConstraintDTO.class,
+            new ConstraintDeserializer(
+                new FileReader(new CsvInputStreamReaderFactory()),
+                Paths.get("test")));
         mapper.registerModule(module);
 
         return mapper

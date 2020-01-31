@@ -22,6 +22,10 @@ import java.io.File;
 import java.util.Collections;
 
 public class TestFileReader extends FileReader {
+    public TestFileReader() {
+        super(null);
+    }
+
     @Override
     public DistributedList<Object> setFromFile(File file) {
         return DistributedList.uniform(Collections.singleton("test"));

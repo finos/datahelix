@@ -21,6 +21,7 @@ import com.scottlogic.datahelix.generator.common.util.FileUtils;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.custom.CustomGeneratorList;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 import com.scottlogic.datahelix.generator.profile.reader.JsonProfileReader;
 import com.scottlogic.datahelix.generator.profile.reader.ProfileCommandBus;
@@ -28,6 +29,7 @@ import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeseri
 import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
+import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
@@ -55,11 +57,14 @@ public class ProfileValidationTests {
                 .toFile()
                 .listFiles(File::isDirectory);
 
+        CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         CustomConstraintFactory customConstraintFactory = new CustomConstraintFactory(new CustomGeneratorList());
-        ConstraintService constraintService = new ConstraintService(customConstraintFactory);
+        ConstraintService constraintService = new ConstraintService(
+            customConstraintFactory,
+            new NameRetrievalService(csvReaderFactory));
         ProfileDeserialiser profileDeserialiser = new ProfileDeserialiser(
             new ConfigValidator(new FileUtils()),
-            new ConstraintDeserializerFactory(new FileReader()));
+            new ConstraintDeserializerFactory(new FileReader(csvReaderFactory)));
         CommandBus commandBus = new ProfileCommandBus(
             new FieldService(),
             constraintService,

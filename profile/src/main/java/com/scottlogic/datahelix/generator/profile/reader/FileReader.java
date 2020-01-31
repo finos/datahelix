@@ -15,19 +15,24 @@
  */
 package com.scottlogic.datahelix.generator.profile.reader;
 
-import com.scottlogic.datahelix.generator.common.ValidationException;
+import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 
-import java.io.*;
+import java.io.File;
 import java.util.stream.Collectors;
 
 public class FileReader {
-    public DistributedList<Object> setFromFile(File file) {
-        InputStream streamFromPath = createStreamFromPath(file);
+    private final CsvInputStreamReaderFactory csvReaderFactory;
 
-        DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath);
-        closeStream(streamFromPath);
+    @Inject
+    public FileReader(CsvInputStreamReaderFactory csvReaderFactory) {
+        this.csvReaderFactory = csvReaderFactory;
+    }
+
+    public DistributedList<Object> setFromFile(File file) {
+        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        DistributedList<String> names = reader.retrieveLines();
 
         return new DistributedList<>(
             names.distributedList().stream()
@@ -37,30 +42,12 @@ public class FileReader {
     }
 
     public DistributedList<String> listFromMapFile(File file, String key) {
-        InputStream streamFromPath = createStreamFromPath(file);
-
-        DistributedList<String> names = CsvInputStreamReader.retrieveLines(streamFromPath, key);
-        closeStream(streamFromPath);
+        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        DistributedList<String> names = reader.retrieveLines(key);
 
         return new DistributedList<>(
             names.distributedList().stream()
                 .map(holder -> new WeightedElement<>(holder.element(), holder.weight()))
                 .collect(Collectors.toList()));
-    }
-
-    private static InputStream createStreamFromPath(File path) {
-        try {
-            return new FileInputStream(path);
-        } catch (FileNotFoundException e) {
-            throw new ValidationException(e.getMessage());
-        }
-    }
-
-    private static void closeStream(InputStream stream) {
-        try {
-            stream.close();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
     }
 }

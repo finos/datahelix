@@ -17,7 +17,8 @@ package com.scottlogic.datahelix.generator.profile.reader.file;
 
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReader;
+import com.scottlogic.datahelix.generator.profile.reader.CsvInputReader;
+import com.scottlogic.datahelix.generator.profile.reader.CsvStreamInputReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
@@ -25,15 +26,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CsvInputStreamReaderTest {
+class CsvStreamInputReaderTest {
     @Test
     public void testReadingLinesFromNames() {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         final InputStream is = loader.getResourceAsStream("names/firstname.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "names/firstname.csv");
 
-        final DistributedList<String> names = CsvInputStreamReader.retrieveLines(is);
+        final DistributedList<String> names = reader.retrieveLines();
 
         final Set<String> sampleNames = Stream.of("Rory", "Kyle", "Grace").collect(Collectors.toSet());
 
@@ -44,8 +46,9 @@ class CsvInputStreamReaderTest {
     public void testReadingLinesFromFileWithoutFrequencies() {
         final ClassLoader loader = Thread.currentThread().getContextClassLoader();
         final InputStream is = loader.getResourceAsStream("csv/without-frequencies.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "csv/without-frequencies.csv");
 
-        final DistributedList<String> set = CsvInputStreamReader.retrieveLines(is);
+        final DistributedList<String> set = reader.retrieveLines();
 
         assertTrue(checkAllWeightsAreEquals(set));
     }
