@@ -60,7 +60,6 @@ public class ProfileDeserialiser
         ObjectMapper mapper = new ObjectMapper();
         mapper.disable(DeserializationFeature.WRAP_EXCEPTIONS);
         mapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-        mapper.enable(JsonParser.Feature.ALLOW_COMMENTS); //TODO: Remove this, only here for the PoC
 
         SimpleModule module = new SimpleModule();
         module.addDeserializer(ConstraintDTO.class, constraintDeserializerFactory.createDeserialiser(profileDirectory));
