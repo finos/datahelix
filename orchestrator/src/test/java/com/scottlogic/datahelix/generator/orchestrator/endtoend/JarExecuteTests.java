@@ -47,6 +47,17 @@ public class JarExecuteTests {
             "Either load from file no longer works, or ");
     }
 
+    @Test
+    void generateSuccessfullyFromJarAndLoadFileWithinSubDirectory() throws Exception {
+        Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/loadfiletest-subfolder.profile.json");
+
+        List<String> collectedOutput = collectOutputAndCloseProcess(p);
+
+        assertOnOutputs(collectedOutput,
+            "Generated successfully from file",
+            "Either load from file no longer works, or ");
+    }
+
     private void assertOnOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
         String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
             "1) You have not built the jar. \n Try running Gradle Build. \n" +

@@ -1,0 +1,15 @@
+{
+    "fields": [
+    {
+      "name": "foo",
+      "type": "string",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "foo",
+      "inSet": "subfolder/testfile.csv"
+    }
+  ]
+}
