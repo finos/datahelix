@@ -15,8 +15,6 @@
  */
 package com.scottlogic.datahelix.generator.profile.reader;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
