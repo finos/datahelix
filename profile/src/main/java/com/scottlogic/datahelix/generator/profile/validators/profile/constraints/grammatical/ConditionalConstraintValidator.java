@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 
 import java.util.List;
@@ -33,7 +34,9 @@ public class ConditionalConstraintValidator  extends GrammaticalConstraintValida
     public ValidationResult validate(ConditionalConstraintDTO conditionalConstraint)
     {
         ValidationResult validateIfConstraint = validateConstraint(conditionalConstraint.ifConstraint, fields);
-        ValidationResult validateThenConstraint = validateConstraint(conditionalConstraint.thenConstraint, fields);
+        ValidationResult validateThenConstraint = conditionalConstraint.thenConstraint == null
+            ? ValidationResult.failure("'if' constraint must also have an associated 'then' constraint")
+            : validateConstraint(conditionalConstraint.thenConstraint, fields);
         ValidationResult validateElseConstraint = conditionalConstraint.elseConstraint == null
             ? ValidationResult.success()
             :validateConstraint(conditionalConstraint.ifConstraint, fields);
