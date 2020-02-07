@@ -38,7 +38,7 @@ public class ConditionalConstraintValidatorTests {
         );
 
     @Test
-    public void validateConditionalConstraint_withNullThenConstraint_fails()
+    public void validateConditionalConstraint_withNullThenConstraint_shouldResultInValidationFailure()
     {
         // Arrange
         EqualToConstraintDTO equalToConstraint = new EqualToConstraintDTO();
