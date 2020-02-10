@@ -8,20 +8,19 @@ function global:au_GetLatest() {
      $url     = $download_page.links | ? href -match $regex | select -First 1 -expand href #2
      $version = [System.Text.RegularExpressions.Regex]::Match($url, "v(\d+\.\d+\.\d+)").Groups[1].Value
 
-     return @{ Version = $version; URL32 = "https://github.com" + $url }
+     return @{ Version = $version; URL = "https://github.com" + $url }
 }
 
 function global:au_SearchReplace() {
     @{
         "tools\chocolateyInstall.ps1" = @{
-            "(^[$]checksum32\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
-            "(^[$]checksum64\s*=\s*)('.*')" = "`$1'$($Latest.Checksum32)'"
+            "(^[$]checksum\s*=\s*)('.*')" = "`$1'$($Latest.Checksum)'"
         }
     }
 }
 
 function global:au_BeforeUpdate() {
-    $Latest.Checksum32 = Get-RemoteChecksum $Latest.Url32
+    $Latest.Checksum = Get-RemoteChecksum $Latest.Url
 }
 
 ##copied from: https://www.powershellgallery.com/packages/AU/2017.3.29/Content/Public%5CGet-RemoteChecksum.ps1
