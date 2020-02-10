@@ -18,7 +18,7 @@ On a Windows computer with Powershell installed (these are the only requirements
 1. Install the [auto-updater](https://github.com/majkinetor/au/blob/master/README.md) chocolatey module
    1. Launch Powershell in administrative mode
    1. Execute `Install-Module au`
-1. Execute `choco apikey <apikey>` key is accessible from the [chocolatey account page](https://chocolatey.org/account).
+1. Execute `choco apikey -k <apikey> -s https://push.chocolatey.org/` key is accessible from the [chocolatey account page](https://chocolatey.org/account).
 
 #### Per update steps
 1. Ensure the latest release has been published to GitHub releases
