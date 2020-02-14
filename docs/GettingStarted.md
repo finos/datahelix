@@ -30,11 +30,11 @@ You can get a copy of DataHelix by one of the following means:
 
 ### Install via Chocolatey
 
-[Chocolatey](https://chocolatey.org/) is a Windows package manager for applications, Data Helix - since v2.1.9 - has been released as a community package.
+[Chocolatey](https://chocolatey.org/) is a Windows package manager for applications, Data Helix - since v2.1.10 - has been released as a community package.
 As such you can install the DataHelix generator by running
 
 ```
-choco install datahelix --version=2.1.9
+choco install datahelix
 ```
 
 This will install the Java runtime environment as required, and setup 'shortcuts' allowing you to type `datahelix` from any directory. 
