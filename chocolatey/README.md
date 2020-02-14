@@ -1,6 +1,6 @@
 ## Chocolatey
 
-Chocolatey is a windows package manager for applications. The Data Helix generator has been published to this service to improve the usability of the tool.
+Chocolatey is a Microsoft Windows package manager for applications. The Data Helix generator has been published to this service to improve the usability of the tool.
 
 ### Getting Data Helix
 
@@ -9,7 +9,7 @@ Chocolatey is a windows package manager for applications. The Data Helix generat
 
 ### Updating the package
 
-The update process for the package cannot - currently - be automated, as it requires a windows build agent (to run Powershell). The steps below detail how to update the package (manually) at present
+The update process for the package cannot - currently - be automated, as it requires a Windows build agent (to run Powershell). The steps below detail how to update the package (manually) at present
 
 On a Windows computer with Powershell installed (these are the only requirements, no need to be able to build the project)
 
