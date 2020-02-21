@@ -154,7 +154,7 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
 
     @Override
     public File getProfileFile() {
-        return profileFile;
+        return profileFile.getAbsoluteFile();
     }
 
     @Override
