@@ -1,0 +1,106 @@
+.TH DATAHELIX 1
+
+.SH NAME
+datahelix \- the open-source data generator.
+
+.SH SYNOPSIS
+.B datahelix
+[\fB\-c\fR \fIcombinationType\fR | \fB\-\-combinationstrategy=\fR\fIcombinationType\fR]
+[\fB\-\-disable-schema-validation\fR]
+[\fB\-h\fR | \fB\-\-help\fR]
+[\fB\-n\fR \fImaxRows\fR | \fB\-\-max-rows=\fR\fImaxRows\fR]
+[\fB\-o\fR \fIoutputPath\fR | \fB\-\-output-path=\fR\fIoutputPath\fR]
+[\fB\-\-output-format=\fR\fIoutputFormat\fR]
+[\fB\-p\fR \fIprofileFile\fR | \fB\-\-profile-file=\fR\fIprofileFile\fR]
+[\fB\-\-\quiet\fR]
+[\fB\-\-replace\fR]
+[\fB\-\-set-from-file-directory=\fR\fIfromFilePath\fR]
+[\fB\-v\fR | \fB\-\-version\fR]
+[\fB\-\-verbose\fR]
+[\fB\-\-visualiser-level=\fR\fIvisualiserLevel\fR]
+[\fB\-\-visualiser-output-folder=\fR\fIvisualiserOutputFolder\fR]
+
+.SH DESCRIPTION
+The generation of representative test and simulation data is a challenging and time-consuming task.
+Although DataHelix was created to address a specific challenge in the financial services industry, you will find it a useful tool for the generation of realistic data for simulation and testing, regardless of industry sector.
+All this from a straightforward JSON data profile document.
+
+.PP
+For further documentation, examples , a getting started guide, and a profile creation guide visit the project's github at github.com/finos/datahelix
+
+.SH OPTIONS
+.TP
+.BR \-c ", " \-\-combination-strategy=\fIcombinationType\fR
+Determines the type of combination strategy used
+(EXHAUSTIVE, PINNING, MINIMAL)
+
+.TP
+.BR \-\-disable-schema-validation
+Disables schema validation
+
+.TP
+.BR \-h ", " \-\-help
+Display available command line options.
+
+.TP
+.BR \-n ", " \-\-max-rows=\fImaxRows\fR   
+Defines the maximum number of rows that should be generated
+
+.TP
+.BR \-o ", " \-\-output-path=\fIoutputPath\fR
+The path to write the generated data file to.
+
+.TP
+.BR \-\-output-format=\fIoutputFormat\fR
+Output format
+(CSV, JSON)
+
+.TP
+.BR \-p ", " \-\-profile-file=\fIprofileFile\fR
+The path of the profile json file.
+
+.TP
+.BR \-\-quiet
+Turns OFF default monitoring
+
+.TP
+.BR \-\-replace
+Defines whether to overwrite/replace existing output files.
+
+.TP
+.BR \-\-set-from-file-directory=\fIfromFilePath\fR
+Custom root for loading sets from file.
+
+.TP
+.BR \-V ", " \-\-version
+Print version information and exit.
+
+.TP
+.BR \-\-verbose
+Turns ON system out monitoring
+
+.TP
+.BR \-\-visualiser-level=\fIvisualiserLevel\fR
+Visualiser level
+(OFF, STANDARD, DETAILED)
+
+.TP
+.BR \-\-visualiser-output-folder=\fIvisualiserOutputFolder\fR
+The path to the folder to write the generated visualiser files to (only used if visualiser-level != OFF).
+
+.SH EXAMPLES
+.TP
+.BR datahelix "  " \-\-max-rows=100 " " \-\-replace " " \-\-profile-file=profile.json " " \-\-output-path=output.csv
+The generator is a command line tool which reads a profile, and outputs data in CSV or JSON format. The \-\-max-rows=100 option tells the generator to create 100 rows of data, and the \-\-replace option tells it to overwrite previously generated files.
+The compulsory \-\-profile-file option specifies the name of the input profile, and the \-\-output-path option specifies the location to write the output to.
+In generate mode \-\-output-path is optional; the generator will default to standard output if it is not supplied.
+By default the generator outputs progress, in rows per second, to the standard error output.
+This can be useful when generating large volumes of data.
+.SH NOTES
+The github page for the datahelix project can be found at (https://github.com/finos/datahelix).
+If you wish to contribute, request a feature, or report a bug please do so there.
+
+.PP
+Copyright 2020 Scott Logic Ltd.
+Distributed under the Apache License, Version 2.0.
+SPDX-License-Identifier: Apache-2.0.

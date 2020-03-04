@@ -18,6 +18,7 @@ plugins {
     id "java"
     id "de.gliderpilot.semantic-release" version "1.4.0"
     id "application"
+    id "nebula.deb" version "8.0.3"
 }
 
 group "com.scottlogic.datahelix.generator"
@@ -95,6 +96,30 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
     archiveName = "${baseName}.${extension}"
+}
+
+task createDeb(type: Deb) {
+    packageName = "datahelix"
+    summary = 'Quickly generate rich and realistic data for simulation and testing. '
+    maintainer = "Data Helix Team <datahelix@scottlogic.com>"
+    license = "Apache-2.0"
+    url = "https://github.com/finos/datahelix"
+    requires('java8-runtime-headless')
+    requires('jarwrapper')
+    dependsOn("fatJar")
+    from('src/main/resources/datahelix'){
+        into '/usr/bin'
+        fileMode 0755
+        user 'root'
+    }
+    from('build/libs/datahelix.jar'){
+        into '/usr/share/datahelix'
+        user 'root'
+    }
+    from('src/main/resources/datahelix.1.gz'){
+        into '/usr/share/man/man1'
+        user 'root'
+    }
 }
 
 jar {
