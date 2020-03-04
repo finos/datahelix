@@ -27,6 +27,7 @@ You can get a copy of DataHelix by one of the following means:
 - Install via Chocolatey
 - Download the zip file
 - Clone and build the project
+- Install via apt-get
 
 ### Install via Chocolatey
 
@@ -59,6 +60,15 @@ Prior to 2.1.8 the .jar file was published directly, without any scripts or bein
 You are also welcome to download the source code and build the generator yourself. To do so, follow the instructions in the [Developer Guide](DeveloperGuide.md#Building).
 
 Datahelix is under active development so expect new features and bug fixes. Please feel free to share any issues, feature requests, or ideas via the [GitHub issues page](https://github.com/finos/datahelix/issues).
+
+### Install via apt-get
+If you are using Debian or a Debian-based linux distribution such as Ubuntu you can install and update the datahelix using apt-get or apt. To do this you will need to add the datahelix package repository as a source. You can do this by adding the line
+```
+deb [trusted=yes] https://apt.fury.io/datahelix/ /
+```
+to your sources file, which can be found at `/etc/apt/sources.list`. This will require superuser privileges. After updating apt-get via the command `apt-get update` the helix can be installed with command `apt-get install datahelix`.
+
+Installing the package set up the datahelix so it can be run from the terminal with command `datahelix`. It will also install a manual page which can be viewed with the command `man datahelix`.
 
 ## Creating your first profile
 
