@@ -1,6 +1,7 @@
 # DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 
 ![DataHelix logo](docs/logo.png)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffinos%2Fdatahelix.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffinos%2Fdatahelix?ref=badge_shield)
 
 The generation of representative test and simulation data is a challenging and time-consuming task. Although DataHelix was created to address a specific challenge in the financial services industry, you will find it a useful tool for the generation of realistic data for simulation and testing, regardless of industry sector. All this from a straightforward JSON data profile document.
 
@@ -73,3 +74,6 @@ Copyright 2019 Scott Logic Ltd.
 Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 SPDX-License-Identifier: [Apache-2.0](https://spdx.org/licenses/Apache-2.0).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ffinos%2Fdatahelix.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ffinos%2Fdatahelix?ref=badge_large)
