@@ -132,7 +132,7 @@ Some of the easiest principles to define, from a development perspective, are th
 In the below, a solution is considered to be something that is individually runnable by a user. The generator, being the composite of a number of modules, is the solution.
 
 These are generally defined as:
-- Each solution must have a single responsibility. I.e. the generator is responsible for generating data. Another component can be responsible for transforming, relaying or otherwise using the output.
+- Each solution must have a single responsibility. I.e. the generator is responsible for generating data. Another solution can be responsible for transforming, relaying or otherwise using the output.
 - Each solution must support inputs from DataHelix products and from elsewhere. I.e. tools to use the output of the generator should equally be able to use data produced by another tool, or from a saved file of content from a previous execution of the generator
 - Each solution must have its own dedicated GitHub repository and should be open sourced through FINOS
 - Each solution must have the same core dependencies as the others, i.e. don't change the version requirements of Java between the solutions
