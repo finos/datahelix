@@ -234,11 +234,24 @@ class Ui {
         });
     }
 
-    loadNewProfile() {
+    removeJumboButtonsAndStrapline() {
+        this.displayContainer.querySelectorAll(':scope > p, :scope > a, :scope > br').forEach(
+            child => {
+
+                child.parentElement.removeChild(child);
+            } 
+        );
+    }
+
+    loadNewProfile(event) {
         this.openFile('.json')
             .then((files => {
                 const fileArray = Object.values(files);
                 if (fileArray.length) {
+                    if (event.ctrlKey) {
+                        this.removeJumboButtonsAndStrapline();
+                    }
+
                     this.streamer.swapProfile(fileArray[0].content);
                     this.streamer.startStreaming();    
                 }
