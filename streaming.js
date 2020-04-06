@@ -138,6 +138,8 @@ class Ui {
         heading.addEventListener('click', this.loadNewProfile.bind(this));
         this.resultsContainer = document.createElement('div');
         this.resultsContainer.id = 'demo-content';
+        this.resultsContainer.title = 'Click to pause';
+        this.resultsContainer.addEventListener('click', this.stopStreaming.bind(this));
     }
 
     showHeader(header) {
@@ -249,6 +251,10 @@ class Ui {
         window.setTimeout(() => {
             streamer.startStreaming();
         }, delay)
+    }
+
+    stopStreaming() {
+        this.streamer.dispose();
     }
 }
 
