@@ -22,7 +22,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,13 +33,19 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JarExecuteTests {
+    private static final Map<Process, String> commandLineMap = new HashMap<>();
+
     @Test
     void generateSuccessfullyFromJar() throws Exception {
         Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/endtoend/testprofile.profile.json");
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertCsvOutputs(collectedOutput, "Generation successful", "");
+        assertCsvOutputs(
+            collectedOutput,
+            "Generation successful",
+            "",
+            p);
     }
 
     @Test
@@ -48,7 +56,8 @@ public class JarExecuteTests {
 
         assertCsvOutputs(collectedOutput,
             "Generated successfully from file",
-            "Either load from file no longer works, or ");
+            "Either load from file no longer works, or ",
+            p);
     }
 
     @Test
@@ -59,7 +68,8 @@ public class JarExecuteTests {
 
         assertCsvOutputs(collectedOutput,
             "Generated successfully from file",
-            "Either load from file no longer works, or ");
+            "Either load from file no longer works, or ",
+            p);
     }
 
     @Test
@@ -70,7 +80,8 @@ public class JarExecuteTests {
 
         assertJsonOutputs(collectedOutput,
             "shortName",
-            null);
+            null,
+            p);
     }
 
     @Test
@@ -81,14 +92,18 @@ public class JarExecuteTests {
 
         assertJsonOutputs(collectedOutput,
             "age",
-            "\"Generated successfully from file\"");
+            "\"Generated successfully from file\"",
+            p);
     }
 
-    private void assertCsvOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
+    private void assertCsvOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage, Process process) {
+        String commandLine = commandLineMap.get(process);
+
         String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
             "1) You have not built the jar. \n Try running Gradle Build. \n" +
             "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
             "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n" +
+            "Command line used: '" + commandLine + "'\n" +
             outputs.stream().limit(5).collect(Collectors.joining("\n"));
         String fullErrorMessage = extraErrorMessage + errorMessageOnFailure;
         assertThat(fullErrorMessage, outputs.size(), is(greaterThanOrEqualTo(2)));
@@ -96,11 +111,14 @@ public class JarExecuteTests {
         assertEquals(expectedFinalMessage, outputs.get(outputs.size() - 1), fullErrorMessage);
     }
 
-    private void assertJsonOutputs(List<String> outputs, String expectedJsonPropertyName, String expectedData) {
+    private void assertJsonOutputs(List<String> outputs, String expectedJsonPropertyName, String expectedData, Process process) {
+        String commandLine = commandLineMap.get(process);
+
         String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
             "1) You have not built the jar. \n Try running Gradle Build. \n" +
             "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
             "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n" +
+            "Command line used: '" + commandLine + "'\n" +
             outputs.stream().limit(5).collect(Collectors.joining("\n"));
         assertThat(errorMessageOnFailure, outputs.size(), is(greaterThanOrEqualTo(1)));
         assertThat(errorMessageOnFailure, outputs.get(outputs.size() - 1), containsString("\"" + expectedJsonPropertyName + "\":"));
@@ -124,8 +142,14 @@ public class JarExecuteTests {
             outputFormat == null
                 ? ""
                 : "--output-format=" + outputFormat);
+
         pb.redirectErrorStream(true);
-        return pb.start();
+        Process process = pb.start();
+
+        String commandLine = String.join(" ", pb.command());
+        commandLineMap.put(process, commandLine);
+
+        return process;
     }
 
     private List<String> collectOutputAndCloseProcess(Process process) throws IOException, InterruptedException {
