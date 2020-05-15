@@ -50,7 +50,7 @@ public class OneToManyRange {
     }
 
     public boolean isEmpty() {
-        return this.max != null && this.min >= this.max;
+        return this.max != null && this.min > this.max;
     }
 
     @Override
