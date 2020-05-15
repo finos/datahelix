@@ -138,10 +138,11 @@ public class JarExecuteTests {
             "build/libs/datahelix.jar",
             profile,
             "--max-rows=1",
-            "--quiet",
-            outputFormat == null
-                ? ""
-                : "--output-format=" + outputFormat);
+            "--quiet");
+
+        if (outputFormat != null) {
+            pb.command().add("--output-format=" + outputFormat);
+        }
 
         pb.redirectErrorStream(true);
         Process process = pb.start();
