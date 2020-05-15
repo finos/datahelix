@@ -21,6 +21,7 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Names;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
+import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
 import com.scottlogic.datahelix.generator.core.generation.*;
 import com.scottlogic.datahelix.generator.core.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerator;
@@ -58,6 +59,9 @@ public class GeneratorModule extends AbstractModule {
         bind(long.class)
             .annotatedWith(Names.named("config:maxRows"))
             .toInstance(generationConfigSource.getMaxRows());
+
+        bind(MonitorType.class)
+            .toInstance(generationConfigSource.getMonitorType());
 
         // Bind known implementations - no user input required
         bind(DataGeneratorMonitor.class).to(AbstractDataGeneratorMonitor.class);
