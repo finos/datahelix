@@ -18,6 +18,8 @@ package com.scottlogic.datahelix.generator.output.writer.json;
 
 import com.fasterxml.jackson.databind.SequenceWriter;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.RelationalGeneratedObject;
+import com.scottlogic.datahelix.generator.common.output.SubGeneratedObject;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
@@ -27,28 +29,75 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 class JsonDataSetWriter implements DataSetWriter {
     private static final DateTimeFormatter standardDateFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     private final SequenceWriter writer;
-    private final Fields fields;
+    private final List<Field> fields;
 
     JsonDataSetWriter(SequenceWriter writer, Fields fields) {
         this.writer = writer;
+        this.fields = fields.getExternalStream().collect(Collectors.toList());
+    }
+
+    private JsonDataSetWriter(List<Field> fields) {
         this.fields = fields;
+        this.writer = null;
     }
 
     @Override
     public void writeRow(GeneratedObject row) throws IOException {
-        Map<Field, Object> jsonObject = new HashMap<>();
-
-        fields.getExternalStream()
-            .forEach(field -> jsonObject
-            .put(field , convertValue(row.getFormattedValue(field))));
+        Map<Field, Object> jsonObject = convertRow(row);
 
         writer.write(jsonObject);
+    }
+
+    private Map<Field, Object> convertRow(GeneratedObject row) {
+        Map<Field, Object> jsonObject = new HashMap<>();
+
+        fields
+            .forEach(field ->
+                jsonObject.put(field, convertValue(row.getFormattedValue(field))));
+
+        if (row instanceof RelationalGeneratedObject) {
+            writeRelatedObjects(jsonObject, (RelationalGeneratedObject)row);
+        }
+
+        return jsonObject;
+    }
+
+    private void writeRelatedObjects(Map<Field, Object> jsonObject, RelationalGeneratedObject relationalGeneratedObject) {
+        relationalGeneratedObject.getSubObjects()
+            .forEach((key, value) -> writeRelatedObject(jsonObject, key, value));
+    }
+
+    private void writeRelatedObject(Map<Field, Object> jsonObject, String key, SubGeneratedObject value) {
+        JsonDataSetWriter subWriter = new JsonDataSetWriter(value.getFields());
+        Field fieldForRelationship = new Field(key, null, false, null, false, true, null);
+
+        if (value.isArray()) {
+            writeRelatedArray(jsonObject, value, subWriter, fieldForRelationship);
+        } else {
+            writeRelatedObject(jsonObject, value, subWriter, fieldForRelationship);
+        }
+    }
+
+    private void writeRelatedObject(Map<Field, Object> jsonObject, SubGeneratedObject value, JsonDataSetWriter subWriter, Field fieldForRelationship) {
+        GeneratedObject singleSubObject = value.getData().get(0);
+        Map<Field, Object> subObject = subWriter.convertRow(singleSubObject);
+        jsonObject.put(fieldForRelationship, subObject);
+    }
+
+    private void writeRelatedArray(Map<Field, Object> jsonObject, SubGeneratedObject value, JsonDataSetWriter subWriter, Field fieldForRelationship) {
+        List<Map<Field, Object>> subObjectsForRelationship = value.getData()
+            .stream()
+            .map(subWriter::convertRow)
+            .collect(Collectors.toList());
+        jsonObject.put(fieldForRelationship, subObjectsForRelationship);
     }
 
     @Override

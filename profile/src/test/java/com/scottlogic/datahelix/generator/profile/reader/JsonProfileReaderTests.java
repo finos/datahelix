@@ -40,6 +40,7 @@ import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
+import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
@@ -97,9 +98,11 @@ public class JsonProfileReaderTests {
         new ProfileCommandBus(
             new FieldService(),
             constraintService,
-            new CustomConstraintFactory(new CustomGeneratorList()),
+                new CustomConstraintFactory(new CustomGeneratorList()),
             new CreateProfileValidator(
-                new ProfileValidator(null))),
+                new ProfileValidator(null)),
+            new ReadRelationshipsValidator(),
+            profileDeserialiser),
         profileDeserialiser);
 
     private void givenJson(String json) {

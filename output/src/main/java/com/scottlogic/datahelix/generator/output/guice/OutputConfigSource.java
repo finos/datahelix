@@ -16,6 +16,8 @@
 
 package com.scottlogic.datahelix.generator.output.guice;
 
+import com.scottlogic.datahelix.generator.common.output.OutputFormat;
+
 import java.nio.file.Path;
 
 public interface OutputConfigSource {

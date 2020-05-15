@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.common.output;
+package com.scottlogic.datahelix.generator.profile.dtos;
 
-import com.scottlogic.datahelix.generator.common.profile.Field;
+import java.util.List;
 
-/** A set of values representing one complete, discrete output (eg, this could be used to make a full CSV row) */
-public interface GeneratedObject {
-    Object getFormattedValue(Field field);
-    Object getValue(Field field);
+public class RelationalProfileDTO extends ProfileDTO {
+    public List<RelationshipDTO> relationships;
 }

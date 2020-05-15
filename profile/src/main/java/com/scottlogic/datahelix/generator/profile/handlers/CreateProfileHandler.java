@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.handlers;
 
 import com.google.inject.Inject;
+import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.commands.CommandHandler;
 import com.scottlogic.datahelix.generator.common.commands.CommandResult;
 import com.scottlogic.datahelix.generator.common.profile.Field;
@@ -25,7 +26,9 @@ import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NotNullConstraint;
+import com.scottlogic.datahelix.generator.core.profile.relationships.Relationship;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.commands.ReadRelationships;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
@@ -39,15 +42,21 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
     private final FieldService fieldService;
     private final ConstraintService constraintService;
     private final CustomConstraintFactory customConstraintFactory;
+    private final CommandBus commandBus;
 
     @Inject
-    public CreateProfileHandler(FieldService fieldService, ConstraintService constraintService,
-                                CustomConstraintFactory customConstraintFactory, Validator<CreateProfile> validator)
+    public CreateProfileHandler(
+        FieldService fieldService,
+        ConstraintService constraintService,
+        CustomConstraintFactory customConstraintFactory,
+        Validator<CreateProfile> validator,
+        CommandBus commandBus)
     {
         super(validator);
         this.fieldService = fieldService;
         this.constraintService = constraintService;
         this.customConstraintFactory = customConstraintFactory;
+        this.commandBus = commandBus;
     }
 
     @Override
@@ -55,12 +64,20 @@ public class CreateProfileHandler extends CommandHandler<CreateProfile, Profile>
     {
         Fields fields = fieldService.createFields(command.profileDTO);
         List<Constraint> constraints = constraintService.createConstraints(command.profileDTO.constraints, fields);
+        CommandResult<List<Relationship>> relationships = commandBus.send(
+            new ReadRelationships(
+                command.profileDirectory,
+                fields,
+                command.profileDTO.relationships));
+        if (!relationships.isSuccess) {
+            throw new RuntimeException("Unable to read relationships");
+        }
 
         constraints.addAll(createNullableConstraints(fields));
         constraints.addAll(createSpecificTypeConstraints(fields));
         constraints.addAll(createCustomGeneratorConstraints(fields));
 
-        return CommandResult.success(new Profile(command.profileDTO.description, fields, constraints));
+        return CommandResult.success(new Profile(command.profileDTO.description, fields, constraints, relationships.value));
     }
 
     private List<Constraint> createNullableConstraints(Fields fields)

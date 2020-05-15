@@ -18,13 +18,17 @@ package com.scottlogic.datahelix.generator.orchestrator.endtoend;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class JarExecuteTests {
     @Test
@@ -33,7 +37,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutputs(collectedOutput, "Generation successful", "");
+        assertCsvOutputs(collectedOutput, "Generation successful", "");
     }
 
     @Test
@@ -42,7 +46,7 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutputs(collectedOutput,
+        assertCsvOutputs(collectedOutput,
             "Generated successfully from file",
             "Either load from file no longer works, or ");
     }
@@ -53,31 +57,73 @@ public class JarExecuteTests {
 
         List<String> collectedOutput = collectOutputAndCloseProcess(p);
 
-        assertOnOutputs(collectedOutput,
+        assertCsvOutputs(collectedOutput,
             "Generated successfully from file",
             "Either load from file no longer works, or ");
     }
 
-    private void assertOnOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
+    @Test
+    void generateRelationalDataSuccessfullyFromJar() throws Exception {
+        Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/relational/profile.json", "JSON");
+
+        List<String> collectedOutput = collectOutputAndCloseProcess(p);
+
+        assertJsonOutputs(collectedOutput,
+            "shortName",
+            null);
+    }
+
+    @Test
+    void generateRelationalDataSuccessfullyFromJarAndLoadFileWithinSubDirectory() throws Exception {
+        Process p = setupProcess("-p=src/test/java/com/scottlogic/datahelix/generator/orchestrator/relational/profile-referenced-relationship.json", "JSON");
+
+        List<String> collectedOutput = collectOutputAndCloseProcess(p);
+
+        assertJsonOutputs(collectedOutput,
+            "age",
+            "\"Generated successfully from file\"");
+    }
+
+    private void assertCsvOutputs(List<String> outputs, String expectedFinalMessage, String extraErrorMessage) {
         String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
             "1) You have not built the jar. \n Try running Gradle Build. \n" +
             "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
             "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n" +
             outputs.stream().limit(5).collect(Collectors.joining("\n"));
         String fullErrorMessage = extraErrorMessage + errorMessageOnFailure;
-        assertTrue(outputs.size() >= 2, fullErrorMessage);
+        assertThat(fullErrorMessage, outputs.size(), is(greaterThanOrEqualTo(2)));
         assertEquals("foo", outputs.get(outputs.size() - 2), fullErrorMessage);
         assertEquals(expectedFinalMessage, outputs.get(outputs.size() - 1), fullErrorMessage);
     }
 
+    private void assertJsonOutputs(List<String> outputs, String expectedJsonPropertyName, String expectedData) {
+        String errorMessageOnFailure = "Jar test failed. This may have been caused by one of the following:" +
+            "1) You have not built the jar. \n Try running Gradle Build. \n" +
+            "2) System.out is being printed to (which interferes with streaming output) e.g. using 'printStackTrace'.\n" +
+            "3) There is a bug in code conditional on whether it is running inside the JAR, e.g. in SupportedVersionsGetter. \n" +
+            outputs.stream().limit(5).collect(Collectors.joining("\n"));
+        assertThat(errorMessageOnFailure, outputs.size(), is(greaterThanOrEqualTo(1)));
+        assertThat(errorMessageOnFailure, outputs.get(outputs.size() - 1), containsString("\"" + expectedJsonPropertyName + "\":"));
+        if (expectedData != null){
+            assertThat(errorMessageOnFailure, outputs.get(outputs.size() - 1), containsString(":" + expectedData));
+        }
+    }
+
     private Process setupProcess(final String profile) throws IOException {
+        return setupProcess(profile, null);
+    }
+
+    private Process setupProcess(final String profile, final String outputFormat) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(
             "java",
             "-jar",
             "build/libs/datahelix.jar",
             profile,
             "--max-rows=1",
-            "--quiet");
+            "--quiet",
+            outputFormat == null
+                ? ""
+                : "--output-format=" + outputFormat);
         pb.redirectErrorStream(true);
         return pb.start();
     }

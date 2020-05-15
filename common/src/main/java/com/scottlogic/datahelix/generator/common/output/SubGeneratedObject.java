@@ -18,8 +18,10 @@ package com.scottlogic.datahelix.generator.common.output;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 
-/** A set of values representing one complete, discrete output (eg, this could be used to make a full CSV row) */
-public interface GeneratedObject {
-    Object getFormattedValue(Field field);
-    Object getValue(Field field);
+import java.util.List;
+
+public interface SubGeneratedObject {
+    List<Field> getFields();
+    List<GeneratedObject> getData();
+    boolean isArray();
 }

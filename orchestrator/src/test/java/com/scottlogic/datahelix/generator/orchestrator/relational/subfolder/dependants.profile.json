@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "age",
+      "type": "integer",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+        "field": "name",
+        "inSet": "testfile.csv"
+    },  
+    {
+      "field": "age",
+      "greaterThanOrEqualTo": 0
+    },
+    {
+      "field": "age",
+      "lessThan": 18
+    }
+  ]
+}

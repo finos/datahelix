@@ -1,0 +1,10 @@
+{
+  "fields": [
+    { "name": "name", "type": "faker.name.firstName", "nullable": false },
+    { "name": "age", "type": "integer", "nullable": false }
+  ],
+  "constraints": [
+    { "field": "age", "greaterThanOrEqualTo": 0 },
+    { "field": "age", "lessThan": 18 }
+  ]
+}

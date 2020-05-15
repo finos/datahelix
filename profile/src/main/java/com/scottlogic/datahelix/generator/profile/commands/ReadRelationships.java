@@ -17,19 +17,21 @@
 package com.scottlogic.datahelix.generator.profile.commands;
 
 import com.scottlogic.datahelix.generator.common.commands.Command;
-import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.profile.dtos.RelationalProfileDTO;
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.core.profile.relationships.Relationship;
+import com.scottlogic.datahelix.generator.profile.dtos.RelationshipDTO;
 
 import java.nio.file.Path;
+import java.util.List;
 
-public class CreateProfile extends Command<Profile>
-{
-    public final RelationalProfileDTO profileDTO;
+public class ReadRelationships extends Command<List<Relationship>> {
+    public final Fields fields;
+    public final List<RelationshipDTO> relationships;
     public final Path profileDirectory;
 
-    public CreateProfile(Path profileDirectory, RelationalProfileDTO profileDTO)
-    {
+    public ReadRelationships(Path profileDirectory, Fields fields, List<RelationshipDTO> relationships) {
         this.profileDirectory = profileDirectory;
-        this.profileDTO = profileDTO;
+        this.fields = fields;
+        this.relationships = relationships;
     }
 }

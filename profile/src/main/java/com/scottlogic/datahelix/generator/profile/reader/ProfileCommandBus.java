@@ -19,10 +19,14 @@ import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.commands.ReadRelationships;
 import com.scottlogic.datahelix.generator.profile.custom.CustomConstraintFactory;
 import com.scottlogic.datahelix.generator.profile.handlers.CreateProfileHandler;
+import com.scottlogic.datahelix.generator.profile.handlers.ReadRelationshipsHandler;
+import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 import com.scottlogic.datahelix.generator.profile.services.ConstraintService;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
+import com.scottlogic.datahelix.generator.profile.services.RelationshipService;
 
 public class ProfileCommandBus extends CommandBus
 {
@@ -31,7 +35,9 @@ public class ProfileCommandBus extends CommandBus
         FieldService fieldService,
         ConstraintService constraintService,
         CustomConstraintFactory customConstraintFactory,
-        Validator<CreateProfile> validator)
+        Validator<CreateProfile> validator,
+        Validator<ReadRelationships> relationshipValidator,
+        ProfileDeserialiser profileDeserialiser)
     {
         register(
             CreateProfile.class,
@@ -39,6 +45,16 @@ public class ProfileCommandBus extends CommandBus
                 fieldService,
                 constraintService,
                 customConstraintFactory,
-                validator));
+                validator,
+                this));
+
+        register(
+            ReadRelationships.class,
+            new ReadRelationshipsHandler(
+                new RelationshipService(
+                    this,
+                    constraintService,
+                    profileDeserialiser),
+                relationshipValidator));
     }
 }

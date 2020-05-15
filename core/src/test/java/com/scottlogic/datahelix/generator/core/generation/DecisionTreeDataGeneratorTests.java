@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.core.generation;
 
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
-import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTreeFactory;
@@ -25,15 +24,16 @@ import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTreeOptimise
 import com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.datahelix.generator.core.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
+import com.scottlogic.datahelix.generator.core.generation.relationships.RelationshipsProcessor;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.Visualiser;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.VisualiserFactory;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.walker.DecisionTreeWalker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,32 +46,30 @@ import static org.mockito.Mockito.verify;
 class DecisionTreeDataGeneratorTests {
     private DecisionTreeDataGenerator generator;
     private DecisionTreeFactory factory;
-    private DataGeneratorMonitor monitor;
     private TreePartitioner treePartitioner;
     private CombinationStrategy combinationStrategy;
     private DecisionTreeOptimiser optimiser;
-    private DecisionTreeWalker treeWalker;
     private UpfrontTreePruner upfrontTreePruner;
     private VisualiserFactory visualiserFactory;
+
     @BeforeEach
     void setup() {
         factory = Mockito.mock(DecisionTreeFactory.class);
-        treeWalker = Mockito.mock(DecisionTreeWalker.class);
         treePartitioner = Mockito.mock(TreePartitioner.class);
         optimiser = Mockito.mock(DecisionTreeOptimiser.class);
-        monitor = Mockito.mock(DataGeneratorMonitor.class);
         combinationStrategy = Mockito.mock(CombinationStrategy.class);
         upfrontTreePruner = Mockito.mock(UpfrontTreePruner.class);
         visualiserFactory = Mockito.mock(VisualiserFactory.class);
         generator = new DecisionTreeDataGenerator(
             factory,
-            treeWalker,
+            Mockito.mock(DecisionTreeWalker.class),
             treePartitioner,
             optimiser,
-            monitor,
+            Mockito.mock(DataGeneratorMonitor.class),
             combinationStrategy,
             upfrontTreePruner,
-            visualiserFactory
+            visualiserFactory,
+            Mockito.mock(RelationshipsProcessor.class)
         );
     }
 
@@ -82,7 +80,7 @@ class DecisionTreeDataGeneratorTests {
         private Profile profile;
         private Visualiser visualiser;
         @BeforeEach
-        void setup() throws IOException {
+        void setup() {
             tree = Mockito.mock(DecisionTree.class);
             rootNode = Mockito.mock(ConstraintNode.class);
             profile = Mockito.mock(Profile.class);

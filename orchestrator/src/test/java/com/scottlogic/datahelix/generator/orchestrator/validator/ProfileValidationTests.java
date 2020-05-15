@@ -32,6 +32,7 @@ import com.scottlogic.datahelix.generator.profile.services.FieldService;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
+import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.DynamicTest;
@@ -69,7 +70,9 @@ public class ProfileValidationTests {
             new FieldService(),
             constraintService,
             customConstraintFactory,
-            new CreateProfileValidator(new ProfileValidator(null)));
+            new CreateProfileValidator(new ProfileValidator(null)),
+            new ReadRelationshipsValidator(),
+            profileDeserialiser);
 
         JsonProfileReader profileReader = new JsonProfileReader(commandBus, profileDeserialiser);
 

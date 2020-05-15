@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.profile;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.relationships.Relationship;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,23 +28,25 @@ public class Profile {
     private final Fields fields;
     private final Collection<Constraint> constraints;
     private final String description;
+    private final Collection<Relationship> relationships;
 
-    public Profile(List<Field> fields, Collection<Constraint> constraints) {
-        this(null, new Fields(fields), constraints);
+    public Profile(List<Field> fields, Collection<Constraint> constraints, Collection<Relationship> relationships) {
+        this(null, new Fields(fields), constraints, relationships);
     }
 
-    public Profile(List<Field> fields, Collection<Constraint> constraints, String description) {
-        this(description, new Fields(fields), constraints);
+    public Profile(List<Field> fields, Collection<Constraint> constraints, Collection<Relationship> relationships, String description) {
+        this(description, new Fields(fields), constraints, relationships);
     }
 
-    public Profile(Fields fields, Collection<Constraint> constraints) {
-        this(null, fields, constraints);
+    public Profile(Fields fields, Collection<Constraint> constraints, Collection<Relationship> relationships) {
+        this(null, fields, constraints, relationships);
     }
 
-    public Profile(String description, Fields fields, Collection<Constraint> constraints) {
+    public Profile(String description, Fields fields, Collection<Constraint> constraints, Collection<Relationship> relationships) {
         this.fields = fields;
         this.constraints = constraints;
         this.description = description;
+        this.relationships = relationships;
     }
 
     public Fields getFields() {
@@ -56,5 +59,9 @@ public class Profile {
 
     public String getDescription() {
         return description;
+    }
+
+    public Collection<Relationship> getRelationships() {
+        return relationships;
     }
 }

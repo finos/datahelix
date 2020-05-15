@@ -22,7 +22,7 @@ import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.commands.CommandResult;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
-import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.RelationalProfileDTO;
 import com.scottlogic.datahelix.generator.profile.serialisation.ProfileDeserialiser;
 
 import java.io.File;
@@ -53,11 +53,11 @@ public class JsonProfileReader implements ProfileReader {
     }
 
     public Profile read(Path profileDirectory, String profileJson) {
-        ProfileDTO profileDTO = profileDeserialiser.deserialise(profileDirectory, profileJson);
+        RelationalProfileDTO profileDTO = profileDeserialiser.deserialise(profileDirectory, profileJson);
         return createFromDto(profileDirectory, profileDTO);
     }
 
-    private Profile createFromDto(Path profileDirectory, ProfileDTO profileDTO) {
+    private Profile createFromDto(Path profileDirectory, RelationalProfileDTO profileDTO) {
         CommandResult<Profile> createProfileResult = commandBus.send(new CreateProfile(profileDirectory, profileDTO));
 
         if (!createProfileResult.isSuccess){
