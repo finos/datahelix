@@ -35,7 +35,7 @@ public class CombinationStrategyProvider  implements Provider<CombinationStrateg
         if (config.getGenerationType() == DataGenerationType.RANDOM){
             // The minimal combination strategy doesn't reuse values for fields.
             // This is required to get truly random data.
-            return new ExhaustiveCombinationStrategy();
+            return new MinimalCombinationStrategy();
         }
 
         switch(config.getCombinationStrategyType()){
