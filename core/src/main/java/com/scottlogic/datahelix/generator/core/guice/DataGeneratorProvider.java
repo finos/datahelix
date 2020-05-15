@@ -22,16 +22,18 @@ import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
 import com.scottlogic.datahelix.generator.core.generation.*;
 
+import javax.annotation.Nullable;
+
 public class DataGeneratorProvider implements Provider<DataGenerator> {
     private final DataGenerator coreGenerator;
-    private final long maxRows;
+    private final Long maxRows;
     private final MonitorType monitorType;
     private final DataGeneratorMonitor monitor;
 
     @Inject
     public DataGeneratorProvider(
         DecisionTreeDataGenerator coreGenerator,
-        @Named("config:maxRows") long maxRows,
+        @Nullable @Named("config:maxRows") Long maxRows,
         MonitorType monitorType,
         DataGeneratorMonitor monitor) {
         this.coreGenerator = coreGenerator;
@@ -42,7 +44,9 @@ public class DataGeneratorProvider implements Provider<DataGenerator> {
 
     @Override
     public DataGenerator get() {
-        DataGenerator limitingGenerator = new LimitingDataGenerator(coreGenerator, maxRows);
+        DataGenerator limitingGenerator = maxRows == null
+            ? coreGenerator
+            : new LimitingDataGenerator(coreGenerator, maxRows);
 
         if (monitorType == MonitorType.QUIET){
             return limitingGenerator;

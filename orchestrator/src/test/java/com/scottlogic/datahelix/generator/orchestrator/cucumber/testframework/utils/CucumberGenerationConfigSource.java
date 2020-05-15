@@ -51,8 +51,13 @@ public class CucumberGenerationConfigSource implements AllConfigSource {
     }
 
     @Override
-    public long getMaxRows() {
+    public Long getMaxRows() {
         return state.maxRows;
+    }
+
+    @Override
+    public boolean getInfiniteOutput() {
+        return false;
     }
 
     @Override

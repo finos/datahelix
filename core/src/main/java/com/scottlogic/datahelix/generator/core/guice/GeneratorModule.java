@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.guice;
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.name.Names;
+import com.google.inject.util.Providers;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.core.config.detail.MonitorType;
@@ -29,6 +30,8 @@ import com.scottlogic.datahelix.generator.core.walker.DecisionTreeWalker;
 import com.scottlogic.datahelix.generator.core.walker.decisionbased.OptionPicker;
 
 import java.time.OffsetDateTime;
+
+import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_MAX_ROWS;
 
 /**
  * Class to define default bindings for Guice injection. Utilises the generation config source to determine which
@@ -56,9 +59,9 @@ public class GeneratorModule extends AbstractModule {
         bind(DataGenerationType.class).toInstance(generationConfigSource.getGenerationType());
         bind(CombinationStrategyType.class).toInstance(generationConfigSource.getCombinationStrategyType());
 
-        bind(long.class)
+        bind(Long.class)
             .annotatedWith(Names.named("config:maxRows"))
-            .toInstance(generationConfigSource.getMaxRows());
+            .toProvider(Providers.of(getMaxRows(generationConfigSource)));
 
         bind(MonitorType.class)
             .toInstance(generationConfigSource.getMonitorType());
@@ -72,5 +75,21 @@ public class GeneratorModule extends AbstractModule {
         bind(int.class)
             .annotatedWith(Names.named("config:internalRandomRowSpecStorage"))
             .toInstance(256);
+    }
+
+    private static Long getMaxRows(GenerationConfigSource generationConfigSource) {
+        Long requestedMaxRows = generationConfigSource.getMaxRows();
+
+        return requestedMaxRows == null
+            ? getDefaultMaxRows(generationConfigSource)
+            : requestedMaxRows;
+    }
+
+    private static Long getDefaultMaxRows(GenerationConfigSource generationConfigSource) {
+        if (generationConfigSource.getInfiniteOutput()){
+            return null;
+        }
+
+        return DEFAULT_MAX_ROWS;
     }
 }

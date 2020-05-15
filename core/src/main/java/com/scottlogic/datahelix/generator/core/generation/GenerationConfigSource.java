@@ -26,7 +26,8 @@ import java.nio.file.Path;
 public interface GenerationConfigSource  {
     DataGenerationType getGenerationType();
     CombinationStrategyType getCombinationStrategyType();
-    long getMaxRows();
+    Long getMaxRows();
+    boolean getInfiniteOutput();
 
     MonitorType getMonitorType();
 

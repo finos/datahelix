@@ -34,7 +34,6 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
-import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_MAX_ROWS;
 import static com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType.MINIMAL;
 import static com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType.RANDOM;
 import static com.scottlogic.datahelix.generator.common.output.OutputFormat.CSV;
@@ -116,7 +115,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     @CommandLine.Option(
         names = {"-n", "--max-rows"},
         description = "Defines the maximum number of rows that should be generated")
-    private long maxRows = DEFAULT_MAX_ROWS;
+    private Long maxRows = null;
+
+    @SuppressWarnings("FieldCanBeLocal")
+    @CommandLine.Option(
+        names = {"--infinite"},
+        description = "Permits infinite generation of data")
+    private boolean infiniteGeneration = false;
 
     @SuppressWarnings("FieldCanBeLocal")
     @CommandLine.Option(
@@ -194,8 +199,13 @@ public class GenerateCommandLine implements AllConfigSource, Callable<Integer> {
     }
 
     @Override
-    public long getMaxRows() {
+    public Long getMaxRows() {
         return maxRows;
+    }
+
+    @Override
+    public boolean getInfiniteOutput() {
+        return infiniteGeneration;
     }
 
     public OutputFormat getOutputFormat() {
