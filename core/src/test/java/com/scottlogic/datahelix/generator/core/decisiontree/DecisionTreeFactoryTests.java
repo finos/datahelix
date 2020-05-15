@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
@@ -73,7 +74,7 @@ class DecisionTreeFactoryTests {
     private DecisionTree getActualOutput() {
         if (this.actualOutput == null) {
             Profile testInput = new Profile(
-                new Fields(
+                new ProfileFields(
                     Arrays.asList(this.fieldA, this.fieldB, this.fieldC)),
                 this.constraints,
                 Collections.emptyList());
@@ -113,7 +114,7 @@ class DecisionTreeFactoryTests {
         DecisionTree testOutput = testObject.analyse(testInput);
         Fields actualFields = testOutput.getFields();
 
-        Fields expected = new Fields(inputFieldList);
+        Fields expected = new ProfileFields(inputFieldList);
         assertThat(actualFields, sameBeanAs(expected));
     }
 

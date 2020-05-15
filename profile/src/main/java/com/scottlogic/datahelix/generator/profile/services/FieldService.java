@@ -16,10 +16,7 @@
 
 package com.scottlogic.datahelix.generator.profile.services;
 
-import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
-import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
@@ -39,7 +36,7 @@ public class FieldService {
     public Fields createFields(ProfileDTO dto) {
         List<Field> fields = dto.fields.stream().map(this::createRegularField).collect(Collectors.toList());
         getInMapFieldNames(dto.constraints).stream().map(this::createInMapField).forEach(fields::add);
-        return new Fields(fields);
+        return new ProfileFields(fields);
     }
 
     public SpecificFieldType specificFieldTypeFromString(String type, String formatting) {

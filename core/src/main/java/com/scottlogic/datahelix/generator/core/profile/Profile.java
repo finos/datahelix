@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.profile;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.relationships.Relationship;
 
@@ -31,11 +32,11 @@ public class Profile {
     private final Collection<Relationship> relationships;
 
     public Profile(List<Field> fields, Collection<Constraint> constraints, Collection<Relationship> relationships) {
-        this(null, new Fields(fields), constraints, relationships);
+        this(null, new ProfileFields(fields), constraints, relationships);
     }
 
     public Profile(List<Field> fields, Collection<Constraint> constraints, Collection<Relationship> relationships, String description) {
-        this(description, new Fields(fields), constraints, relationships);
+        this(description, new ProfileFields(fields), constraints, relationships);
     }
 
     public Profile(Fields fields, Collection<Constraint> constraints, Collection<Relationship> relationships) {

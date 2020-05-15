@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning;
 
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
@@ -289,7 +290,7 @@ class TreePartitionerTests {
     }
 
     private Fields fields(String... fieldNames) {
-        return new Fields(
+        return new ProfileFields(
             Stream.of(fieldNames)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));

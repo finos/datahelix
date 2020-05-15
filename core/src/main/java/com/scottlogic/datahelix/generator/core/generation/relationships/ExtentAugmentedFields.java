@@ -21,16 +21,21 @@ import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 
-public class ExtentAugmentedFields extends Fields {
-    private static final SpecificFieldType integer = new SpecificFieldType("integer", FieldType.NUMERIC, null);
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
-    public static final String minField = "min";
-    public static final String maxField = "max";
-    public static final Field min = new Field(minField, integer, false, null, false, true, null);
-    public static final Field max = new Field(maxField, integer, false, null, false, true, null);
+public class ExtentAugmentedFields implements Fields {
+    private static final SpecificFieldType integer = new SpecificFieldType("integer", FieldType.NUMERIC, null);
+    private static final String minField = "min";
+    private static final String maxField = "max";
+    private static final Field min = new Field(minField, integer, false, null, false, true, null);
+    private static final Field max = new Field(maxField, integer, false, null, false, true, null);
+
+    private final Fields underlying;
 
     public ExtentAugmentedFields(Fields fields) {
-        super(fields.asList());
+        this.underlying = fields;
     }
 
     @Override
@@ -43,6 +48,47 @@ public class ExtentAugmentedFields extends Fields {
             return max;
         }
 
-        return super.getByName(fieldName);
+        return underlying.getByName(fieldName);
+    }
+
+    @Override
+    public int size() {
+        return underlying.size();
+    }
+
+    @Override
+    public Stream<Field> stream() {
+        return Stream.concat(
+            underlying.stream(),
+            Stream.of(min, max));
+    }
+
+    @Override
+    public Stream<Field> getExternalStream() {
+        return underlying.getExternalStream();
+    }
+
+    @Override
+    public List<Field> asList() {
+        return underlying.asList();
+    }
+
+    @Override
+    public Iterator<Field> iterator() {
+        return underlying.iterator();
+    }
+
+    public boolean isExtentField(Field field) {
+        return field.equals(min) || field.equals(max);
+    }
+
+    public OneToManyRange applyExtent(OneToManyRange range, Field field, int extent) {
+        if (field.equals(min)) {
+            return range.withMin(extent);
+        } else if (field.equals(max)) {
+            return range.withMax(extent);
+        }
+
+        return range;
     }
 }

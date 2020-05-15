@@ -35,15 +35,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class OneToManyRangeResolver {
     private final DecisionTreeFactory factory;
     private final TreePruner treePruner;
-
-    private static final Field min = ExtentAugmentedFields.min;
-    private static final Field max = ExtentAugmentedFields.max;
 
     @Inject
     public OneToManyRangeResolver(
@@ -56,8 +51,9 @@ public class OneToManyRangeResolver {
     public OneToManyRange getRange(Fields profileFields, Collection<Constraint> constraints, GeneratedObject generatedObject) {
         OneToManyRange range = new OneToManyRange(0, null);
 
+        ExtentAugmentedFields extentAugmentedFields = new ExtentAugmentedFields(profileFields);
         DecisionTree tree = factory.analyse(new Profile(
-            getFields(profileFields),
+            extentAugmentedFields,
             new ArrayList<>(constraints),
             Collections.emptyList())
         );
@@ -76,25 +72,19 @@ public class OneToManyRangeResolver {
         //read the root-level properties for <min> and <max> if there are any decisions
         range = rootNode.getAtomicConstraints()
             .stream()
-            .filter(ac -> ac.getField().equals(min) || ac.getField().equals(max))
+            .filter(ac -> extentAugmentedFields.isExtentField(ac.getField()))
             .reduce(
                 range,
-                OneToManyRangeResolver::applyAtomicConstraint,
+                (r, atomicConstraint) -> applyAtomicConstraint(r, atomicConstraint, extentAugmentedFields),
                 (a, b) -> null);
 
         return range;
     }
 
-    private static OneToManyRange applyAtomicConstraint(OneToManyRange range, AtomicConstraint atomicConstraint) {
+    private static OneToManyRange applyAtomicConstraint(OneToManyRange range, AtomicConstraint atomicConstraint, ExtentAugmentedFields extentAugmentedFields) {
         Field field = atomicConstraint.getField();
 
-        if (field.equals(min)) {
-            return range.withMin(getExtent(atomicConstraint));
-        } else if (field.equals(max)) {
-            return range.withMax(getExtent(atomicConstraint));
-        }
-
-        return range;
+        return extentAugmentedFields.applyExtent(range, field, getExtent(atomicConstraint));
     }
 
     private static int getExtent(AtomicConstraint atomicConstraint) {
@@ -135,13 +125,5 @@ public class OneToManyRangeResolver {
             },
             (a, b) -> null
         );
-    }
-
-    private List<Field> getFields(Fields profileFields) {
-        return Stream.concat(
-            profileFields.asList().stream(),
-            Stream.of(min, max))
-            .collect(Collectors.toList());
-
     }
 }

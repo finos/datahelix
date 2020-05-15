@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.generation.databags;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.builders.DataBagBuilder;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RowSpec;
@@ -43,7 +44,7 @@ class RowSpecDataBagGeneratorTests {
     private Field field = createField("Field1");
     Field field2 = createField("field2");
     Field field3 = createField("field3");
-    private Fields fields = new Fields(Collections.singletonList(field));
+    private Fields fields = new ProfileFields(Collections.singletonList(field));
     private FieldSpec fieldSpec = mock(FieldSpec.class);
     private FieldSpec fieldSpec2 = mock(FieldSpec.class);
     private FieldSpec fieldSpec3 = mock(FieldSpec.class);
@@ -80,7 +81,7 @@ class RowSpecDataBagGeneratorTests {
             put(field2, fieldSpec2);
             put(field3, fieldSpec3); }};
         RowSpec rowSpec = new RowSpec(
-            new Fields(Arrays.asList(field2, field, field3)),
+            new ProfileFields(Arrays.asList(field2, field, field3)),
             map,
             Collections.emptyList());
 

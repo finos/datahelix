@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.output.writer.csv;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -98,7 +99,7 @@ class CsvOutputWriterFactoryTests {
 
     @Test
     void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("External"),
                 createInternalField("Internal")
@@ -112,7 +113,7 @@ class CsvOutputWriterFactoryTests {
     }
 
     private static Fields fields(String ...names) {
-        return new Fields(
+        return new ProfileFields(
             Arrays.stream(names)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));
