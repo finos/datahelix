@@ -28,8 +28,8 @@ A relationship description can have the following properties
 | `name` | string | required | The name of the relationship, this is the name of the property in which the related data will be embedded |
 | `description` | string | optional | A description for the relationship, this is for documentation only - it has no bearing on the generation process | 
 | `profileFile` | string | optional* | A relative path to a profile file, that describes the data that should be generated within this relationship |
-| `profile` | object | optional* | that describes the data that should be generated within this relationship |
-| `extents` | array of `extents` | optional | the min and max number of records within a one-to-many relationship, if absent will be treated as a one-to-one relationship |
+| `profile` | object | optional* | A profile that describes the data that should be generated within this relationship |
+| `extents` | array of `extent` | optional | The _min_ and _max_ number of records within a one-to-many relationship, if absent will be treated as a one-to-one relationship |
 
 For example:
 ```
@@ -168,3 +168,30 @@ Note that data within `dependants` is:
   - if `children` sub-objects have all `age`s &gt; 18 then `councilTaxRateBand` = `A`
 - Constrain circular relationships to a maximum depth, i.e.
   - Generate a tree of ancestors (or conversely children) from a given person (aka genealogical data)
+
+## How to use the feature
+To be able to use the feature, you first need to work out how to build the profile. The generator needs a place to start producing data, this will depend on your relationships. Consider the following scenarios:
+
+### 1. One-to-many (Customers and their orders)
+Two entities related with a simple foreign-key relationship, i.e.
+
+- A customer entity with customer details
+- An order entity with order details and the id of the customer
+
+Create a profile that represents the customer initially, then embed the profile for the orders entity as a one-to-many relationship within this. You'll then get a collection of orders for each customer. A process of repeating each order (and grebbing the parent customer-id) will permit a collection of orders that can be injected into a database.
+
+### 2. Many-to-many (Parts and their orders)
+Two entities, orders and parts (ignoring customer for simplicity), i.e.
+
+- An order entity which represents an order with some related parts
+- A part entity which represents a purchasable item in a catalogue (ignoring stock quantity)
+
+Each order can have many parts and each part can be on many orders. Therefore, naturally, in a relational database there would be a Cross-reference table that contains the keys of the order and part in a row.
+
+To be able to use this feature to produce the data you need, you need to start at the Cross-Reference table, as this is the only unique 'entity' in this model. Therefore your profile would be constructed as follows:
+
+- Cross-Reference: an empty object (unless you want any additional data, e.g. requested-quantity), except for it's two one-to-many relationships
+  - Part: one-to-many collection of parts
+  - Order: one-to-many collection of orders
+
+From the output data you can derive all the orders that exist, all the parts that exist. Equally it is possible to dervive the orders that contain a part and conversely the parts that are contained in an order.
