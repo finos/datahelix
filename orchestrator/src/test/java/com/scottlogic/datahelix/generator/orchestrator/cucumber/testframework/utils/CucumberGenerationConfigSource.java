@@ -82,7 +82,7 @@ public class CucumberGenerationConfigSource implements AllConfigSource {
 
     @Override
     public OutputFormat getOutputFormat() {
-        return null;
+        return OutputFormat.JSON;
     }
 
     @Override
