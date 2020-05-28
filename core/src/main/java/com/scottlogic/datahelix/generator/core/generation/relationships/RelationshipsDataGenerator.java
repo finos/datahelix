@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.core.generation.relationships;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.datahelix.generator.common.output.OutputFormat;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
@@ -26,13 +25,13 @@ import com.scottlogic.datahelix.generator.core.profile.relationships.Relationshi
 
 import java.util.Collection;
 
-public class RelationshipsProcessor {
+public class RelationshipsDataGenerator {
     private final OutputFormat outputFormat;
     private final RelationshipProcessor oneToOne;
     private final RelationshipProcessor oneToMany;
 
     @Inject
-    public RelationshipsProcessor(
+    public RelationshipsDataGenerator(
         OutputFormat outputFormat,
         OneToOneRelationshipProcessor oneToOne,
         OneToManyRelationshipProcessor oneToMany) {

@@ -24,7 +24,7 @@ import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTreeOptimise
 import com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.datahelix.generator.core.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
-import com.scottlogic.datahelix.generator.core.generation.relationships.RelationshipsProcessor;
+import com.scottlogic.datahelix.generator.core.generation.relationships.RelationshipsDataGenerator;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.Visualiser;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.VisualiserFactory;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
@@ -69,7 +69,7 @@ class DecisionTreeDataGeneratorTests {
             combinationStrategy,
             upfrontTreePruner,
             visualiserFactory,
-            Mockito.mock(RelationshipsProcessor.class)
+            Mockito.mock(RelationshipsDataGenerator.class)
         );
     }
 

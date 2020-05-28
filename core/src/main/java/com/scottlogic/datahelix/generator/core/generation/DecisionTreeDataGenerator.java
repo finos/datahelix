@@ -25,7 +25,7 @@ import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTreeOptimise
 import com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning.TreePartitioner;
 import com.scottlogic.datahelix.generator.core.generation.combinationstrategies.CombinationStrategy;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
-import com.scottlogic.datahelix.generator.core.generation.relationships.RelationshipsProcessor;
+import com.scottlogic.datahelix.generator.core.generation.relationships.RelationshipsDataGenerator;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.Visualiser;
 import com.scottlogic.datahelix.generator.core.generation.visualiser.VisualiserFactory;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
@@ -45,7 +45,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
     private final CombinationStrategy partitionCombiner;
     private final UpfrontTreePruner upfrontTreePruner;
     private final VisualiserFactory visualiserFactory;
-    private final RelationshipsProcessor relationshipsProcessor;
+    private final RelationshipsDataGenerator relationshipsDataGenerator;
 
     @Inject
     public DecisionTreeDataGenerator(
@@ -57,7 +57,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         CombinationStrategy combinationStrategy,
         UpfrontTreePruner upfrontTreePruner,
         VisualiserFactory visualiserFactory,
-        RelationshipsProcessor relationshipsProcessor) {
+        RelationshipsDataGenerator relationshipsDataGenerator) {
         this.decisionTreeGenerator = decisionTreeGenerator;
         this.treePartitioner = treePartitioner;
         this.treeOptimiser = optimiser;
@@ -66,7 +66,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
         this.partitionCombiner = combinationStrategy;
         this.upfrontTreePruner = upfrontTreePruner;
         this.visualiserFactory = visualiserFactory;
-        this.relationshipsProcessor = relationshipsProcessor;
+        this.relationshipsDataGenerator = relationshipsDataGenerator;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class DecisionTreeDataGenerator implements DataGenerator {
             .map(tree -> () -> treeWalker.walk(tree));
 
         return partitionCombiner.permute(partitionedDataBags)
-            .map(generatedObject -> relationshipsProcessor.produceRelationalObjects(
+            .map(generatedObject -> relationshipsDataGenerator.produceRelationalObjects(
                 profile.getFields(),
                 generatedObject,
                 profile.getRelationships(),
