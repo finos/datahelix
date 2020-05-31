@@ -17,6 +17,7 @@ package com.scottlogic.datahelix.generator.core.walker.decisionbased;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.builders.TestConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
@@ -37,7 +38,7 @@ import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.cre
 class RowSpecTreeSolverTests {
     private Field fieldA = createField("A");
     private Field fieldB = createField("B");
-    private Fields fields = new Fields(Arrays.asList(fieldA, fieldB));
+    private Fields fields = new ProfileFields(Arrays.asList(fieldA, fieldB));
     private FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
     private ConstraintReducer constraintReducer = new ConstraintReducer(fieldSpecMerger);
     private TreePruner pruner = new TreePruner(fieldSpecMerger, constraintReducer, new FieldSpecHelper());

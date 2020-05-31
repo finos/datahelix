@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Example generation (relational)" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.scottlogic.datahelix.generator.orchestrator.App" />
+    <module name="datahelix.generator.orchestrator.main" />
+    <option name="PROGRAM_PARAMETERS" value="generate --profile-file=examples\relational\profile.json --output-format=JSON --quiet --max-rows=10" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -23,8 +23,10 @@ import com.google.inject.name.Names;
 import com.scottlogic.datahelix.generator.common.commands.CommandBus;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
 import com.scottlogic.datahelix.generator.profile.commands.CreateProfile;
+import com.scottlogic.datahelix.generator.profile.commands.ReadRelationships;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
 import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValidator;
+import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import com.scottlogic.datahelix.generator.profile.reader.*;
 
@@ -53,6 +55,7 @@ public class ProfileModule extends AbstractModule {
 
         bind(Key.get(new TypeLiteral<Validator<ProfileDTO>>(){})).to(ProfileValidator.class);
         bind(Key.get(new TypeLiteral<Validator<CreateProfile>>(){})).to(CreateProfileValidator.class);
+        bind(Key.get(new TypeLiteral<Validator<ReadRelationships>>(){})).to(ReadRelationshipsValidator.class);
         bind(CommandBus.class).to(ProfileCommandBus.class);
     }
 }

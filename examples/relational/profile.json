@@ -1,0 +1,47 @@
+{
+  "fields": [
+	{ "name": "id", "type": "integer", "nullable": false, "unique": true },
+    { "name": "shortName", "type": "faker.name.firstName", "nullable": false }
+  ],
+  "constraints": [
+	{ "field": "id", "greaterThanOrEqualTo": 1 },
+	{ "field": "id", "lessThanOrEqualTo": 100 },
+    { "field": "shortName", "shorterThan": 6 },
+    { "field": "shortName", "matchingRegex": "J.*" }
+  ],
+  "relationships": 
+  [ 
+    {
+      "name": "dependants",
+      "description": "presence of min/max indicates that it is a collection (one-to-many)",
+      "profileFile": "dependants.profile.json",
+      "extents": [
+        { "field": "min", "equalTo": 0 },
+        {
+          "if": { "field": "shortName", "matchingRegex": "J[ae].*" },
+          "then": { "field": "min", "equalTo": 2 },
+          "else": { "field": "max", "equalTo": 3 }
+        },
+        { "field": "max", "equalTo": 3 },
+        {
+          "if": { "field": "shortName", "matchingRegex": "J[iou].*" },
+          "then": { "field": "max", "equalTo": 1 }
+        }
+      ]
+    },
+    {
+      "name": "mother",
+      "description": "absence of min/max indicates that it is a sub-object (one-to-one)",
+      "profile": {
+        "fields": [
+          { "name": "name", "type": "faker.name.firstName", "nullable": false },
+          { "name": "age", "type": "integer", "nullable": false }
+        ],
+        "constraints": [
+          { "field": "age", "greaterThanOrEqualTo": 16 },
+          { "field": "age", "lessThanOrEqualTo": 100 }
+        ]
+      }
+    }
+  ]
+}

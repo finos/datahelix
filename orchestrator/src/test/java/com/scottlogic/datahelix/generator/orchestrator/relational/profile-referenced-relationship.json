@@ -1,0 +1,36 @@
+{
+  "fields": [
+    {
+      "name": "shortName",
+      "type": "faker.name.firstName",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "shortName",
+      "shorterThan": 6
+    },
+    {
+      "field": "shortName",
+      "matchingRegex": "J.*"
+    }
+  ],
+  "relationships": [ {
+    "name": "dependants",
+    "description": "presence of min/max indicates that it is a collection (one-to-many)",
+    "extents": [
+        { "field": "min", "equalTo": 1 },
+        {
+          "if": { "field": "shortName", "matchingRegex": "J[ae].*" },
+          "then": { "field": "min", "equalTo": 2 }
+        },
+        { "field": "max", "equalTo": 3 },
+        {
+          "if": { "field": "shortName", "matchingRegex": "J[iou].*" },
+          "then": { "field": "max", "equalTo": 1 }
+        }
+    ],
+    "profileFile": "subfolder/dependants.profile.json"
+   } ]
+}

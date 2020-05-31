@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -53,7 +54,7 @@ class DecisionTreeOptimiserTest {
                     .where(B).isNotNull())
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new Fields(Collections.EMPTY_LIST)))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));
@@ -86,7 +87,7 @@ class DecisionTreeOptimiserTest {
                     .where(A).isNotInSet("a1"))
             .build();
 
-        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new Fields(Collections.EMPTY_LIST)))
+        ConstraintNode actual = optimiser.optimiseTree(new DecisionTree(original, new ProfileFields(Collections.EMPTY_LIST)))
             .getRootNode();
 
         assertThat(actual, sameBeanAs(original));

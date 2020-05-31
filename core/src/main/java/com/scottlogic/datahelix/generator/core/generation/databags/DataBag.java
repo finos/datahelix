@@ -35,8 +35,13 @@ public class DataBag implements GeneratedObject {
     }
 
     @Override
+    public Object getValue(Field field) {
+        return getDataBagValue(field).getValue();
+    }
+
+    @Override
     public Object getFormattedValue(Field field) {
-        Object value = getDataBagValue(field).getValue();
+        Object value = getValue(field);
         String formatting = field.getFormatting();
 
         if (formatting == null || value == null) {

@@ -23,11 +23,11 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
-class FieldsTests
+class ProfileFieldsTests
 {
     @Test
     void equals_objIsNull_returnsFalse() {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("Test")
             )
@@ -43,7 +43,7 @@ class FieldsTests
 
     @Test
     void equals_objTypeIsNotProfileFields_returnsFalse() {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("Test")
             )
@@ -59,7 +59,7 @@ class FieldsTests
 
     @Test
     void equals_rowSpecFieldsLengthNotEqualToOtherObjectFieldsLength_returnsFalse() {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -67,7 +67,7 @@ class FieldsTests
         );
 
         boolean result = fields.equals(
-            new Fields(
+            new ProfileFields(
                 Arrays.asList(
                     createField("First Field")
                 )
@@ -82,7 +82,7 @@ class FieldsTests
 
     @Test
     void equals_rowSpecFieldsLengthEqualToOterObjectFieldsLengthButValuesDiffer_returnsFalse() {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -90,7 +90,7 @@ class FieldsTests
         );
 
         boolean result = fields.equals(
-            new Fields(
+            new ProfileFields(
                 Arrays.asList(
                     createField("First Field"),
                     createField("Third Field")
@@ -106,7 +106,7 @@ class FieldsTests
 
     @Test
     void equals_rowSpecFieldsAreEqualToTheFieldsOfTheOtherObject_returnsTrue() {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
@@ -114,7 +114,7 @@ class FieldsTests
         );
 
         boolean result = fields.equals(
-            new Fields(
+            new ProfileFields(
                 Arrays.asList(
                     createField("First Field"),
                     createField("Second Field")
@@ -130,13 +130,13 @@ class FieldsTests
 
     @Test
     void hashCode_valuesinFieldsDifferInSize_returnsDifferentHashCodes() {
-        Fields firstFields = new Fields(
+        Fields firstFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        Fields secondFields = new Fields(
+        Fields secondFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field"),
@@ -156,13 +156,13 @@ class FieldsTests
 
     @Test
     void hashCode_valuesInFieldsAreEqualSizeButValuesDiffer_returnsDifferentHashCodes() {
-        Fields firstFields = new Fields(
+        Fields firstFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        Fields secondFields = new Fields(
+        Fields secondFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Third Field")
@@ -181,13 +181,13 @@ class FieldsTests
 
     @Test
     void hashCode_valuesInFieldsAreEqual_identicalHashCodesAreReturned() {
-        Fields firstFields = new Fields(
+        Fields firstFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")
             )
         );
-        Fields secondFields = new Fields(
+        Fields secondFields = new ProfileFields(
             Arrays.asList(
                 createField("First Field"),
                 createField("Second Field")

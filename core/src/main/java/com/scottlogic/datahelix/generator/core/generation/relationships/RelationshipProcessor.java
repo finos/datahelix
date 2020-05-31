@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.output.guice;
+package com.scottlogic.datahelix.generator.core.generation.relationships;
 
-public enum OutputFormat {
-    CSV,
-    JSON
+import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.core.generation.DataGenerator;
+import com.scottlogic.datahelix.generator.core.profile.relationships.Relationship;
+
+interface RelationshipProcessor {
+    void processRelationship(Fields profileFields, Relationship relationship, GeneratedRelationalData generatedObject, DataGenerator dataGenerator);
 }

@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionNode;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
@@ -116,7 +117,7 @@ class ConstraintToFieldMapperTests {
     void beforeEach() {
         constraintsSet = new HashSet<>();
         decisionsSet = new HashSet<>();
-        fields = new Fields(Collections.emptyList());
+        fields = new ProfileFields(Collections.emptyList());
         mappings = null;
     }
 
@@ -134,7 +135,7 @@ class ConstraintToFieldMapperTests {
     }
 
     private void givenFields(String... fieldNames) {
-        fields = new Fields(
+        fields = new ProfileFields(
             Arrays.stream(fieldNames)
                 .map(FieldBuilder::createField)
                 .collect(Collectors.toList()));

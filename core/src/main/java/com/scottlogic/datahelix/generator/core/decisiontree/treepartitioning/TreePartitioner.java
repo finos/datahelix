@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionNode;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.FieldSpecRelation;
@@ -88,12 +89,12 @@ public class TreePartitioner {
                         .addRelations(partition.getRelations())
                         .setDecisions(partition.getDecisionNodes())
                         .build(),
-                    new Fields(new ArrayList<>(partition.fields))
+                    new ProfileFields(new ArrayList<>(partition.fields))
                 )),
             unpartitionedFields
                 .map(field -> new DecisionTree(
                     new ConstraintNodeBuilder().build(),
-                    new Fields(Collections.singletonList(field))
+                    new ProfileFields(Collections.singletonList(field))
                 ))
             );
     }

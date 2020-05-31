@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.RelationalProfileDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.ConfigValidator;
 
@@ -44,14 +44,14 @@ public class ProfileDeserialiser
         this.constraintDeserializerFactory = constraintDeserializerFactory;
     }
 
-    public ProfileDTO deserialise(File profileFile) throws IOException {
+    public RelationalProfileDTO deserialise(File profileFile) throws IOException {
         configValidator.validate(profileFile);
         byte[] encoded = Files.readAllBytes(profileFile.toPath());
         String profileJson = new String(encoded, StandardCharsets.UTF_8);
         return deserialise(profileFile.getParentFile().toPath(), profileJson);
     }
 
-    public ProfileDTO deserialise(Path profileDirectory, String json) {
+    public RelationalProfileDTO deserialise(Path profileDirectory, String json) {
         if (profileDirectory == null) {
             throw new IllegalArgumentException("profileDirectory must be supplied");
         }
@@ -66,7 +66,7 @@ public class ProfileDeserialiser
 
         try {
             return mapper
-                .readerFor(ProfileDTO.class)
+                .readerFor(RelationalProfileDTO.class)
                 .readValue(json);
         } catch (Exception e) {
             StringWriter stackTrace = new StringWriter();

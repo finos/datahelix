@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
@@ -85,7 +86,7 @@ class RowSpecTreeSolverTests {
         final Field currency = createField("currency");
         final Field city = createField("city");
 
-        Fields fields = new Fields(Arrays.asList(country, currency, city));
+        Fields fields = new ProfileFields(Arrays.asList(country, currency, city));
 
         List<Constraint> constraints = Arrays.asList(
             new ConditionalConstraint(
@@ -129,7 +130,7 @@ class RowSpecTreeSolverTests {
                     new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
                 )));
 
-        Profile profile = new Profile(fields, constraints);
+        Profile profile = new Profile(fields, constraints, new ArrayList<>());
 
         final DecisionTree merged = this.dTreeGenerator.analyse(profile);
 

@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.output.writer.json;
 import com.scottlogic.datahelix.generator.common.output.GeneratedObject;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.output.writer.DataSetWriter;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -39,7 +40,7 @@ import static org.mockito.Mockito.when;
 class JsonOutputWriterFactoryTest {
     @Test
     void writer_whereStreamingJson__shouldOutputNewLineDelimiterRows() throws IOException {
-        Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
+        Fields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
             fields,
@@ -49,7 +50,7 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writer_whereNotStreamingJson__shouldOutputRowsWrappedInAnArray() throws IOException {
-        Fields fields = new Fields(Collections.singletonList(FieldBuilder.createField("my_field")));
+        Fields fields = new ProfileFields(Collections.singletonList(FieldBuilder.createField("my_field")));
 
         expectJson(
             fields,
@@ -59,7 +60,7 @@ class JsonOutputWriterFactoryTest {
 
     @Test
     void writeRow_withInternalFields_shouldNotWriteInternalFields() throws IOException {
-        Fields fields = new Fields(
+        Fields fields = new ProfileFields(
             Arrays.asList(
                 createField("External"),
                 createInternalField("Internal")

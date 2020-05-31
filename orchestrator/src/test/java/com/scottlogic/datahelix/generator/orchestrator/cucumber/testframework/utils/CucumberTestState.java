@@ -45,7 +45,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
+import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
 import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
 
 import java.io.IOException;

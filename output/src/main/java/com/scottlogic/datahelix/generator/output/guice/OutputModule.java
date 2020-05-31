@@ -18,6 +18,8 @@ package com.scottlogic.datahelix.generator.output.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.google.inject.util.Providers;
+import com.scottlogic.datahelix.generator.common.output.OutputFormat;
 import com.scottlogic.datahelix.generator.output.OutputPath;
 import com.scottlogic.datahelix.generator.output.outputtarget.SingleDatasetOutputTarget;
 import com.scottlogic.datahelix.generator.output.writer.OutputWriterFactory;
@@ -45,5 +47,8 @@ public class OutputModule extends AbstractModule {
         bind(boolean.class)
             .annotatedWith(Names.named("config:streamOutput"))
             .toInstance(outputConfigSource.useStdOut());
+
+        bind(OutputFormat.class)
+            .toProvider(Providers.of(outputConfigSource.getOutputFormat()));
     }
 }
