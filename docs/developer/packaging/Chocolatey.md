@@ -27,7 +27,7 @@ On a Windows computer with Powershell installed (these are the only requirements
       1. This will determine the latest release number and calculate the checksum of the .zip file
       1. These details will be inserted into the `.nuspec` and `chocolateyinstall.ps1` scripts
    1. Execute `choco pack`
-   1. Execute `choco push datahelix-X.Y.Z.nupkg --source https://push.chocolatey.org/`
+   1. Execute `choco push datahelix.X.Y.Z.nupkg --source https://push.chocolatey.org/`
    1. Discard the changes to the `.nuspec` and `chocolateyinstall.ps1` files
 
 The package will be pushed to the community feed for chocolatey, it will be 'private' until all of the following validation/moderation steps are complete:
