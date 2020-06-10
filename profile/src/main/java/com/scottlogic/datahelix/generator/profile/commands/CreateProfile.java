@@ -18,16 +18,16 @@ package com.scottlogic.datahelix.generator.profile.commands;
 
 import com.scottlogic.datahelix.generator.common.commands.Command;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
-import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.RelationalProfileDTO;
 
 import java.nio.file.Path;
 
 public class CreateProfile extends Command<Profile>
 {
-    public final ProfileDTO profileDTO;
+    public final RelationalProfileDTO profileDTO;
     public final Path profileDirectory;
 
-    public CreateProfile(Path profileDirectory, ProfileDTO profileDTO)
+    public CreateProfile(Path profileDirectory, RelationalProfileDTO profileDTO)
     {
         this.profileDirectory = profileDirectory;
         this.profileDTO = profileDTO;

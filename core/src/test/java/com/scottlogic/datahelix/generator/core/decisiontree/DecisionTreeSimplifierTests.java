@@ -16,20 +16,24 @@
 
 package com.scottlogic.datahelix.generator.core.decisiontree;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.common.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class DecisionTreeSimplifierTests {
@@ -56,7 +60,7 @@ class DecisionTreeSimplifierTests {
                     )
                 )
             )).build(),
-            new Fields(
+            new ProfileFields(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );
@@ -83,7 +87,7 @@ class DecisionTreeSimplifierTests {
                     )
                 )
             )).build(),
-            new Fields(
+            new ProfileFields(
                 new ArrayList<Field>() {{ add(createField("Field 1")); }}
             )
         );

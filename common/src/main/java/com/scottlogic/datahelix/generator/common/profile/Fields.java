@@ -16,62 +16,13 @@
 
 package com.scottlogic.datahelix.generator.common.profile;
 
-
-
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Fields implements Iterable<Field> {
-    private final List<Field> fields;
-
-    public Fields(List<Field> fields) {
-        this.fields = fields;
-    }
-
-    public Field getByName(String fieldName) {
-        return this.fields.stream()
-            .filter(f -> f.getName().equals(fieldName))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Profile fields do not contain " + fieldName));
-    }
-    
-    public int size() {
-        return this.fields.size();
-    }
-
-    @Override
-    public Iterator<Field> iterator() {
-        return fields.iterator();
-    }
-
-    public Stream<Field> stream() {
-        return this.fields.stream();
-    }
-
-    public Stream<Field> getExternalStream() {
-        return this.stream().filter(f -> !f.isInternal());
-    }
-
-    public List<Field> asList() {
-        return fields;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj.getClass() != getClass()) {
-            return false;
-        }
-
-        Fields fields = (Fields) obj;
-        return this.fields.equals(fields.fields);
-    }
-
-    @Override
-    public int hashCode() {
-        return fields.hashCode();
-    }
+public interface Fields extends Iterable<Field> {
+    Field getByName(String fieldName);
+    int size();
+    Stream<Field> stream();
+    Stream<Field> getExternalStream();
+    List<Field> asList();
 }

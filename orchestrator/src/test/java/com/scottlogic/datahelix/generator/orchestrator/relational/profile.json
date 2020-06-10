@@ -1,0 +1,47 @@
+{
+  "fields": [
+    {
+      "name": "shortName",
+      "type": "faker.name.firstName",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "field": "shortName",
+      "shorterThan": 6
+    },
+    {
+      "field": "shortName",
+      "matchingRegex": "J.*"
+    }
+  ],
+  "relationships": [ {
+    "name": "mother",
+    "description": "absence of min/max indicates that it is a sub-object (one-to-one)",
+    "profile": {
+        "fields": [
+          {
+            "name": "name",
+            "type": "faker.name.firstName",
+            "nullable": false
+          },
+          {
+            "name": "age",
+            "type": "integer",
+            "nullable": false
+          }
+        ],
+        "constraints": [
+          {
+            "field": "age",
+            "greaterThanOrEqualTo": 16
+          },
+          {
+            "field": "age",
+            "lessThanOrEqualTo": 100
+          }
+        ]
+      }
+   } ]
+}

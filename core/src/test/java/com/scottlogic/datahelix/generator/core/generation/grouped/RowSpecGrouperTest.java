@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.generation.grouped;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecGroup;
@@ -40,7 +41,7 @@ class RowSpecGrouperTest {
     void createGroups_withTwoRelatedFields_givesOneGroupOfSizeOne() {
         Field first = createField("first");
         Field second = createField("second");
-        Fields fields = new Fields(Arrays.asList(first, second));
+        Fields fields = new ProfileFields(Arrays.asList(first, second));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
 
@@ -59,7 +60,7 @@ class RowSpecGrouperTest {
         Field first = createField("first");
         Field second = createField("second");
         Field third = createField("third");
-        Fields fields = new Fields(Arrays.asList(first, second, third));
+        Fields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
@@ -78,7 +79,7 @@ class RowSpecGrouperTest {
         Field first = createField("first");
         Field second = createField("second");
         Field third = createField("third");
-        Fields fields = new Fields(Arrays.asList(first, second, third));
+        Fields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
@@ -96,7 +97,7 @@ class RowSpecGrouperTest {
         Field first = createField("first");
         Field second = createField("second");
         Field third = createField("third");
-        Fields fields = new Fields(Arrays.asList(first, second, third));
+        Fields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
@@ -114,7 +115,7 @@ class RowSpecGrouperTest {
         Field first = createField("first");
         Field second = createField("second");
         Field third = createField("third");
-        Fields fields = new Fields(Arrays.asList(first, second, third));
+        Fields fields = new ProfileFields(Arrays.asList(first, second, third));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third);
 
@@ -138,7 +139,7 @@ class RowSpecGrouperTest {
         Field fourth = createField("fourth");
         Field fifth = createField("fifth");
 
-        Fields fields = new Fields(Arrays.asList(first, second, third, fourth, fifth));
+        Fields fields = new ProfileFields(Arrays.asList(first, second, third, fourth, fifth));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second, third, fourth, fifth);
 
@@ -159,7 +160,7 @@ class RowSpecGrouperTest {
         Field first = createField("first");
         Field second = createField("second");
 
-        Fields fields = new Fields(Arrays.asList(first, second));
+        Fields fields = new ProfileFields(Arrays.asList(first, second));
 
         Map<Field, FieldSpec> fieldSpecMap = fieldSpecMapOf(first, second);
 

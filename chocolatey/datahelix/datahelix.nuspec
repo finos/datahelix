@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Test your packages in a test environment: https://github.com/chocolatey/chocolatey-test-environment -->
+
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>datahelix</id>
+    <version>0.0.0</version>
+    <owners>FINOS</owners>
+    <title>DataHelix (generator)</title>
+    <authors>Scott Logic</authors>
+    <projectUrl>https://finos.github.io/datahelix</projectUrl>
+    <iconUrl>https://finos.github.io/datahelix/chocolatey-package.png</iconUrl>
+    <licenseUrl>https://github.com/finos/datahelix/blob/master/LICENSE</licenseUrl>
+    <packageSourceUrl>https://chocolatey.org/packages</packageSourceUrl>
+    <projectSourceUrl>https://github.com/finos/datahelix</projectSourceUrl>
+    <docsUrl>https://github.com/finos/datahelix/blob/master/docs/GettingStarted.md</docsUrl>
+    <tags>datahelix data-generation</tags>
+    <summary>DataHelix: Data generator</summary>
+    <description>DataHelix: The open-source data generator</description>
+    <releaseNotes>https://github.com/finos/datahelix/releases</releaseNotes>
+    <dependencies>
+      <dependency id="jre8" version="1.8" />
+      <dependency id="chocolatey-core.extension" version="1.1.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
