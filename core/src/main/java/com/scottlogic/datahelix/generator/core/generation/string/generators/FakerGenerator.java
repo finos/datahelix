@@ -20,6 +20,7 @@ import com.github.javafaker.Faker;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.util.OrderedRandom;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.stream.Stream;
 
 public class FakerGenerator implements StringGenerator {
@@ -71,6 +72,24 @@ public class FakerGenerator implements StringGenerator {
     }
 
     private String getFakerValue(Faker faker) {
-        return faker.expression("#{" + this.fakerSpec + "}");
+        try {
+            return faker.expression("#{" + this.fakerSpec + "}");
+        } catch (Exception e) {
+            return getFakerValueWorkaround(faker);
+        }
+    }
+
+    private String getFakerValueWorkaround(Faker faker) {
+        String elements[] = this.fakerSpec.split("\\.");
+        Object obj = faker;
+        for (String element : elements) {
+            try {
+                obj = obj.getClass().getMethod(element).invoke(obj);
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return (String) obj;
     }
 }
