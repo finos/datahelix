@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 
 import java.util.List;
