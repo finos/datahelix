@@ -33,7 +33,9 @@ public class ConditionalConstraintValidator  extends GrammaticalConstraintValida
     public ValidationResult validate(ConditionalConstraintDTO conditionalConstraint)
     {
         ValidationResult validateIfConstraint = validateConstraint(conditionalConstraint.ifConstraint, fields);
-        ValidationResult validateThenConstraint = validateConstraint(conditionalConstraint.thenConstraint, fields);
+        ValidationResult validateThenConstraint = conditionalConstraint.thenConstraint == null
+            ? ValidationResult.failure("'if' constraint must also have an associated 'then' constraint")
+            : validateConstraint(conditionalConstraint.thenConstraint, fields);
         ValidationResult validateElseConstraint = conditionalConstraint.elseConstraint == null
             ? ValidationResult.success()
             :validateConstraint(conditionalConstraint.ifConstraint, fields);
