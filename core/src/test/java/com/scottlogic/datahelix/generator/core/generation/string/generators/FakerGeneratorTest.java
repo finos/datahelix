@@ -22,6 +22,7 @@ import com.scottlogic.datahelix.generator.core.utils.JavaUtilRandomNumberGenerat
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -73,5 +74,22 @@ class FakerGeneratorTest {
             .limit(size);
 
         assertTrue(results.allMatch(str -> str.length() <= length));
+    }
+
+    @Test
+    void generateWithCompositeExpression() {
+        String jobTitleRegex = "^[A-Za-z]+ [A-Za-z]+$";
+        StringRestrictions restrictions = StringRestrictionsFactory.forStringMatching(
+            Pattern.compile(jobTitleRegex), false
+        );
+        RegexStringGenerator regex = (RegexStringGenerator) restrictions.createGenerator();
+        FakerGenerator generator = new FakerGenerator(regex, "job.title");
+
+        final int size = 10;
+
+        Stream<String> results = generator.generateRandomValues(new JavaUtilRandomNumberGenerator())
+            .limit(size);
+
+        assertTrue(results.allMatch(str -> str.matches(jobTitleRegex)));
     }
 }
