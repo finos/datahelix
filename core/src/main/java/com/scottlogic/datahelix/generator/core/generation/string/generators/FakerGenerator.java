@@ -79,6 +79,12 @@ public class FakerGenerator implements StringGenerator {
         }
     }
 
+    /*
+     *  This method is a temporary workaround for the issue highlighted here:
+     *  https://github.com/DiUS/java-faker/issues/474
+     * 
+     *  Once the underlying issue has been fixed, this method can be removed.
+     */
     private String getFakerValueWorkaround(Faker faker) {
         String elements[] = this.fakerSpec.split("\\.");
         Object obj = faker;
