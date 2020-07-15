@@ -21,6 +21,7 @@ import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
 
     ValidationResult fieldTypeMustMatchValueType(T dto, FieldType expectedFieldType)
     {
-        FieldType fieldType = getFieldType(dto.field);
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
         if (expectedFieldType != fieldType)
         {
             return ValidationResult.failure(String.format("Expected field type %s doesn't match field type %s%s", ValidationResult.quote(expectedFieldType), ValidationResult.quote(fieldType), getErrorInfo(dto)));
@@ -54,7 +55,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         {
             return ValidationResult.failure("Values must be specified" + getErrorInfo(dto));
         }
-        FieldType fieldType = getFieldType(dto.field);
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
         if (value instanceof Boolean && fieldType != FieldType.BOOLEAN)
         {
             return ValidationResult.failure(String.format("Value %s must be a boolean%s", ValidationResult.quote(value), getErrorInfo(dto)));

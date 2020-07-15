@@ -233,6 +233,18 @@ public class JsonProfileReaderTests {
     }
 
     @Test
+    public void shouldRejectFieldWithUnrecognisedType()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \" string\" } ]," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field type ' string' is not supported | Field: 'f1'")));
+    }
+
+    @Test
     public void shouldRejectMissingConstraints()
     {
         givenJson(

@@ -21,6 +21,7 @@ import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,8 +56,8 @@ public class RelationalConstraintValidator<T extends RelationalConstraintDTO> ex
         {
             return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(otherFieldName), getErrorInfo(dto)));
         }
-        FieldType fieldType = getFieldType(field.get().name);
-        FieldType otherFieldType = getFieldType(otherField.get().name);
+        FieldType fieldType = FieldValidator.getSpecificFieldType(field.get()).getFieldType();
+        FieldType otherFieldType = FieldValidator.getSpecificFieldType(otherField.get()).getFieldType();
         if (fieldType != otherFieldType)
         {
             return ValidationResult.failure(String.format("Field type %s doesn't match related field type %s%s", ValidationResult.quote(fieldName), ValidationResult.quote(otherFieldName), getErrorInfo(dto)));

@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.common.profile;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DATE_FORMATTING;
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_TIME_FORMATTING;
@@ -56,11 +57,10 @@ public enum StandardSpecificFieldType {
         return fieldType;
     }
 
-    public static StandardSpecificFieldType from(String type) {
+    public static Optional<StandardSpecificFieldType> from(String type) {
         return Arrays.stream(StandardSpecificFieldType.values())
             .filter(sft -> sft.type.equals(type))
-            .findAny()
-            .orElseThrow(() -> new IllegalStateException("No data types with type " + type));
+            .findAny();
     }
 
     public String getDefaultFormatting() {
