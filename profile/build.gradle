@@ -45,6 +45,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
     testImplementation "org.threeten:threeten-extra:${THREE_TEN_VERSION}"
 
+    testCompile project(":core").sourceSets.test.output
+
     implementation('org.jetbrains.kotlin:kotlin-stdlib') {
         version {
             strictly "1.3.30"

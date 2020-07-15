@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
+package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities;
 
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic.GranularToConstraintValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -32,8 +33,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class GranularToConstraintValidatorTests
+public class GranularityConstraintValidatorTests
 {
+    public static final String ERROR_INFO = " | error info";
 
     private final List<FieldDTO> fields = Arrays.asList
         (
@@ -43,7 +45,7 @@ public class GranularToConstraintValidatorTests
         );
 
     @Test
-    public void validateGranularToConstraint_withValidNumericData_succeeds()
+    public void validateGranularityConstraint_withValidNumericData_succeeds()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO("decimal").buildGranularTo(0.1);
@@ -56,7 +58,7 @@ public class GranularToConstraintValidatorTests
     }
 
     @Test
-    public void validateGranularToConstraint_withNullField_fails()
+    public void validateGranularityConstraint_withNullField_fails()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO(null).buildGranularTo(0.1);
@@ -71,7 +73,7 @@ public class GranularToConstraintValidatorTests
     }
 
     @Test
-    public void validateGranularToConstraint_withEmptyField_fails()
+    public void validateGranularityConstraint_withEmptyField_fails()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO("").buildGranularTo(0.1);
@@ -86,7 +88,7 @@ public class GranularToConstraintValidatorTests
     }
 
     @Test
-    public void validateGranularToConstraint_withUndefinedField_fails()
+    public void validateGranularityConstraint_withUndefinedField_fails()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO("unknown").buildGranularTo(0.1);
@@ -101,7 +103,7 @@ public class GranularToConstraintValidatorTests
     }
 
     @Test
-    public void validateGranularToConstraint_withValueTypeBoolean_fails()
+    public void validateGranularityConstraint_withValueTypeBoolean_fails()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO("boolean").buildGranularTo(true);
@@ -116,7 +118,7 @@ public class GranularToConstraintValidatorTests
     }
 
     @Test
-    public void validateGranularToConstraint_withValueTypeString_fails()
+    public void validateGranularityConstraint_withValueTypeString_fails()
     {
         // Arrange
         GranularToConstraintDTO dto = atomicConstraintDTO("text").buildGranularTo("test");
@@ -128,5 +130,51 @@ public class GranularToConstraintValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
         assertThat(validationResult.errors, hasItem("Granularity test is not supported for string fields | Field: text | Constraint: granularTo"));
+    }
+
+    @Test
+    public void validateGranularityConstraint_withValidChronoUnit_succeeds()
+    {
+        // Act
+        ValidationResult validationResult = new DateTimeGranularityValidator(ERROR_INFO).validate("millis");
+
+        // Assert
+        assertTrue(validationResult.isSuccess);
+    }
+
+    @Test
+    public void validateGranularityConstraint_withWorkingDay_succeeds()
+    {
+        // Act
+        ValidationResult validationResult = new DateTimeGranularityValidator(ERROR_INFO).validate("working days");
+
+        // Assert
+        assertTrue(validationResult.isSuccess);
+    }
+
+    @Test
+    public void validateGranularityConstraint_withEmptyValue_fails()
+    {
+        // Act
+        ValidationResult validationResult = new DateTimeGranularityValidator(ERROR_INFO).validate("");
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        // TODO: Granularity value not quoted
+        assertThat(validationResult.errors, hasItem("Granularity  is not supported | error info"));
+    }
+
+    @Test
+    public void validateGranularityConstraint_withInvalidValue_fails()
+    {
+        // Act
+        ValidationResult validationResult = new DateTimeGranularityValidator(ERROR_INFO).validate("mills");
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        // TODO: Granularity value not quoted
+        assertThat(validationResult.errors, hasItem("Granularity mills is not supported | error info"));
     }
 }

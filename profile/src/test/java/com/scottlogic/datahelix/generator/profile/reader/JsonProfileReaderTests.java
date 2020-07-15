@@ -43,7 +43,9 @@ import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValida
 import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -112,10 +114,18 @@ public class JsonProfileReaderTests {
     private Profile getResultingProfile() {
         return jsonProfileReader.read(Paths.get("test"), json);
     }
-    
-    private void expectValidationException(String message) {
+
+    private void expectValidationException(String message)
+    {
         Throwable exception = Assertions.assertThrows(ValidationException.class, this::getResultingProfile);
         Assertions.assertEquals(message, exception.getMessage());
+    }
+
+    @SafeVarargs
+    private final void expectValidationErrors(Consumer<String>... errorAssertions)
+    {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, this::getResultingProfile);
+        expectMany(validationException.errorMessages, errorAssertions);
     }
 
     @SafeVarargs
@@ -160,6 +170,103 @@ public class JsonProfileReaderTests {
             Assert.fail("Sequences had different numbers of elements");
     }
 
+    // TODO: Fix
+    @Disabled
+    @Test
+    public void shouldRejectMissingFieldsAndConstraints()
+    {
+        givenJson("{}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified"))
+            , error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectMissingFields()
+    {
+        givenJson(
+            "{" +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    @Test
+    public void shouldRejectNullFields()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": null," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    @Test
+    public void shouldRejectEmptyFields()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": []," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    // TODO: Fix
+    @Disabled
+    @Test
+    public void shouldRejectFieldsContainingANull()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [" +
+                "        { \"name\": \"f1\", \"type\": \"string\" }," +
+                "        null" +
+                "    ]," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field entries cannot be null")));
+    }
+
+    @Test
+    public void shouldRejectMissingConstraints()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectNullConstraints()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
+                "    \"constraints\": null" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectConstraintsContainingNull()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
+                "    \"constraints\": [null]" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraint must not be null")));
+    }
 
     @Test
     public void shouldDeserialiseSingleField() {
@@ -512,12 +619,11 @@ public class JsonProfileReaderTests {
     public void shouldRejectLessThanWithNullValue() {
         givenJson(
             "{" +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"lessThan\": null }" +
                 "    ]" +
                 "}");
-
         expectValidationException("Number must be specified | Field: foo | Constraint: lessThan");
     }
 

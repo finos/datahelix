@@ -39,10 +39,11 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.N
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.InMapConstraintValidator;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.NotConstraintValidator;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.RelationalConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.InMapConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.NotConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.RelationalConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic.*;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.DateTimeGranularityValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AllOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AnyOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.ConditionalConstraintValidator;

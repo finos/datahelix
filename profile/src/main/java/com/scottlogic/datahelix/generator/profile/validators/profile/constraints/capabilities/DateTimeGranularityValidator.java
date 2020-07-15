@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
+package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities;
 
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
@@ -35,7 +35,7 @@ public class DateTimeGranularityValidator implements Validator<String>
     {
         try
         {
-            if(value.equalsIgnoreCase("WORKING DAYS"))
+            if (value.equalsIgnoreCase("WORKING DAYS"))
             {
                 return ValidationResult.success();
             }
@@ -55,7 +55,7 @@ public class DateTimeGranularityValidator implements Validator<String>
             }
         } catch (Exception e)
         {
-           return ValidationResult.failure("Granularity " + value + " is not supported" + errorInfo);
+            return ValidationResult.failure("Granularity " + value + " is not supported" + errorInfo);
         }
     }
 }

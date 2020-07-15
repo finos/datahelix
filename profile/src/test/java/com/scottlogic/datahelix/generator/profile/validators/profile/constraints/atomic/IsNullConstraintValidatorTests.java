@@ -19,7 +19,7 @@ import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldTy
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.IsNullConstraintDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -32,7 +32,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class EqualToConstraintValidatorTests
+public class IsNullConstraintValidatorTests
 {
 
     private final List<FieldDTO> fields = Arrays.asList
@@ -41,75 +41,60 @@ public class EqualToConstraintValidatorTests
         );
 
     @Test
-    public void validateEqualToConstraint_withValidData_succeeds()
+    public void validateIsNullConstraint_withValidField_succeeds()
     {
         // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("text").buildEqualTo("test");
+        IsNullConstraintDTO dto = atomicConstraintDTO("text").buildIsNull(false);
 
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new IsNullConstraintValidator(fields).validate(dto);
 
         // Assert
         assertTrue(validationResult.isSuccess);
     }
 
     @Test
-    public void validateEqualToConstraint_withNullField_fails()
+    public void validateIsNullConstraint_withNullField_fails()
     {
         // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO(null).buildEqualTo("test");
+        IsNullConstraintDTO dto = atomicConstraintDTO(null).buildIsNull(false);
 
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new IsNullConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: isNull"));
     }
 
     @Test
-    public void validateEqualToConstraint_withEmptyField_fails()
+    public void validateIsNullConstraint_withEmptyField_fails()
     {
         // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("").buildEqualTo("test");
+        IsNullConstraintDTO dto = atomicConstraintDTO("").buildIsNull(false);
 
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new IsNullConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: isNull"));
     }
 
     @Test
-    public void validateEqualToConstraint_withUndefinedField_fails()
+    public void validateIsNullConstraint_withUndefinedField_fails()
     {
         // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("unknown").buildEqualTo("test");
+        IsNullConstraintDTO dto = atomicConstraintDTO("unknown").buildIsNull(false);
 
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new IsNullConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: equalTo"));
-    }
-
-    @Test
-    public void validateEqualToConstraint_withInvalidData_fails()
-    {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("text").buildEqualTo(true);
-
-        // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
-
-        // Assert
-        assertFalse(validationResult.isSuccess);
-        assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: text | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: isNull"));
     }
 }
