@@ -67,7 +67,7 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: containingRegex"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'containingRegex'"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: containingRegex"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'containingRegex'"));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: containingRegex"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'containingRegex'"));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Text must be specified | Field: text | Constraint: containingRegex"));
+        assertThat(validationResult.errors, hasItem("Text must be specified | Field: 'text' | Constraint: 'containingRegex'"));
     }
 
     @Test
@@ -142,6 +142,6 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: decimal | Constraint: containingRegex"));
+        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: 'decimal' | Constraint: 'containingRegex'"));
     }
 }

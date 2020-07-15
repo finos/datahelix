@@ -48,18 +48,18 @@ public class RelationalConstraintValidator<T extends RelationalConstraintDTO> ex
         Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(fieldName)).findFirst();
         if (!field.isPresent())
         {
-            return ValidationResult.failure(fieldName + " must be defined in fields" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(fieldName), getErrorInfo(dto)));
         }
         Optional<FieldDTO> otherField = fields.stream().filter(f -> f.name.equals(otherFieldName)).findFirst();
         if (!otherField.isPresent())
         {
-            return ValidationResult.failure(otherFieldName + " must be defined in fields" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(otherFieldName), getErrorInfo(dto)));
         }
         FieldType fieldType = getFieldType(field.get().name);
         FieldType otherFieldType = getFieldType(otherField.get().name);
         if (fieldType != otherFieldType)
         {
-            return ValidationResult.failure("Field type " + fieldName + " doesn't match related field type " + otherFieldName + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("Field type %s doesn't match related field type %s%s", ValidationResult.quote(fieldName), ValidationResult.quote(otherFieldName), getErrorInfo(dto)));
         }
         if (dto.offsetUnit != null && !dto.offsetUnit.isEmpty())
         {

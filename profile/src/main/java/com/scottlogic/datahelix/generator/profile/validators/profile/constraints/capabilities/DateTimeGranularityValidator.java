@@ -55,7 +55,7 @@ public class DateTimeGranularityValidator implements Validator<String>
             }
         } catch (Exception e)
         {
-            return ValidationResult.failure("Granularity " + value + " is not supported" + errorInfo);
+            return ValidationResult.failure(String.format("Granularity %s is not supported%s", ValidationResult.quote(value), errorInfo));
         }
     }
 }

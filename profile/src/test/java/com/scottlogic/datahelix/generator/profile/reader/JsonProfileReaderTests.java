@@ -43,7 +43,6 @@ import com.scottlogic.datahelix.generator.profile.validators.CreateProfileValida
 import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -603,7 +602,8 @@ public class JsonProfileReaderTests {
     }
 
     @Test
-    public void shouldRejectEqualToWithNullValue() {
+    public void shouldRejectEqualToWithNullValue()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -612,11 +612,12 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo");
+        expectValidationException("Values must be specified | Field: 'foo' | Constraint: 'equalTo'");
     }
 
     @Test
-    public void shouldRejectLessThanWithNullValue() {
+    public void shouldRejectLessThanWithNullValue()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
@@ -624,11 +625,12 @@ public class JsonProfileReaderTests {
                 "        { \"field\": \"foo\",  \"lessThan\": null }" +
                 "    ]" +
                 "}");
-        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan");
+        expectValidationException("Number must be specified | Field: 'foo' | Constraint: 'lessThan'");
     }
 
     @Test
-    public void shouldRejectInSetWithANullValue() {
+    public void shouldRejectInSetWithANullValue()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -637,11 +639,12 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: inSet");
+        expectValidationException("Values must be specified | Field: 'foo' | Constraint: 'inSet'");
     }
 
     @Test
-    public void shouldRejectInSetSetToNull() {
+    public void shouldRejectInSetSetToNull()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -650,7 +653,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet");
+        expectValidationException("In set values must be specified | Field: 'foo' | Constraint: 'inSet'");
     }
 
     @Test

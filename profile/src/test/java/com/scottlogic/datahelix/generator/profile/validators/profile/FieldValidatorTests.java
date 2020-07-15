@@ -100,7 +100,7 @@ public class FieldValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field type must be specified | Field: test"));
+        assertThat(validationResult.errors, hasItem("Field type must be specified | Field: 'test'"));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class FieldValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(2));
         assertThat(validationResult.errors, hasItem("Field name must be specified"));
-        assertThat(validationResult.errors, hasItem("Field type must be specified | Field: Unnamed field"));
+        assertThat(validationResult.errors, hasItem("Field type must be specified | Field: Unnamed"));
     }
 }

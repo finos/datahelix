@@ -80,7 +80,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Values must be specified | Field: text | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Values must be specified | Field: 'text' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class ConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 1 must be a string | Field: text | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value 1 must be a string | Field: 'text' | Constraint: 'equalTo'"));
     }
 
     @Test

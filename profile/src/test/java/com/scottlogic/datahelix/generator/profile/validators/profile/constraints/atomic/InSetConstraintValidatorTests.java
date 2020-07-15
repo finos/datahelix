@@ -77,7 +77,7 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'inSet'"));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'inSet'"));
     }
 
     @Test
@@ -107,7 +107,7 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'inSet'"));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("In set values must be specified | Field: text | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("In set values must be specified | Field: 'text' | Constraint: 'inSet'"));
     }
 
     @Test
@@ -137,7 +137,7 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("In set values must be specified | Field: text | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("In set values must be specified | Field: 'text' | Constraint: 'inSet'"));
     }
 
     @Test
@@ -152,8 +152,8 @@ public class InSetConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(2));
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: text | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'inSet'"));
         // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: text | Constraint: inSet"));
+        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'text' | Constraint: 'inSet'"));
     }
 }

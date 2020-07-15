@@ -65,7 +65,7 @@ public class IsNullConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: isNull"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'isNull'"));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class IsNullConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: isNull"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'isNull'"));
     }
 
     @Test
@@ -95,6 +95,6 @@ public class IsNullConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: isNull"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
     }
 }

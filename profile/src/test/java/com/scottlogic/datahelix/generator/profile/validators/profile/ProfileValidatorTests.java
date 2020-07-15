@@ -152,7 +152,7 @@ public class ProfileValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field names must be unique | Duplicates: test"));
+        assertThat(validationResult.errors, hasItem("Field names must be unique | Duplicates: 'test'"));
     }
 
     @Test
@@ -199,6 +199,6 @@ public class ProfileValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Unique field uniq cannot be referenced in IF statement"));
+        assertThat(validationResult.errors, hasItem("Unique field 'uniq' cannot be referenced in IF statement"));
     }
 }

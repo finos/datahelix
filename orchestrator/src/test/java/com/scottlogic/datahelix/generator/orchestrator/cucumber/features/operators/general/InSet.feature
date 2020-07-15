@@ -267,7 +267,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
     And foo is in set:
       | null |
       | 1    |
-    Then the profile is invalid with error "Values must be specified | Field: foo | Constraint: inSet"
+    Then the profile is invalid with error "Values must be specified | Field: 'foo' | Constraint: 'inSet'"
     And no data is created
 
   Scenario: Running an 'inSet' request that includes multiples of the same entry should be successful.

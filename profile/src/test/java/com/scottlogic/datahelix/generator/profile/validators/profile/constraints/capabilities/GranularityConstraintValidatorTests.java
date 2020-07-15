@@ -69,7 +69,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: granularTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'granularTo'"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: granularTo"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'granularTo'"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: granularTo"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'granularTo'"));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Granularity true is not supported for boolean fields | Field: boolean | Constraint: granularTo"));
+        assertThat(validationResult.errors, hasItem("Granularity true is not supported for boolean fields | Field: 'boolean' | Constraint: 'granularTo'"));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Granularity test is not supported for string fields | Field: text | Constraint: granularTo"));
+        assertThat(validationResult.errors, hasItem("Granularity 'test' is not supported for string fields | Field: 'text' | Constraint: 'granularTo'"));
     }
 
     @Test
@@ -161,8 +161,7 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: Granularity value not quoted
-        assertThat(validationResult.errors, hasItem("Granularity  is not supported | error info"));
+        assertThat(validationResult.errors, hasItem("Granularity '' is not supported | error info"));
     }
 
     @Test
@@ -174,7 +173,6 @@ public class GranularityConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: Granularity value not quoted
-        assertThat(validationResult.errors, hasItem("Granularity mills is not supported | error info"));
+        assertThat(validationResult.errors, hasItem("Granularity 'mills' is not supported | error info"));
     }
 }

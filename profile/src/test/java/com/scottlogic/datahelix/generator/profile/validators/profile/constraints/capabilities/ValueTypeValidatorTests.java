@@ -68,7 +68,7 @@ public class ValueTypeValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: text | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class ValueTypeValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
         // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: text | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'text' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -112,8 +112,7 @@ public class ValueTypeValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: This error message does not quote the string
-        assertThat(validationResult.errors, hasItem("Value text must be a number | Field: decimal | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value 'text' must be a number | Field: 'decimal' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -129,7 +128,7 @@ public class ValueTypeValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
         // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: decimal | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'decimal' | Constraint: 'equalTo'"));
     }
 
     @Test
@@ -158,7 +157,7 @@ public class ValueTypeValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
         // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: boolean | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'boolean' | Constraint: 'equalTo'"));
     }
 
     // TODO: validation should fail, but currently succeeds
@@ -175,6 +174,6 @@ public class ValueTypeValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 'text' must be a boolean | Field: boolean | Constraint: equalTo"));
+        assertThat(validationResult.errors, hasItem("Value 'text' must be a boolean | Field: 'boolean' | Constraint: 'equalTo'"));
     }
 }

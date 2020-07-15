@@ -82,7 +82,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Related field must be specified | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Related field must be specified | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Related field must be specified | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Related field must be specified | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field type integer doesn't match related field type text | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Field type 'integer' doesn't match related field type 'text' | Constraint: 'greaterThanField'"));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Granularity days is not supported for string fields | Constraint: afterField"));
+        assertThat(validationResult.errors, hasItem("Granularity 'days' is not supported for string fields | Constraint: 'afterField'"));
     }
 
     // TODO: Validator should check for offset, even when no offset unit is present
@@ -198,7 +198,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Granularity days is not supported for string fields | Constraint: afterField"));
+        assertThat(validationResult.errors, hasItem("Granularity 'days' is not supported for string fields | Constraint: 'afterField'"));
     }
 
     // TODO: Add these checks to the validator
@@ -214,7 +214,7 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field type datetime doesn't match related constraint type numeric | Constraint: greaterThanField"));
+        assertThat(validationResult.errors, hasItem("Field type 'datetime' doesn't match related constraint type 'numeric' | Constraint: 'greaterThanField'"));
     }
 
     @Disabled
@@ -229,6 +229,6 @@ public class RelationalConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field type integer doesn't match related constraint type datetime | Constraint: afterField"));
+        assertThat(validationResult.errors, hasItem("Field type 'integer' doesn't match related constraint type 'datetime' | Constraint: 'afterField'"));
     }
 }

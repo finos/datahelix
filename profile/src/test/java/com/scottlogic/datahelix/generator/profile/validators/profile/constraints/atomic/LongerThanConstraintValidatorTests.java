@@ -68,7 +68,7 @@ public class LongerThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: longerThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'longerThan'"));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class LongerThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: longerThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'longerThan'"));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class LongerThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: longerThan"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'longerThan'"));
     }
 
     @Test
@@ -141,6 +141,6 @@ public class LongerThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: decimal | Constraint: longerThan"));
+        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: 'decimal' | Constraint: 'longerThan'"));
     }
 }

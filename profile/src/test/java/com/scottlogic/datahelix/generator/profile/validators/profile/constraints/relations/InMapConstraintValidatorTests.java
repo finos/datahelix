@@ -75,7 +75,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: 'inMap'"));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Constraint: 'inMap'"));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Constraint: 'inMap'"));
     }
 
     @Test
@@ -117,7 +117,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Values must be specified | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("Values must be specified | Constraint: 'inMap'"));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Values must be specified | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("Values must be specified | Constraint: 'inMap'"));
     }
 
     // TODO: Type checking of value list is missing
@@ -147,7 +147,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(2));
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: text | Constraint: inMap"));
-        assertThat(validationResult.errors, hasItem("Value true must be a string | Field: text | Constraint: inMap"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'inMap'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a string | Field: 'text' | Constraint: 'inMap'"));
     }
 }

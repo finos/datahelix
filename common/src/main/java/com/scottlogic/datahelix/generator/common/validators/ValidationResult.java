@@ -17,6 +17,7 @@ package com.scottlogic.datahelix.generator.common.validators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -76,6 +77,24 @@ public class ValidationResult
             isValid.add(validationResult.isSuccess);
         });
         return new ValidationResult(isValid.stream().allMatch(o -> o), errors);
+    }
+
+    public static String quote(Object value)
+    {
+        if (value instanceof Collection)
+        {
+            Collection<Object> values = (Collection<Object>) value;
+            return values.stream().map(ValidationResult::quote).collect(Collectors.joining(", "));
+        } else if (value instanceof String)
+        {
+            return String.format("'%s'", ((String) value).replace("'", "\\'"));
+        } else if (value == null)
+        {
+            return "NULL";
+        } else
+        {
+            return value.toString();
+        }
     }
 }
 

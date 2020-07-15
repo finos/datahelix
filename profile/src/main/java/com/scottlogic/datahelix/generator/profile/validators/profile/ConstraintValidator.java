@@ -39,14 +39,14 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.N
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.services.FieldService;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.InMapConstraintValidator;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.NotConstraintValidator;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.RelationalConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.DateTimeGranularityValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AllOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AnyOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.ConditionalConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.NotConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.InMapConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.RelationalConstraintValidator;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
 
     protected String getErrorInfo(T constraint)
     {
-        return " | Constraint: " + constraint.getType().propertyName;
+        return String.format(" | Constraint: %s", ValidationResult.quote(constraint.getType().propertyName));
     }
 
     protected static ValidationResult validateConstraint(ConstraintDTO dto, List<FieldDTO> fields)
@@ -157,9 +157,9 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         switch (fieldType)
         {
             case BOOLEAN:
-                return ValidationResult.failure("Granularity " + value + " is not supported for boolean fields" + getErrorInfo(dto));
+                return ValidationResult.failure(String.format("Granularity %s is not supported for boolean fields%s", ValidationResult.quote(value), getErrorInfo(dto)));
             case STRING:
-                return ValidationResult.failure("Granularity " + value + " is not supported for string fields" + getErrorInfo(dto));
+                return ValidationResult.failure(String.format("Granularity %s is not supported for string fields%s", ValidationResult.quote(value), getErrorInfo(dto)));
             case DATETIME:
                 return new DateTimeGranularityValidator(getErrorInfo(dto)).validate((String) value);
         }

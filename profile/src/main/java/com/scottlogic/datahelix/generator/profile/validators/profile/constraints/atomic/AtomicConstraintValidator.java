@@ -35,7 +35,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
     @Override
     protected String getErrorInfo(T atomicConstraint)
     {
-        return " | Field: " + atomicConstraint.field + super.getErrorInfo(atomicConstraint);
+        return String.format(" | Field: %s%s", ValidationResult.quote(atomicConstraint.field), super.getErrorInfo(atomicConstraint));
     }
 
     ValidationResult fieldTypeMustMatchValueType(T dto, FieldType expectedFieldType)
@@ -43,29 +43,29 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         FieldType fieldType = getFieldType(dto.field);
         if (expectedFieldType != fieldType)
         {
-            return ValidationResult.failure("Expected field type " + expectedFieldType + " doesn't match field type " + fieldType + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("Expected field type %s doesn't match field type %s%s", ValidationResult.quote(expectedFieldType), ValidationResult.quote(fieldType), getErrorInfo(dto)));
         }
         return ValidationResult.success();
     }
 
     ValidationResult fieldTypeMustMatchValueType(T dto, Object value)
     {
-        if(value == null)
+        if (value == null)
         {
             return ValidationResult.failure("Values must be specified" + getErrorInfo(dto));
         }
         FieldType fieldType = getFieldType(dto.field);
-        if(value instanceof Boolean && fieldType != FieldType.BOOLEAN)
+        if (value instanceof Boolean && fieldType != FieldType.BOOLEAN)
         {
-            return ValidationResult.failure("Value " + value + " must be a boolean" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("Value %s must be a boolean%s", ValidationResult.quote(value), getErrorInfo(dto)));
         }
-        if (!(value instanceof Number || value instanceof String && isNumber((String)value)) && fieldType == FieldType.NUMERIC)
+        if (!(value instanceof Number || value instanceof String && isNumber((String) value)) && fieldType == FieldType.NUMERIC)
         {
-            return ValidationResult.failure("Value " + value + " must be a number" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("Value %s must be a number%s", ValidationResult.quote(value), getErrorInfo(dto)));
         }
         if (value instanceof Number && fieldType != FieldType.NUMERIC)
         {
-            return ValidationResult.failure("Value " + value + " must be a string" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("Value %s must be a string%s", ValidationResult.quote(value), getErrorInfo(dto)));
         }
         return ValidationResult.success();
     }
@@ -76,8 +76,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         {
             Double.parseDouble(s);
             return true;
-        }
-        catch (NumberFormatException | NullPointerException e)
+        } catch (NumberFormatException | NullPointerException e)
         {
             return false;
         }
@@ -94,7 +93,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(fieldName)).findFirst();
         if (!field.isPresent())
         {
-            return ValidationResult.failure(fieldName + " must be defined in fields" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(fieldName), getErrorInfo(dto)));
         }
         return ValidationResult.success();
     }

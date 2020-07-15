@@ -46,7 +46,7 @@ public class InMapConstraintValidator extends ConstraintValidator<InMapConstrain
         Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst();
         if (!field.isPresent())
         {
-            return ValidationResult.failure(dto.field + " must be defined in fields" + getErrorInfo(dto));
+            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(dto.field), getErrorInfo(dto)));
         }
         return ValidationResult.success();
     }

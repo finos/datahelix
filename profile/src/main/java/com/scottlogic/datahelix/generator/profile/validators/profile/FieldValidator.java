@@ -46,10 +46,10 @@ public class FieldValidator implements Validator<FieldDTO>
 
     private ValidationResult typeMustBeSpecified(FieldDTO field)
     {
-        String fieldName = field.name == null ? "Unnamed field" : field.name;
+        String fieldName = field.name == null ? "Unnamed" : ValidationResult.quote(field.name);
         return field.type != null
             ? ValidationResult.success()
-            : ValidationResult.failure("Field type must be specified | Field: " + fieldName);
+            : ValidationResult.failure(String.format("Field type must be specified | Field: %s", fieldName));
     }
 
 

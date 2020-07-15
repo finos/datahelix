@@ -68,7 +68,7 @@ public class ShorterThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: shorterThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'shorterThan'"));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ShorterThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: shorterThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'shorterThan'"));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class ShorterThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: shorterThan"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'shorterThan'"));
     }
 
     @Test
@@ -128,6 +128,6 @@ public class ShorterThanConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: integer | Constraint: shorterThan"));
+        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: 'integer' | Constraint: 'shorterThan'"));
     }
 }

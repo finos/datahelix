@@ -68,7 +68,7 @@ public class OfLengthConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: ofLength"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'ofLength'"));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class OfLengthConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: ofLength"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'ofLength'"));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class OfLengthConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: ofLength"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'ofLength'"));
     }
 
     @Test
@@ -143,6 +143,6 @@ public class OfLengthConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: decimal | Constraint: ofLength"));
+        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: 'decimal' | Constraint: 'ofLength'"));
     }
 }

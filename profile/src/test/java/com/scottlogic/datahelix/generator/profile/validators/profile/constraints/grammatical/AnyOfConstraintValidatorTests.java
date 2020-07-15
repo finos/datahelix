@@ -69,7 +69,7 @@ public class AnyOfConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Sub constraints must be specified | Constraint: anyOf"));
+        assertThat(validationResult.errors, hasItem("Sub constraints must be specified | Constraint: 'anyOf'"));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class AnyOfConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Sub constraints must be specified | Constraint: anyOf"));
+        assertThat(validationResult.errors, hasItem("Sub constraints must be specified | Constraint: 'anyOf'"));
     }
 
     @Test
@@ -111,6 +111,6 @@ public class AnyOfConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: isNull"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
     }
 }

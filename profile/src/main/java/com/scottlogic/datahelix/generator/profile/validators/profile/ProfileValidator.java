@@ -73,7 +73,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
         fields.forEach(field ->
         {
-            if(!fieldNames.add(field.name))
+            if (!fieldNames.add(field.name))
             {
                 duplicateFieldNames.add(field.name);
             }
@@ -81,8 +81,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
         return duplicateFieldNames.isEmpty()
             ? ValidationResult.success()
-            : ValidationResult.failure("Field names must be unique | Duplicates: "
-            + String.join(", ", duplicateFieldNames));
+            : ValidationResult.failure(String.format("Field names must be unique | Duplicates: %s", ValidationResult.quote(duplicateFieldNames)));
     }
 
     private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
@@ -113,7 +112,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
             .collect(Collectors.toSet());
 
         List<String> errors = uniqueFields.stream().filter(ifConstraintFields::contains)
-            .map(f -> "Unique field "+f+" cannot be referenced in IF statement")
+            .map(f -> String.format("Unique field %s cannot be referenced in IF statement", ValidationResult.quote(f)))
             .collect(Collectors.toList());
 
         return errors.isEmpty()

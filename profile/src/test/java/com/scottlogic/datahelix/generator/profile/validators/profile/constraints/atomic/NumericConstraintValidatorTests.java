@@ -69,7 +69,7 @@ public class NumericConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field: null | Constraint: lessThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'lessThan'"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class NumericConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Field must be specified | Field:  | Constraint: lessThan"));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'lessThan'"));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class NumericConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("unknown must be defined in fields | Field: unknown | Constraint: lessThan"));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'lessThan'"));
     }
 
     @Test
@@ -114,7 +114,7 @@ public class NumericConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Number must be specified | Field: integer | Constraint: lessThan"));
+        assertThat(validationResult.errors, hasItem("Number must be specified | Field: 'integer' | Constraint: 'lessThan'"));
     }
 
     @Test
@@ -159,6 +159,6 @@ public class NumericConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Expected field type NUMERIC doesn't match field type STRING | Field: text | Constraint: lessThan"));
+        assertThat(validationResult.errors, hasItem("Expected field type NUMERIC doesn't match field type STRING | Field: 'text' | Constraint: 'lessThan'"));
     }
 }
