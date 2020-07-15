@@ -61,7 +61,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
             return ValidationResult.failure("Value " + value + " must be a boolean" + getErrorInfo(dto));
         }
         if (!(value instanceof Number || value instanceof String && isNumber((String)value) ||
-            value instanceof WeightedElement && !(((WeightedElement) value).element() instanceof Number)) &&
+            value instanceof WeightedElement && isNumber((String)((WeightedElement) value).element())) &&
             fieldType == FieldType.NUMERIC)
         {
             return ValidationResult.failure("Value " + value + " must be a number" + getErrorInfo(dto));
