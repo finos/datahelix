@@ -73,10 +73,9 @@ public class ProfileValidatorTests
 
         // Assert
         assertFalse(validationResult.isSuccess);
-        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, iterableWithSize(2));
         assertThat(validationResult.errors, hasItem("Fields must be specified"));
-//        TODO: Should also return this aswell
-//        assertThat(validationResult.errors, hasItem("Constraints must be specified"));
+        assertThat(validationResult.errors, hasItem("Constraints must be specified"));
     }
 
     @Test

@@ -48,6 +48,11 @@ public class ProfileValidator implements Validator<ProfileDTO>
     @Override
     public ValidationResult validate(ProfileDTO dto)
     {
+        ValidationResult fieldsAndConstraintsMustBeSpecified = ValidationResult.combine(
+            fieldsMustBeSpecified(dto.fields),
+            constraintsMustBeSpecified(dto));
+        if (!fieldsAndConstraintsMustBeSpecified.isSuccess) return fieldsAndConstraintsMustBeSpecified;
+
         ValidationResult fieldsMustBeValid = fieldsMustBeValid(dto.fields);
         if (!fieldsMustBeValid.isSuccess) return fieldsMustBeValid;
 
@@ -86,14 +91,11 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
     private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
     {
-        ValidationResult fieldsMustBeSpecified = fieldsMustBeSpecified(fields);
-        if (!fieldsMustBeSpecified.isSuccess) return fieldsMustBeSpecified;
-
-        ValidationResult fieldsMustBeUnique  = fieldsMustBeUnique(fields);
-        if(!fieldsMustBeUnique.isSuccess) return fieldsMustBeUnique;
-
         FieldValidator fieldValidator = new FieldValidator();
-        return ValidationResult.combine(fields.stream().map(fieldValidator::validate));
+        ValidationResult eachFieldsMustBeValid =  ValidationResult.combine(fields.stream().map(fieldValidator::validate));
+        if (!eachFieldsMustBeValid.isSuccess) return eachFieldsMustBeValid;
+
+        return fieldsMustBeUnique(fields);
     }
 
     private ValidationResult uniqueFieldsMustNotBeInIfStatements(ProfileDTO dto)
@@ -122,7 +124,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
     private ValidationResult uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(ProfileDTO dto)
     {
-        if(configSource == null)
+        if (configSource == null)
         {
             return ValidationResult.success();
         }
@@ -133,12 +135,16 @@ public class ProfileValidator implements Validator<ProfileDTO>
         return ValidationResult.success();
     }
 
-
-    public ValidationResult constraintsMustBeValid(ProfileDTO dto)
+    public ValidationResult constraintsMustBeSpecified(ProfileDTO dto)
     {
         return dto.constraints == null
             ? ValidationResult.failure("Constraints must be specified")
-            : ValidationResult.combine(dto.constraints.stream()
+            : ValidationResult.success();
+    }
+
+    public ValidationResult constraintsMustBeValid(ProfileDTO dto)
+    {
+        return ValidationResult.combine(dto.constraints.stream()
             .map(c -> ConstraintValidator.validateConstraint(c, dto.fields)));
     }
 }

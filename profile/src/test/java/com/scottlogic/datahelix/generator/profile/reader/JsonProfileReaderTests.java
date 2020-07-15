@@ -44,7 +44,6 @@ import com.scottlogic.datahelix.generator.profile.validators.ReadRelationshipsVa
 import com.scottlogic.datahelix.generator.profile.validators.profile.ProfileValidator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -169,8 +168,6 @@ public class JsonProfileReaderTests {
             Assert.fail("Sequences had different numbers of elements");
     }
 
-    // TODO: Fix
-    @Disabled
     @Test
     public void shouldRejectMissingFieldsAndConstraints()
     {
@@ -215,8 +212,6 @@ public class JsonProfileReaderTests {
         expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
     }
 
-    // TODO: Fix
-    @Disabled
     @Test
     public void shouldRejectFieldsContainingANull()
     {
@@ -229,7 +224,7 @@ public class JsonProfileReaderTests {
                 "    \"constraints\": []" +
                 "}");
 
-        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field entries cannot be null")));
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field must not be null")));
     }
 
     @Test
