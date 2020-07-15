@@ -20,7 +20,6 @@ package com.scottlogic.datahelix.generator.profile.factories.constraint_factorie
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
@@ -39,13 +38,6 @@ public class NumericConstraintFactory extends AtomicConstraintFactory
     @Override
     Object parseValue(Object value)
     {
-        if (value instanceof WeightedElement) {
-            WeightedElement weightedElement = (WeightedElement) value;
-            return new WeightedElement<>(
-                NumberUtils.coerceToBigDecimal(weightedElement.element()),
-                weightedElement.weight()
-            );
-        }
         return NumberUtils.coerceToBigDecimal(value);
     }
 

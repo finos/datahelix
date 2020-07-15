@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile.factories.constraint_factorie
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.InMapRelation;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
@@ -109,7 +110,10 @@ public abstract class AtomicConstraintFactory {
     {
         DistributedList<Object> values = DistributedList.weightedOrDefault(dto.values.stream()
             .distinct()
-            .map(this::parseValue)
+            .map(value -> (value instanceof WeightedElement)
+                ? WeightedElement.parseValue((WeightedElement) value, this::parseValue)
+                : this.parseValue(value)
+            )
             .collect(Collectors.toList()));
         return new InSetConstraint(field, values);
     }
