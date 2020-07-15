@@ -117,6 +117,24 @@ public class AtomicConstraintDeserialiserTests {
     }
 
     @Test
+    public void shouldDeserialiseWeightedInSetCsvFile() throws IOException {
+        // Arrange
+        final String json = "{\"field\": \"country\", \"inSet\": \"countries.csv\" }";
+        // Act
+        ConstraintDTO actual = deserialiseJsonString(new TestFileReader(true), json);
+
+        // Assert
+        InSetConstraintDTO expected = new InSetConstraintDTO();
+        expected.field = "country";
+        expected.values = Arrays.asList(
+            new WeightedElement<>("test1", 0.2),
+            new WeightedElement<>("test2", 0.8)
+        );
+
+        assertThat(actual, sameBeanAs(expected));
+    }
+
+    @Test
     public void shouldDeserialiseInMapWithoutException() throws IOException {
         // Arrange
         final String json = "{\"field\": \"country\", \"inMap\": \"countries.csv\", \"key\": \"Country\" }";
