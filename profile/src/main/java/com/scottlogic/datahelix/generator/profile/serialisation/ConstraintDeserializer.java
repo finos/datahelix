@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,7 +85,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InSetConstraintDTO map(InSetFromFileConstraintDTO dto)
     {
-        List<Object> values = fileReader.setFromFile(getFile(dto.file)).stream().collect(Collectors.toList());
+        List<Object> values = new ArrayList<>(fileReader.setFromFile(getFile(dto.file)).distributedList());
         InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
         inSetConstraintDTO.field = dto.field;
         inSetConstraintDTO.values = values;

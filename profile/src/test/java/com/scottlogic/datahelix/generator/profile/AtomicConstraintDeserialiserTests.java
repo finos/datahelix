@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
@@ -110,7 +111,7 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.values = Collections.singletonList("test");
+        expected.values = Collections.singletonList(new WeightedElement<>("test", 1.0));
 
         assertThat(actual, sameBeanAs(expected));
     }

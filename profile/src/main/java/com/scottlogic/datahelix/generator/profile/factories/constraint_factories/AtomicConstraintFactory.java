@@ -107,7 +107,7 @@ public abstract class AtomicConstraintFactory {
 
     private InSetConstraint createInSetConstraint(InSetConstraintDTO dto, Field field)
     {
-        DistributedList<Object> values = DistributedList.uniform(dto.values.stream()
+        DistributedList<Object> values = DistributedList.weightedOrDefault(dto.values.stream()
             .distinct()
             .map(this::parseValue)
             .collect(Collectors.toList()));

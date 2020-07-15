@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.AtomicConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ConstraintValidator;
@@ -59,7 +60,9 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         {
             return ValidationResult.failure("Value " + value + " must be a boolean" + getErrorInfo(dto));
         }
-        if (!(value instanceof Number || value instanceof String && isNumber((String)value)) && fieldType == FieldType.NUMERIC)
+        if (!(value instanceof Number || value instanceof String && isNumber((String)value) ||
+            value instanceof WeightedElement && !(((WeightedElement) value).element() instanceof Number)) &&
+            fieldType == FieldType.NUMERIC)
         {
             return ValidationResult.failure("Value " + value + " must be a number" + getErrorInfo(dto));
         }
