@@ -60,6 +60,29 @@ class DistributedListTest {
         assertEquals(manualSet, uniformSet);
     }
 
+    @Test
+    public void testWeightedOrDefaultPassesThroughWeightedElements() {
+        WeightedElement<String> firstManual = new WeightedElement<>("first", 0.2);
+        WeightedElement<String> secondManual = new WeightedElement<>("second", 0.3);
+        WeightedElement<String> thirdManual = new WeightedElement<>("third", 0.5);
+
+        WeightedElement<String> first = new WeightedElement<>("first", 2);
+        WeightedElement<String> second = new WeightedElement<>("second", 3);
+        WeightedElement<String> third = new WeightedElement<>("third", 5);
+
+        List<WeightedElement<String>> manualElements = Arrays.asList(
+            firstManual,
+            secondManual,
+            thirdManual
+        );
+        DistributedList<String> manualSet = new DistributedList<>(manualElements);
+
+        List<WeightedElement<String>> elements = Arrays.asList(first, second, third);
+        DistributedList<WeightedElement<String>> weightedSet = DistributedList.weightedOrDefault(elements);
+
+        assertEquals(manualSet, weightedSet);
+    }
+
     private DistributedList<String> prepareTwoElementSet() {
         List<WeightedElement<String>> holders = Stream.of("first", "second", "third", "fourth")
             .map(WeightedElement::withDefaultWeight)
