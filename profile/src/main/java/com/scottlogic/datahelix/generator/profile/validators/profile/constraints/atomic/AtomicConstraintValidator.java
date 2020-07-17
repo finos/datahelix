@@ -94,7 +94,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
         {
             return ValidationResult.failure("Field must be specified" + getErrorInfo(dto));
         }
-        Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(fieldName)).findFirst();
+        Optional<FieldDTO> field = findField(fieldName);
         if (!field.isPresent())
         {
             return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(fieldName), getErrorInfo(dto)));

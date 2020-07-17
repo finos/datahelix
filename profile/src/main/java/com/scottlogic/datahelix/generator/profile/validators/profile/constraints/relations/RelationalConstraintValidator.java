@@ -22,50 +22,55 @@ import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.DateTimeGranularityValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.NumericGranularityValidator;
 
 import java.util.List;
 import java.util.Optional;
 
-public class RelationalConstraintValidator<T extends RelationalConstraintDTO> extends ConstraintValidator<T>
+import static com.scottlogic.datahelix.generator.common.validators.ValidationResult.quote;
+
+abstract public class RelationalConstraintValidator<T extends RelationalConstraintDTO> extends ConstraintValidator<T>
 {
+    protected static final String FIELD_DESCRIPTION = "Field";
+    protected static final String RELATED_FIELD_DESCRIPTION = "Related field";
+
     public RelationalConstraintValidator(List<FieldDTO> fields)
     {
         super(fields);
     }
 
-    @Override
-    public ValidationResult validate(T dto)
+    protected ValidationResult offsetMustBeValid(T dto)
     {
-        String fieldName = dto.field;
-        String otherFieldName = dto.getOtherField();
-        if (fieldName == null || fieldName.isEmpty())
+        boolean withoutOffsetUnit = dto.offsetUnit == null || dto.offsetUnit.isEmpty();
+        Optional<FieldType> fieldType = findField(dto.field)
+            .map(f -> FieldValidator.getSpecificFieldType(f).getFieldType());
+
+        if (!fieldType.isPresent() || withoutOffsetUnit) return ValidationResult.success();
+
+        switch (fieldType.get())
         {
-            return ValidationResult.failure("Field must be specified" + getErrorInfo(dto));
-        }
-        if (otherFieldName == null || otherFieldName.isEmpty())
-        {
-            return ValidationResult.failure("Related field must be specified" + getErrorInfo(dto));
-        }
-        Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(fieldName)).findFirst();
-        if (!field.isPresent())
-        {
-            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(fieldName), getErrorInfo(dto)));
-        }
-        Optional<FieldDTO> otherField = fields.stream().filter(f -> f.name.equals(otherFieldName)).findFirst();
-        if (!otherField.isPresent())
-        {
-            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(otherFieldName), getErrorInfo(dto)));
-        }
-        FieldType fieldType = FieldValidator.getSpecificFieldType(field.get()).getFieldType();
-        FieldType otherFieldType = FieldValidator.getSpecificFieldType(otherField.get()).getFieldType();
-        if (fieldType != otherFieldType)
-        {
-            return ValidationResult.failure(String.format("Field type %s doesn't match related field type %s%s", ValidationResult.quote(fieldName), ValidationResult.quote(otherFieldName), getErrorInfo(dto)));
-        }
-        if (dto.offsetUnit != null && !dto.offsetUnit.isEmpty())
-        {
-            return validateGranularity(dto, dto.field, dto.offsetUnit);
+            case BOOLEAN:
+                return ValidationResult.failure(String.format("Offset is not supported for boolean fields%s", getErrorInfo(dto)));
+            case STRING:
+                return ValidationResult.failure(String.format("Offset is not supported for string fields%s", getErrorInfo(dto)));
+            case DATETIME:
+                return new DateTimeGranularityValidator(getErrorInfo(dto)).validate(dto.offsetUnit);
+            case NUMERIC:
+                return new NumericGranularityValidator(getErrorInfo(dto)).validate(dto.offsetUnit);
         }
         return ValidationResult.success();
+    }
+
+    protected ValidationResult fieldMustBeValid(T dto, String fieldName, String fieldDescription)
+    {
+        if (fieldName == null || fieldName.isEmpty())
+        {
+            return ValidationResult.failure(String.format("%s must be specified%s", fieldDescription, getErrorInfo(dto)));
+        }
+
+        return findField(fieldName).isPresent()
+            ? ValidationResult.success()
+            : ValidationResult.failure(String.format("%s must be defined in fields%s", quote(fieldName), getErrorInfo(dto)));
     }
 }

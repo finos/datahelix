@@ -36,18 +36,23 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.A
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.EqualToFieldConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.RelationalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.DateTimeGranularityValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.NumericGranularityValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AllOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.AnyOfConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.ConditionalConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical.NotConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.EqualToFieldConstraintValidator;
 import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.InMapConstraintValidator;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.RelationalConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.NumericRelationalConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations.TemporalRelationalConstraintValidator;
 
 import java.util.List;
+import java.util.Optional;
 
 public abstract class ConstraintValidator<T extends ConstraintDTO> implements Validator<T>
 {
@@ -76,22 +81,24 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
             case IN_MAP:
                 return new InMapConstraintValidator(fields).validate((InMapConstraintDTO) dto);
             case IS_NULL:
-                return new IsNullConstraintValidator(fields).validate((IsNullConstraintDTO)dto);
+                return new IsNullConstraintValidator(fields).validate((IsNullConstraintDTO) dto);
             case GRANULAR_TO:
                 return new GranularToConstraintValidator(fields).validate((GranularToConstraintDTO) dto);
             case MATCHES_REGEX:
             case CONTAINS_REGEX:
                 return new RegexConstraintValidator(fields).validate((RegexConstraintDTO) dto);
             case EQUAL_TO_FIELD:
+                return new EqualToFieldConstraintValidator(fields).validate((EqualToFieldConstraintDTO) dto);
             case GREATER_THAN_FIELD:
             case GREATER_THAN_OR_EQUAL_TO_FIELD:
             case LESS_THAN_FIELD:
             case LESS_THAN_OR_EQUAL_TO_FIELD:
+                return new NumericRelationalConstraintValidator(fields).validate((RelationalConstraintDTO) dto);
             case AFTER_FIELD:
             case AFTER_OR_AT_FIELD:
             case BEFORE_FIELD:
             case BEFORE_OR_AT_FIELD:
-                return new RelationalConstraintValidator<>(fields).validate((RelationalConstraintDTO) dto);
+                return new TemporalRelationalConstraintValidator(fields).validate((RelationalConstraintDTO) dto);
             case OF_LENGTH:
                 return new OfLengthConstraintValidator(fields, FieldType.STRING).validate((OfLengthConstraintDTO) dto);
             case LONGER_THAN:
@@ -140,11 +147,14 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
         return ValidationResult.success();
     }
 
+    protected Optional<FieldDTO> findField(String field)
+    {
+        return fields.stream().filter(f -> f.name.equals(field)).findFirst();
+    }
+
     protected FieldDTO getField(String field)
     {
-        return fields.stream()
-            .filter(f -> f.name.equals(field))
-            .findFirst()
+        return findField(field)
             .orElseThrow(() -> new IllegalStateException(String.format("Field '%s' referenced but can not be found", field)));
     }
 
@@ -159,6 +169,8 @@ public abstract class ConstraintValidator<T extends ConstraintDTO> implements Va
                 return ValidationResult.failure(String.format("Granularity %s is not supported for string fields%s", ValidationResult.quote(value), getErrorInfo(dto)));
             case DATETIME:
                 return new DateTimeGranularityValidator(getErrorInfo(dto)).validate((String) value);
+            case NUMERIC:
+                return new NumericGranularityValidator(getErrorInfo(dto)).validate(value);
         }
         return ValidationResult.success();
     }

@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.creation;
 
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.AfterFieldConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.EqualToFieldConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.GreaterThanFieldConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 
@@ -53,6 +54,16 @@ public class RelationsConstraintDTOBuilder
     public AfterFieldConstraintDTO afterField(String otherField)
     {
         AfterFieldConstraintDTO dto = new AfterFieldConstraintDTO();
+        dto.field = field;
+        dto.offset = offset;
+        dto.offsetUnit = offsetUnit;
+        dto.otherField = otherField;
+        return dto;
+    }
+
+    public EqualToFieldConstraintDTO equalToField(String otherField)
+    {
+        EqualToFieldConstraintDTO dto = new EqualToFieldConstraintDTO();
         dto.field = field;
         dto.offset = offset;
         dto.offsetUnit = offsetUnit;

@@ -592,7 +592,7 @@ public class JsonProfileReaderTests {
             "    ]" +
             "}");
 
-        expectValidationException("Numeric granularity must be <= 1");
+        expectValidationException("Numeric granularity must be <= 1 | Field: 'foo' | Constraint: 'granularTo'");
     }
 
     @Test
@@ -605,7 +605,7 @@ public class JsonProfileReaderTests {
             "    ]" +
             "}");
 
-        expectValidationException("Numeric granularity must be fractional power of ten");
+        expectValidationException("Numeric granularity must be fractional power of ten | Field: 'foo' | Constraint: 'granularTo'");
     }
 
     @Test
