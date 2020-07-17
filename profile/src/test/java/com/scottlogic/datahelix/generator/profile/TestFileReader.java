@@ -16,24 +16,44 @@
 package com.scottlogic.datahelix.generator.profile;
 
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class TestFileReader extends FileReader {
+    private final boolean weighted;
+
     public TestFileReader() {
         super(null);
+        weighted = false;
+    }
+
+    public TestFileReader(boolean weighted) {
+        super(null);
+        this.weighted = weighted;
     }
 
     @Override
     public DistributedList<Object> setFromFile(File file) {
-        return DistributedList.uniform(Collections.singleton("test"));
+        return weighted
+            ? this.getDistributedListWithWeights()
+            : DistributedList.uniform(Collections.singleton("test"));
     }
     @Override
     public DistributedList<String> listFromMapFile(File file, String key) {
         return DistributedList.uniform(Collections.singleton("test"));
     }
 
+    private static DistributedList<Object> getDistributedListWithWeights() {
+        List<Object> elements = Arrays.asList(
+            new WeightedElement<>("test1", 20),
+            new WeightedElement<>("test2", 80)
+        );
+        return DistributedList.weightedOrDefault(elements);
+    }
 }
 

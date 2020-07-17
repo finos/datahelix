@@ -39,4 +39,17 @@ class WeightedElementTest {
         assertEquals(weight, weightedElement.weight());
     }
 
+    @Test
+    public void testParseValueParsesElement() {
+        final int element = 1;
+        final double weight = 1D;
+        WeightedElement<Integer> weightedElement = new WeightedElement<>(element, weight);
+
+        WeightedElement parsedElement = (WeightedElement) WeightedElement.parseValue(
+            weightedElement,
+            e -> Integer.toString((int) e)
+        );
+
+        assertTrue(parsedElement.element() instanceof String);
+    }
 }
