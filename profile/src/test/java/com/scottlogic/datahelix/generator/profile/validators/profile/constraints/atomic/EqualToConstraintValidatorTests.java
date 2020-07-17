@@ -110,6 +110,6 @@ public class EqualToConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'text' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a string | Field: 'text' | Constraint: 'equalTo'"));
     }
 }

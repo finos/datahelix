@@ -16,9 +16,12 @@
 
 package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
 
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.ValueTypeValidator;
 
 import java.util.List;
 
@@ -33,9 +36,11 @@ public class GranularToConstraintValidator extends AtomicConstraintValidator<Gra
     public final ValidationResult validate(GranularToConstraintDTO dto)
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
-        if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
-        ValidationResult valueMustBeValid = fieldTypeMustMatchValueType(dto, dto.value);
-        if(!valueMustBeValid.isSuccess) return valueMustBeValid;
+        if (!fieldMustBeValid.isSuccess) return fieldMustBeValid;
+
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
+        ValidationResult valueMustBeValid = new ValueTypeValidator(fieldType, getErrorInfo(dto)).validate(dto.value);
+        if (!valueMustBeValid.isSuccess) return valueMustBeValid;
 
         return validateGranularity(dto, dto.field, dto.value);
     }

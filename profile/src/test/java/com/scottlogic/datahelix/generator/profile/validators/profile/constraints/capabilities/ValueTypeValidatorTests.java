@@ -15,19 +15,10 @@
  */
 package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities;
 
-import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
-import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
-import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
-import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic.EqualToConstraintValidator;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstraintDTOBuilder.atomicConstraintDTO;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertFalse;
@@ -36,21 +27,13 @@ import static org.junit.Assert.assertTrue;
 
 public class ValueTypeValidatorTests
 {
-    private final List<FieldDTO> fields = Arrays.asList
-        (
-            FieldDTOBuilder.fieldDTO("text", StandardSpecificFieldType.STRING).build(),
-            FieldDTOBuilder.fieldDTO("decimal", StandardSpecificFieldType.DECIMAL).build(),
-            FieldDTOBuilder.fieldDTO("boolean", StandardSpecificFieldType.BOOLEAN).build()
-        );
+    public static final String ERROR_INFO = " | error info";
 
     @Test
     public void validateValueType_withStringTypeAndValidData_succeeds()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("text").buildEqualTo("test");
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.STRING, ERROR_INFO).validate("test");
 
         // Assert
         assertTrue(validationResult.isSuccess);
@@ -59,42 +42,32 @@ public class ValueTypeValidatorTests
     @Test
     public void validateValueType_withStringTypeAndNumericValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("text").buildEqualTo(1.1);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.STRING, ERROR_INFO).validate(1.1);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | error info"));
     }
 
     @Test
     public void validateValueType_withStringTypeAndBooleanValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("text").buildEqualTo(true);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.STRING, ERROR_INFO).validate(true);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'text' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a string | error info"));
     }
 
     @Test
     public void validateValueType_withNumericTypeAndValidData_succeeds()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("decimal").buildEqualTo(1.1);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.NUMERIC, ERROR_INFO).validate(1.1);
 
         // Assert
         assertTrue(validationResult.isSuccess);
@@ -103,42 +76,32 @@ public class ValueTypeValidatorTests
     @Test
     public void validateValueType_withNumericTypeAndStringValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("decimal").buildEqualTo("text");
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.NUMERIC, ERROR_INFO).validate("text");
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 'text' must be a number | Field: 'decimal' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value 'text' must be a number | error info"));
     }
 
     @Test
     public void validateValueType_withNumericTypeAndBooleanValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("decimal").buildEqualTo(true);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.NUMERIC, ERROR_INFO).validate(true);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'decimal' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a number | error info"));
     }
 
     @Test
     public void validateValueType_withBooleanTypeAndValidData_succeeds()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("boolean").buildEqualTo(true);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.BOOLEAN, ERROR_INFO).validate(true);
 
         // Assert
         assertTrue(validationResult.isSuccess);
@@ -147,33 +110,24 @@ public class ValueTypeValidatorTests
     @Test
     public void validateValueType_withBooleanTypeAndNumericValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("boolean").buildEqualTo(1.1);
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.BOOLEAN, ERROR_INFO).validate(1.1);
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'boolean' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a boolean | error info"));
     }
 
-    // TODO: validation should fail, but currently succeeds
-    @Disabled
     @Test
     public void validateValueType_withBooleanTypeAndStringValue_fails()
     {
-        // Arrange
-        EqualToConstraintDTO dto = atomicConstraintDTO("boolean").buildEqualTo("text");
-
         // Act
-        ValidationResult validationResult = new EqualToConstraintValidator(fields).validate(dto);
+        ValidationResult validationResult = new ValueTypeValidator(FieldType.BOOLEAN, ERROR_INFO).validate("text");
 
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Value 'text' must be a boolean | Field: 'boolean' | Constraint: 'equalTo'"));
+        assertThat(validationResult.errors, hasItem("Value 'text' must be a boolean | error info"));
     }
 }

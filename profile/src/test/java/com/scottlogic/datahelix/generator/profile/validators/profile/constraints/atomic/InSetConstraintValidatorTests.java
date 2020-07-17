@@ -153,7 +153,6 @@ public class InSetConstraintValidatorTests
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(2));
         assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'inSet'"));
-        // TODO: This error message is not helpful or correct
-        assertThat(validationResult.errors, hasItem("Value true must be a boolean | Field: 'text' | Constraint: 'inSet'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a string | Field: 'text' | Constraint: 'inSet'"));
     }
 }
