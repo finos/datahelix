@@ -20,7 +20,6 @@ import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -134,8 +133,6 @@ public class InMapConstraintValidatorTests
         assertThat(validationResult.errors, hasItem("Values must be specified | Constraint: 'inMap'"));
     }
 
-    // TODO: Type checking of value list is missing
-    @Disabled
     @Test
     public void validateInMapConstraint_withInvalidData_fails()
     {
@@ -147,7 +144,7 @@ public class InMapConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(2));
-        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Field: 'text' | Constraint: 'inMap'"));
-        assertThat(validationResult.errors, hasItem("Value true must be a string | Field: 'text' | Constraint: 'inMap'"));
+        assertThat(validationResult.errors, hasItem("Value 1.1 must be a string | Constraint: 'inMap'"));
+        assertThat(validationResult.errors, hasItem("Value true must be a string | Constraint: 'inMap'"));
     }
 }

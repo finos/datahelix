@@ -21,7 +21,6 @@ import com.scottlogic.datahelix.generator.profile.creation.ConstraintDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -143,8 +142,6 @@ public class ConditionalConstraintValidatorTests
         assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
     }
 
-    // TODO: should fail, but is successful
-    @Disabled
     @Test
     public void validateConditionalConstraint_withInvalidElseConstraint_fails()
     {
