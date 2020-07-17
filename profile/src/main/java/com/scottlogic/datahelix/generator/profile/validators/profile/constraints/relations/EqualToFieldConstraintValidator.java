@@ -40,10 +40,10 @@ public class EqualToFieldConstraintValidator extends RelationalConstraintValidat
             fieldMustBeValid(dto, dto.getOtherField(), RELATED_FIELD_DESCRIPTION),
             offsetMustBeValid(dto)
         );
-        return fieldsAndOffsetValid.isSuccess ? fieldAndOtherFieldMustHaveType(dto) : fieldsAndOffsetValid;
+        return fieldsAndOffsetValid.isSuccess ? fieldAndOtherFieldMustHaveMatchingType(dto) : fieldsAndOffsetValid;
     }
 
-    private ValidationResult fieldAndOtherFieldMustHaveType(EqualToFieldConstraintDTO dto)
+    private ValidationResult fieldAndOtherFieldMustHaveMatchingType(EqualToFieldConstraintDTO dto)
     {
         FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
         FieldType otherFieldType = FieldValidator.getSpecificFieldType(getField(dto.getOtherField())).getFieldType();
