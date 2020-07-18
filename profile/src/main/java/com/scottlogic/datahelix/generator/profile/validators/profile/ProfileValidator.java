@@ -78,8 +78,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
         fields.forEach(field ->
         {
-            if (!fieldNames.add(field.name))
-            {
+            if (!fieldNames.add(field.name)) {
                 duplicateFieldNames.add(field.name);
             }
         });
@@ -92,7 +91,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
     private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
     {
         FieldValidator fieldValidator = new FieldValidator();
-        ValidationResult eachFieldsMustBeValid =  ValidationResult.combine(fields.stream().map(fieldValidator::validate));
+        ValidationResult eachFieldsMustBeValid = ValidationResult.combine(fields.stream().map(fieldValidator::validate));
         if (!eachFieldsMustBeValid.isSuccess) return eachFieldsMustBeValid;
 
         return fieldsMustBeUnique(fields);
@@ -124,12 +123,10 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
     private ValidationResult uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(ProfileDTO dto)
     {
-        if (configSource == null)
-        {
+        if (configSource == null) {
             return ValidationResult.success();
         }
-        if (configSource.getCombinationStrategyType() != MINIMAL && dto.fields.stream().anyMatch(f -> f.unique))
-        {
+        if (configSource.getCombinationStrategyType() != MINIMAL && dto.fields.stream().anyMatch(f -> f.unique)) {
             return ValidationResult.failure("Unique fields do not work when not using Minimal combination strategy");
         }
         return ValidationResult.success();

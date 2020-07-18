@@ -81,18 +81,14 @@ public class ValidationResult
 
     public static String quote(Object value)
     {
-        if (value instanceof Collection)
-        {
+        if (value instanceof Collection) {
             Collection<Object> values = (Collection<Object>) value;
             return values.stream().map(ValidationResult::quote).collect(Collectors.joining(", "));
-        } else if (value instanceof String)
-        {
+        } else if (value instanceof String) {
             return String.format("'%s'", ((String) value).replace("'", "\\'"));
-        } else if (value == null)
-        {
+        } else if (value == null) {
             return "NULL";
-        } else
-        {
+        } else {
             return value.toString();
         }
     }

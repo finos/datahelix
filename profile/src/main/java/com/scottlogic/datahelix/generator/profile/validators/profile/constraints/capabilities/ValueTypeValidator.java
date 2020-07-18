@@ -35,17 +35,14 @@ public class ValueTypeValidator implements Validator<Object>
     @Override
     public final ValidationResult validate(Object value)
     {
-        if (value == null)
-        {
+        if (value == null) {
             return ValidationResult.failure("Values must be specified" + errorInfo);
         }
-        if (value instanceof WeightedElement)
-        {
+        if (value instanceof WeightedElement) {
             return validate(((WeightedElement) value).element());
         }
 
-        switch (expectedFieldType)
-        {
+        switch (expectedFieldType) {
             case BOOLEAN:
                 return value instanceof Boolean
                     ? ValidationResult.success()
@@ -61,12 +58,10 @@ public class ValueTypeValidator implements Validator<Object>
 
     private static boolean isNumber(String s)
     {
-        try
-        {
+        try {
             Double.parseDouble(s);
             return true;
-        } catch (NumberFormatException | NullPointerException e)
-        {
+        } catch (NumberFormatException | NullPointerException e) {
             return false;
         }
     }

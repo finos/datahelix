@@ -35,8 +35,8 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
     @Override
     public final ValidationResult validate(InSetConstraintDTO dto)
     {
-        ValidationResult result = ValidationResult.combine(valuesMustBeSpecified(dto),fieldMustBeValid(dto));
-        if(!result.isSuccess) return result;
+        ValidationResult result = ValidationResult.combine(valuesMustBeSpecified(dto), fieldMustBeValid(dto));
+        if (!result.isSuccess) return result;
 
         return fieldTypeMustBeValid(dto);
     }

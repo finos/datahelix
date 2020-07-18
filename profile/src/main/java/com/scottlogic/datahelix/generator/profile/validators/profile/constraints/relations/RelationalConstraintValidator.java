@@ -48,8 +48,7 @@ abstract public class RelationalConstraintValidator<T extends RelationalConstrai
 
         if (!fieldType.isPresent() || withoutOffsetUnit) return ValidationResult.success();
 
-        switch (fieldType.get())
-        {
+        switch (fieldType.get()) {
             case BOOLEAN:
                 return ValidationResult.failure(String.format("Offset is not supported for boolean fields%s", getErrorInfo(dto)));
             case STRING:
@@ -64,8 +63,7 @@ abstract public class RelationalConstraintValidator<T extends RelationalConstrai
 
     protected ValidationResult fieldMustBeValid(T dto, String fieldName, String fieldDescription)
     {
-        if (fieldName == null || fieldName.isEmpty())
-        {
+        if (fieldName == null || fieldName.isEmpty()) {
             return ValidationResult.failure(String.format("%s must be specified%s", fieldDescription, getErrorInfo(dto)));
         }
 

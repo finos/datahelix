@@ -131,7 +131,7 @@ public class CucumberTestState {
 
     public void addNullableField(String fieldName)
     {
-        FieldDTO fieldDTO = fieldDTOWithStringType(fieldName).withNullablity().build();
+        FieldDTO fieldDTO = fieldDTOWithStringType(fieldName).withNullability().build();
         this.profileFields.add(fieldDTO);
     }
 

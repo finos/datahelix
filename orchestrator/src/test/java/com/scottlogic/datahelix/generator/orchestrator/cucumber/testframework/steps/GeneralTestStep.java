@@ -173,14 +173,11 @@ public class GeneralTestStep {
             .getProfileValidationErrors()
             .collect(Collectors.toList());
 
-        if (errors.size() == 0)
-        {
+        if (errors.size() == 0) {
             Assert.fail("No profile validation errors were raised");
-        } else if (errors.size() != 1)
-        {
+        } else if (errors.size() != 1) {
             Assert.fail("More than one profile validation errors were raised");
-        } else
-        {
+        } else {
             Assert.assertThat(
                 "Expected profile validation error",
                 errors.get(0), equalTo(expectedError));
@@ -210,14 +207,11 @@ public class GeneralTestStep {
             .getProfileValidationErrors()
             .collect(Collectors.toList());
 
-        if (errors.size() == 0)
-        {
+        if (errors.size() == 0) {
             Assert.fail("No profile validation errors were raised");
-        } else if (errors.size() != 1)
-        {
+        } else if (errors.size() != 1) {
             Assert.fail("More than one profile validation errors were raised");
-        } else
-        {
+        } else {
             Assert.assertThat(
                 "Expected profile validation error",
                 errors.get(0), containsString(expectedError));

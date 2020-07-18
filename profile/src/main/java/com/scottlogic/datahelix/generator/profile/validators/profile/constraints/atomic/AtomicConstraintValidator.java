@@ -42,8 +42,7 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
     ValidationResult fieldTypeMustMatchValueType(T dto, FieldType expectedFieldType)
     {
         FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
-        if (expectedFieldType != fieldType)
-        {
+        if (expectedFieldType != fieldType) {
             return ValidationResult.failure(String.format("Expected field type %s doesn't match field type %s%s", ValidationResult.quote(expectedFieldType), ValidationResult.quote(fieldType), getErrorInfo(dto)));
         }
         return ValidationResult.success();
@@ -52,13 +51,11 @@ abstract class AtomicConstraintValidator<T extends AtomicConstraintDTO> extends 
     ValidationResult fieldMustBeValid(T dto)
     {
         String fieldName = dto.field;
-        if (fieldName == null || fieldName.isEmpty())
-        {
+        if (fieldName == null || fieldName.isEmpty()) {
             return ValidationResult.failure("Field must be specified" + getErrorInfo(dto));
         }
         Optional<FieldDTO> field = findField(fieldName);
-        if (!field.isPresent())
-        {
+        if (!field.isPresent()) {
             return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(fieldName), getErrorInfo(dto)));
         }
         return ValidationResult.success();

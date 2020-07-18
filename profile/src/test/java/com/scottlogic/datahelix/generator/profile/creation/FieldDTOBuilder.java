@@ -57,7 +57,7 @@ public class FieldDTOBuilder
         return new FieldDTOBuilder(name, type, formatting, true, nullable);
     }
 
-    public FieldDTOBuilder withNullablity()
+    public FieldDTOBuilder withNullability()
     {
         return new FieldDTOBuilder(name, type, formatting, unique, true);
     }

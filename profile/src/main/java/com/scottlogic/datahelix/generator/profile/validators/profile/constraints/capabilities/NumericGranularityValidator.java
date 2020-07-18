@@ -33,12 +33,10 @@ public class NumericGranularityValidator implements Validator<Object>
     @Override
     public final ValidationResult validate(Object granularity)
     {
-        try
-        {
+        try {
             NumericGranularity.create(granularity);
             return ValidationResult.success();
-        } catch (ValidationException e)
-        {
+        } catch (ValidationException e) {
             return ValidationResult.failure(String.format("%s%s", e.getMessage(), errorInfo));
         }
     }
