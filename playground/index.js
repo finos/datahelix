@@ -1,4 +1,4 @@
-const generatorEndpoint = "https://1551npsbdh.execute-api.eu-west-2.amazonaws.com/api/generator";
+const generatorEndpoint = "https://un5ldd2avb.execute-api.eu-west-2.amazonaws.com/api/generator";
 const runButton = document.getElementById("run");
 const generatorOutputPanel = document.getElementById("output-panel");
 const profileArea = document.getElementById("profile");
