@@ -34,6 +34,7 @@ import static org.junit.Assert.assertTrue;
 
 public class RegexConstraintValidatorTests
 {
+    private final static String newLine = System.lineSeparator();
 
 
     private final List<FieldDTO> fields = Arrays.asList
@@ -127,7 +128,7 @@ public class RegexConstraintValidatorTests
         // Assert
         assertFalse(validationResult.isSuccess);
         assertThat(validationResult.errors, iterableWithSize(1));
-        assertThat(validationResult.errors, hasItem("Regex is invalid | Dangling meta character '*' near index 2\n/*****/\n  ^"));
+        assertThat(validationResult.errors, hasItem(String.format("Regex is invalid | Dangling meta character '*' near index 2%s/*****/%s  ^", newLine, newLine)));
     }
 
     @Test
