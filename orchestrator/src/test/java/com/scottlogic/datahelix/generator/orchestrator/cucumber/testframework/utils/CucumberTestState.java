@@ -46,12 +46,13 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.C
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
 import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializerFactory;
 
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder.fieldDTOWithStringType;
 
 /**
  * Class to represent the state during cucumber test running and execution
@@ -122,16 +123,15 @@ public class CucumberTestState {
     }
 
 
-    public void addNonNullableField(String fieldName) {
-        FieldDTO fieldDTO = new FieldDTO();
-        fieldDTO.name = fieldName;
+    public void addNonNullableField(String fieldName)
+    {
+        FieldDTO fieldDTO = fieldDTOWithStringType(fieldName).build();
         this.profileFields.add(fieldDTO);
     }
 
-    public void addNullableField(String fieldName) {
-        FieldDTO fieldDTO = new FieldDTO();
-        fieldDTO.name = fieldName;
-        fieldDTO.nullable = true;
+    public void addNullableField(String fieldName)
+    {
+        FieldDTO fieldDTO = fieldDTOWithStringType(fieldName).withNullability().build();
         this.profileFields.add(fieldDTO);
     }
 

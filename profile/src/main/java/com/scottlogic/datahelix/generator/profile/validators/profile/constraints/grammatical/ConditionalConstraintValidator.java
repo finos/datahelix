@@ -22,7 +22,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.C
 
 import java.util.List;
 
-public class ConditionalConstraintValidator  extends GrammaticalConstraintValidator<ConditionalConstraintDTO>
+public class ConditionalConstraintValidator extends GrammaticalConstraintValidator<ConditionalConstraintDTO>
 {
     public ConditionalConstraintValidator(List<FieldDTO> fields)
     {
@@ -38,7 +38,7 @@ public class ConditionalConstraintValidator  extends GrammaticalConstraintValida
             : validateConstraint(conditionalConstraint.thenConstraint, fields);
         ValidationResult validateElseConstraint = conditionalConstraint.elseConstraint == null
             ? ValidationResult.success()
-            :validateConstraint(conditionalConstraint.ifConstraint, fields);
+            : validateConstraint(conditionalConstraint.elseConstraint, fields);
 
         return ValidationResult.combine(validateIfConstraint, validateThenConstraint, validateElseConstraint);
     }

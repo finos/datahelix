@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
+package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities;
 
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
@@ -33,15 +33,12 @@ public class DateTimeGranularityValidator implements Validator<String>
     @Override
     public final ValidationResult validate(String value)
     {
-        try
-        {
-            if(value.equalsIgnoreCase("WORKING DAYS"))
-            {
+        try {
+            if (value.equalsIgnoreCase("WORKING DAYS")) {
                 return ValidationResult.success();
             }
             ChronoUnit chronoUnit = Enum.valueOf(ChronoUnit.class, value.toUpperCase());
-            switch (chronoUnit)
-            {
+            switch (chronoUnit) {
                 case MILLIS:
                 case SECONDS:
                 case MINUTES:
@@ -53,9 +50,8 @@ public class DateTimeGranularityValidator implements Validator<String>
                 default:
                     throw new IllegalStateException("Unsupported granularity: " + chronoUnit);
             }
-        } catch (Exception e)
-        {
-           return ValidationResult.failure("Granularity " + value + " is not supported" + errorInfo);
+        } catch (Exception e) {
+            return ValidationResult.failure(String.format("Granularity %s is not supported%s", ValidationResult.quote(value), errorInfo));
         }
     }
 }

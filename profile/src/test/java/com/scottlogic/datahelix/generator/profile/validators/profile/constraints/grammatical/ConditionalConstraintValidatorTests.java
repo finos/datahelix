@@ -17,45 +17,146 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
+import com.scottlogic.datahelix.generator.profile.creation.ConstraintDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstraintDTOBuilder.atomicConstraintDTO;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConditionalConstraintValidatorTests {
+public class ConditionalConstraintValidatorTests
+{
 
     private final List<FieldDTO> fields = Arrays.asList
         (
-            FieldDTOBuilder.create("integer", StandardSpecificFieldType.INTEGER.toSpecificFieldType())
+            FieldDTOBuilder.fieldDTO("text", StandardSpecificFieldType.STRING).build(),
+            FieldDTOBuilder.fieldDTO("decimal", StandardSpecificFieldType.DECIMAL).build(),
+            FieldDTOBuilder.fieldDTO("boolean", StandardSpecificFieldType.BOOLEAN).build()
         );
 
     @Test
-    public void validateConditionalConstraint_withNullThenConstraint_shouldResultInValidationFailure()
+    public void validateConditionalConstraint_withValidIfAndThen_succeeds()
     {
-        // Arrange
-        EqualToConstraintDTO equalToConstraint = new EqualToConstraintDTO();
-        equalToConstraint.field = "integer";
-        equalToConstraint.value = 1;
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("text").buildIsNull(false),
+            atomicConstraintDTO("decimal").buildIsNull(false)
+        );
 
-        ConditionalConstraintDTO dto = new ConditionalConstraintDTO();
-        dto.ifConstraint = equalToConstraint;
-        dto.thenConstraint = null;
-        dto.elseConstraint  = null;
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertTrue(validationResult.isSuccess);
+    }
+
+    @Test
+    public void validateConditionalConstraint_withValidIfThenAndElse_succeeds()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("text").buildIsNull(false),
+            atomicConstraintDTO("decimal").buildIsNull(false),
+            atomicConstraintDTO("boolean").buildIsNull(false)
+        );
+
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertTrue(validationResult.isSuccess);
+    }
+
+    @Test
+    public void validateConditionalConstraint_withUnspecifiedIfConstraint_fails()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            null,
+            atomicConstraintDTO("decimal").buildIsNull(false)
+        );
 
         // Act
         ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
-        assertEquals(1, validationResult.errors.size());
-        assertTrue(validationResult.errors.contains("'if' constraint must also have an associated 'then' constraint"));
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Constraint must not be null"));
+    }
+
+    @Test
+    public void validateConditionalConstraint_withInvalidIfConstraint_fails()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("unknown").buildIsNull(false),
+            atomicConstraintDTO("decimal").buildIsNull(false)
+        );
+
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
+    }
+
+    @Test
+    public void validateConditionalConstraint_withUnspecifiedThenConstraint_fails()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("text").buildIsNull(false),
+            null
+        );
+
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'if' constraint must also have an associated 'then' constraint"));
+    }
+
+    @Test
+    public void validateConditionalConstraint_withInvalidThenConstraint_fails()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("text").buildIsNull(false),
+            atomicConstraintDTO("unknown").buildIsNull(false)
+        );
+
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
+    }
+
+    @Test
+    public void validateConditionalConstraint_withInvalidElseConstraint_fails()
+    {
+        ConditionalConstraintDTO dto = ConstraintDTOBuilder.conditional(
+            atomicConstraintDTO("text").buildIsNull(false),
+            atomicConstraintDTO("decimal").buildIsNull(false),
+            atomicConstraintDTO("unknown").buildIsNull(false)
+        );
+
+        // Act
+        ValidationResult validationResult = new ConditionalConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'isNull'"));
     }
 }

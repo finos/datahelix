@@ -112,10 +112,18 @@ public class JsonProfileReaderTests {
     private Profile getResultingProfile() {
         return jsonProfileReader.read(Paths.get("test"), json);
     }
-    
-    private void expectValidationException(String message) {
+
+    private void expectValidationException(String message)
+    {
         Throwable exception = Assertions.assertThrows(ValidationException.class, this::getResultingProfile);
         Assertions.assertEquals(message, exception.getMessage());
+    }
+
+    @SafeVarargs
+    private final void expectValidationErrors(Consumer<String>... errorAssertions)
+    {
+        ValidationException validationException = Assertions.assertThrows(ValidationException.class, this::getResultingProfile);
+        expectMany(validationException.errorMessages, errorAssertions);
     }
 
     @SafeVarargs
@@ -160,6 +168,111 @@ public class JsonProfileReaderTests {
             Assert.fail("Sequences had different numbers of elements");
     }
 
+    @Test
+    public void shouldRejectMissingFieldsAndConstraints()
+    {
+        givenJson("{}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified"))
+            , error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectMissingFields()
+    {
+        givenJson(
+            "{" +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    @Test
+    public void shouldRejectNullFields()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": null," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    @Test
+    public void shouldRejectEmptyFields()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": []," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Fields must be specified")));
+    }
+
+    @Test
+    public void shouldRejectFieldsContainingANull()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [" +
+                "        { \"name\": \"f1\", \"type\": \"string\" }," +
+                "        null" +
+                "    ]," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field must not be null")));
+    }
+
+    @Test
+    public void shouldRejectFieldWithUnrecognisedType()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \" string\" } ]," +
+                "    \"constraints\": []" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Field type ' string' is not supported | Field: 'f1'")));
+    }
+
+    @Test
+    public void shouldRejectMissingConstraints()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectNullConstraints()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
+                "    \"constraints\": null" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraints must be specified")));
+    }
+
+    @Test
+    public void shouldRejectConstraintsContainingNull()
+    {
+        givenJson(
+            "{" +
+                "    \"fields\": [ { \"name\": \"f1\", \"type\": \"string\" } ]," +
+                "    \"constraints\": [null]" +
+                "}");
+
+        expectValidationErrors(error -> Assert.assertThat(error, equalTo("Constraint must not be null")));
+    }
 
     @Test
     public void shouldDeserialiseSingleField() {
@@ -479,7 +592,7 @@ public class JsonProfileReaderTests {
             "    ]" +
             "}");
 
-        expectValidationException("Numeric granularity must be <= 1");
+        expectValidationException("Numeric granularity must be <= 1 | Field: 'foo' | Constraint: 'granularTo'");
     }
 
     @Test
@@ -492,11 +605,12 @@ public class JsonProfileReaderTests {
             "    ]" +
             "}");
 
-        expectValidationException("Numeric granularity must be fractional power of ten");
+        expectValidationException("Numeric granularity must be fractional power of ten | Field: 'foo' | Constraint: 'granularTo'");
     }
 
     @Test
-    public void shouldRejectEqualToWithNullValue() {
+    public void shouldRejectEqualToWithNullValue()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -505,24 +619,25 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: equalTo");
+        expectValidationException("Values must be specified | Field: 'foo' | Constraint: 'equalTo'");
     }
 
     @Test
-    public void shouldRejectLessThanWithNullValue() {
+    public void shouldRejectLessThanWithNullValue()
+    {
         givenJson(
             "{" +
-                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
+                "    \"fields\": [ { \"name\": \"foo\", \"type\": \"integer\" } ]," +
                 "    \"constraints\": [" +
                 "        { \"field\": \"foo\",  \"lessThan\": null }" +
                 "    ]" +
                 "}");
-
-        expectValidationException("Number must be specified | Field: foo | Constraint: lessThan");
+        expectValidationException("Number must be specified | Field: 'foo' | Constraint: 'lessThan'");
     }
 
     @Test
-    public void shouldRejectInSetWithANullValue() {
+    public void shouldRejectInSetWithANullValue()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -531,11 +646,12 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("Values must be specified | Field: foo | Constraint: inSet");
+        expectValidationException("Values must be specified | Field: 'foo' | Constraint: 'inSet'");
     }
 
     @Test
-    public void shouldRejectInSetSetToNull() {
+    public void shouldRejectInSetSetToNull()
+    {
         givenJson(
             "{" +
                 "    \"fields\": [ { \"name\": \"foo\", \"type\": \"datetime\" } ]," +
@@ -544,7 +660,7 @@ public class JsonProfileReaderTests {
                 "    ]" +
                 "}");
 
-        expectValidationException("In set values must be specified | Field: foo | Constraint: inSet");
+        expectValidationException("In set values must be specified | Field: 'foo' | Constraint: 'inSet'");
     }
 
     @Test

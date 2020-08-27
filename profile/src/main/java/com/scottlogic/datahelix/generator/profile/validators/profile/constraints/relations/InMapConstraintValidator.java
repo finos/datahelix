@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile.validators.profile.constraints;
+package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.relations;
 
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.validators.profile.ConstraintValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.ValueTypeValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,19 +37,20 @@ public class InMapConstraintValidator extends ConstraintValidator<InMapConstrain
     @Override
     public ValidationResult validate(InMapConstraintDTO inMapConstraint)
     {
-        return ValidationResult.combine(fieldMustBeValid(inMapConstraint), valuesMustBeSpecified(inMapConstraint));
+        ValidationResult validationResult = ValidationResult.combine(fieldMustBeValid(inMapConstraint), valuesMustBeSpecified(inMapConstraint));
+        if (!validationResult.isSuccess) return validationResult;
+
+        return fieldTypeMustBeValid(inMapConstraint);
     }
 
     private ValidationResult fieldMustBeValid(InMapConstraintDTO dto)
     {
-        if (dto.field == null || dto.field.isEmpty())
-        {
+        if (dto.field == null || dto.field.isEmpty()) {
             return ValidationResult.failure("Field must be specified" + getErrorInfo(dto));
         }
         Optional<FieldDTO> field = fields.stream().filter(f -> f.name.equals(dto.field)).findFirst();
-        if (!field.isPresent())
-        {
-            return ValidationResult.failure(dto.field + " must be defined in fields" + getErrorInfo(dto));
+        if (!field.isPresent()) {
+            return ValidationResult.failure(String.format("%s must be defined in fields%s", ValidationResult.quote(dto.field), getErrorInfo(dto)));
         }
         return ValidationResult.success();
     }
@@ -56,5 +60,12 @@ public class InMapConstraintValidator extends ConstraintValidator<InMapConstrain
         return inMapConstraint.values != null && !inMapConstraint.values.isEmpty()
             ? ValidationResult.success()
             : ValidationResult.failure("Values must be specified" + getErrorInfo(inMapConstraint));
+    }
+
+    private ValidationResult fieldTypeMustBeValid(InMapConstraintDTO dto)
+    {
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
+        ValueTypeValidator valueTypeValidator = new ValueTypeValidator(fieldType, getErrorInfo(dto));
+        return ValidationResult.combine(dto.values.stream().map(valueTypeValidator::validate));
     }
 }

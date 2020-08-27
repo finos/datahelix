@@ -25,24 +25,29 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstraintDTOBuilder.atomicConstraintDTO;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class RegexConstraintValidatorTests {
+public class RegexConstraintValidatorTests
+{
+    private final static String newLine = System.lineSeparator();
 
 
     private final List<FieldDTO> fields = Arrays.asList
         (
-            FieldDTOBuilder.create("text", StandardSpecificFieldType.STRING.toSpecificFieldType())
+            FieldDTOBuilder.fieldDTO("text", StandardSpecificFieldType.STRING).build(),
+            FieldDTOBuilder.fieldDTO("decimal", StandardSpecificFieldType.DECIMAL).build()
         );
 
     @Test
     public void validateRegexConstraint_withValidRegex_succeeds()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = "text";
-        dto.value = "/a{0,3}/";
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("text").buildContainsRegex("/a{0,3}/");
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
@@ -55,73 +60,89 @@ public class RegexConstraintValidatorTests {
     public void validateRegexConstraint_withNullField_fails()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = null;
-        dto.value = "/a{0,3}/";
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO(null).buildContainsRegex("/a{0,3}/");
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'containingRegex'"));
     }
 
     @Test
     public void validateRegexConstraint_withEmptyField_fails()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = "";
-        dto.value = "/a{0,3}/";
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("").buildContainsRegex("/a{0,3}/");
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'containingRegex'"));
     }
 
     @Test
     public void validateRegexConstraint_withUndefinedField_fails()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = "unknown";
-        dto.value = "/a{0,3}/";
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("unknown").buildContainsRegex("/a{0,3}/");
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'containingRegex'"));
     }
 
     @Test
     public void validateRegexConstraint_withNullRegex_fails()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = "text";
-        dto.value = null;
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("text").buildContainsRegex(null);
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Text must be specified | Field: 'text' | Constraint: 'containingRegex'"));
     }
+
     @Test
     public void validateRegexConstraint_withInvalidRegex_fails()
     {
         // Arrange
-        ContainsRegexConstraintDTO dto = new ContainsRegexConstraintDTO();
-        dto.field = "text";
-        dto.value = "/*****/";
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("text").buildContainsRegex("/*****/");
 
         // Act
         ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem(String.format("Regex is invalid | Dangling meta character '*' near index 2%s/*****/%s  ^", newLine, newLine)));
+    }
+
+    @Test
+    public void validateRegexConstraint_withInvalidFieldType_fails()
+    {
+        // Arrange
+        ContainsRegexConstraintDTO dto = atomicConstraintDTO("decimal").buildContainsRegex("/a{0,3}/");
+
+        // Act
+        ValidationResult validationResult = new RegexConstraintValidator(fields).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Expected field type STRING doesn't match field type NUMERIC | Field: 'decimal' | Constraint: 'containingRegex'"));
     }
 }

@@ -173,7 +173,7 @@ Feature: User can create data across multiple fields for all combinations availa
     And bar is in set:
       | 2    |
       | null |
-    Then the profile is invalid with error "Values must be specified | Field: bar | Constraint: inSet"
+    Then the profile is invalid with error "Values must be specified | Field: 'bar' | Constraint: 'inSet'"
 
   Scenario: Running an exhaustive combination strategy should be successful
     Given the following non nullable fields exist:

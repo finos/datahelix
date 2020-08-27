@@ -16,15 +16,63 @@
 
 package com.scottlogic.datahelix.generator.profile.creation;
 
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AllOfConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.AnyOfConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.ConditionalConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstraintDTOBuilder
 {
-    public static EqualToConstraintDTO create(String field, Object value)
+    public static AllOfConstraintDTO allOf(ConstraintDTO... constraints)
     {
-        EqualToConstraintDTO dto = new EqualToConstraintDTO();
-        dto.field = field;
-        dto.value = value;
+        return allOfValue(Arrays.stream(constraints).collect(Collectors.toList()));
+    }
+
+    public static AllOfConstraintDTO allOfValue(List<ConstraintDTO> constraints)
+    {
+        AllOfConstraintDTO dto = new AllOfConstraintDTO();
+        dto.constraints = constraints;
         return dto;
     }
+
+    public static AnyOfConstraintDTO anyOf(ConstraintDTO... constraints)
+    {
+        return anyOfValue(Arrays.stream(constraints).collect(Collectors.toList()));
+    }
+
+    public static AnyOfConstraintDTO anyOfValue(List<ConstraintDTO> constraints)
+    {
+        AnyOfConstraintDTO dto = new AnyOfConstraintDTO();
+        dto.constraints = constraints;
+        return dto;
+    }
+
+    public static ConditionalConstraintDTO conditional(ConstraintDTO ifConstraint, ConstraintDTO thenConstraint)
+    {
+        return conditional(ifConstraint, thenConstraint, null);
+    }
+
+    public static ConditionalConstraintDTO conditional(ConstraintDTO ifConstraint,
+                                                       ConstraintDTO thenConstraint,
+                                                       ConstraintDTO elseConstraint)
+    {
+        ConditionalConstraintDTO dto = new ConditionalConstraintDTO();
+        dto.ifConstraint = ifConstraint;
+        dto.thenConstraint = thenConstraint;
+        dto.elseConstraint = elseConstraint;
+        return dto;
+    }
+
+    public static NotConstraintDTO not(ConstraintDTO constraint)
+    {
+        NotConstraintDTO dto = new NotConstraintDTO();
+        dto.constraint = constraint;
+        return dto;
+    }
+
 }
