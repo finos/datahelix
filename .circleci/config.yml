@@ -100,17 +100,16 @@ jobs:
 
 workflows:
   version: 2
-#  Commented out to test the job before scheduling it
-#  nightly:
-#    triggers:
-#      - schedule:
-#          cron: "0 0 * * *"
-#          filters:
-#            branches:
-#              only:
-#                - master
-#    jobs:
-#      - test_playground_status
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - test_playground_status
   build_and_test:
     jobs:
       - build:
@@ -125,11 +124,6 @@ workflows:
           filters:
             branches:
               ignore: master
-# Temporary to test the job
-      - test_playground_status:
-          filters:
-            branches:
-              only: task/add-playground-test
 
   release:
     jobs:
