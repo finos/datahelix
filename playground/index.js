@@ -97,7 +97,7 @@ runButton.addEventListener("click", () => {
       const table = "<thead><tr>" + mapToElements(columns, "th") + "</tr></thead>" +
         "<tbody>" + mapToElements(rows, "tr", row => mapToElements(row, "td")) + "</tbody>";
 
-      generatorOutputPanel.innerHTML = `<table id=output" class="table table-striped table-bordered">${table}</table>`;
+      generatorOutputPanel.innerHTML = `<table id="output" class="table table-striped table-bordered">${table}</table>`;
     })
     .catch(() => {
       showAlert("There was a problem in reaching the DataHelix API endpoint");
