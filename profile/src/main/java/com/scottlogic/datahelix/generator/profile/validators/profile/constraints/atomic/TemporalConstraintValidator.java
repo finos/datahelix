@@ -24,6 +24,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.TemporalConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.factories.DateTimeFactory;
 import com.scottlogic.datahelix.generator.profile.factories.TimeFactory;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -34,15 +35,17 @@ public class TemporalConstraintValidator extends AtomicConstraintValidator<Tempo
     }
 
     @Override
-    public final ValidationResult validate(TemporalConstraintDTO dto) {
+    public final ValidationResult validate(TemporalConstraintDTO dto)
+    {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
         if (!fieldMustBeValid.isSuccess) return fieldMustBeValid;
 
-        FieldType fieldType = getFieldType(dto.field);
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
 
         ValidationResult validationResult;
 
-        switch (fieldType){
+        switch (fieldType)
+        {
             case DATETIME:
                 validationResult = dateTimeMustBeValid(dto);
                 break;

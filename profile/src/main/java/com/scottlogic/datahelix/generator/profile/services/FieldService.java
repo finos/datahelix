@@ -28,6 +28,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.N
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,18 +40,20 @@ public class FieldService {
         return new ProfileFields(fields);
     }
 
-    public SpecificFieldType specificFieldTypeFromString(String type, String formatting) {
+    public static Optional<SpecificFieldType> specificFieldTypeFromString(String type, String formatting)
+    {
         return type.startsWith(StandardSpecificFieldType.FAKER.getType())
-            ? new SpecificFieldType(StandardSpecificFieldType.FAKER.getType(),
+            ? Optional.of(new SpecificFieldType(StandardSpecificFieldType.FAKER.getType(),
             StandardSpecificFieldType.FAKER.getFieldType(),
             formatting,
-            type.substring(6))
-            : StandardSpecificFieldType.from(type).toSpecificFieldType();
+            type.substring(6)))
+            : StandardSpecificFieldType.from(type).map(StandardSpecificFieldType::toSpecificFieldType);
     }
 
     private Field createRegularField(FieldDTO fieldDTO) {
         String formatting = formatting(fieldDTO);
-        SpecificFieldType type = specificFieldTypeFromString(fieldDTO.type, formatting);
+        SpecificFieldType type = specificFieldTypeFromString(fieldDTO.type, formatting)
+            .orElseThrow(() -> new IllegalStateException(String.format("No data types with type '%s'", fieldDTO.type)));
         return new Field(
             fieldDTO.name,
             type,
@@ -69,7 +72,8 @@ public class FieldService {
         if (fieldDTO.type.startsWith(StandardSpecificFieldType.FAKER.getType())) {
             return null;
         } else {
-            return StandardSpecificFieldType.from(fieldDTO.type).getDefaultFormatting();
+            return StandardSpecificFieldType.from(fieldDTO.type)
+                .map(StandardSpecificFieldType::getDefaultFormatting).orElse(null);
         }
     }
 

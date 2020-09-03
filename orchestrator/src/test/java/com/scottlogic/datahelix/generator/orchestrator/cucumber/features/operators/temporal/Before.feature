@@ -108,4 +108,4 @@ Feature: User can specify that a datetime date is lower than, but not equal to, 
 
   Scenario: Running a 'before' request that specifies the highest valid system date should be unsuccessful
     Given foo is before 0000-01-01T00:00:00.000Z
-    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: foo | Constraint: before"
+    Then the profile is invalid with error containing "Dates must be between 0001-01-01T00:00:00.000Z and 9999-12-31T23:59:59.999Z | Field: 'foo' | Constraint: 'before'"

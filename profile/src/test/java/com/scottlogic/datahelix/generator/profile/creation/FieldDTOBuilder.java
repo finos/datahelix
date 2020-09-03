@@ -16,24 +16,65 @@
 
 package com.scottlogic.datahelix.generator.profile.creation;
 
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 
 public class FieldDTOBuilder
 {
-    public static FieldDTO create(String name)
+    private final String name;
+    private final String type;
+    private final String formatting;
+    private final boolean unique;
+    private final boolean nullable;
+
+    private FieldDTOBuilder(String name, String type, String formatting, boolean unique, boolean nullable)
+    {
+        this.name = name;
+        this.type = type;
+        this.formatting = formatting;
+        this.unique = unique;
+        this.nullable = nullable;
+    }
+
+    private FieldDTOBuilder(String name, String type)
+    {
+        this(name, type, null, false, false);
+    }
+
+    public FieldDTO build()
     {
         FieldDTO fieldDTO = new FieldDTO();
         fieldDTO.name = name;
-        fieldDTO.type = StandardSpecificFieldType.STRING.toSpecificFieldType().getType();
+        fieldDTO.type = type;
+        fieldDTO.formatting = formatting;
+        fieldDTO.unique = unique;
+        fieldDTO.nullable = nullable;
         return fieldDTO;
     }
-    public static FieldDTO create(String name, SpecificFieldType type)
+
+    public FieldDTOBuilder withUniqueness()
     {
-        FieldDTO fieldDTO = new FieldDTO();
-        fieldDTO.name = name;
-        fieldDTO.type = type == null ? null : type.getType();
-        return fieldDTO;
+        return new FieldDTOBuilder(name, type, formatting, true, nullable);
     }
+
+    public FieldDTOBuilder withNullability()
+    {
+        return new FieldDTOBuilder(name, type, formatting, unique, true);
+    }
+
+    public FieldDTOBuilder withFormatting(String formatting)
+    {
+        return new FieldDTOBuilder(name, type, formatting, unique, nullable);
+    }
+
+    public static FieldDTOBuilder fieldDTO(String name, StandardSpecificFieldType type)
+    {
+        return new FieldDTOBuilder(name, type == null ? null : type.toSpecificFieldType().getType());
+    }
+
+    public static FieldDTOBuilder fieldDTOWithStringType(String name)
+    {
+        return FieldDTOBuilder.fieldDTO(name, StandardSpecificFieldType.STRING);
+    }
+
 }

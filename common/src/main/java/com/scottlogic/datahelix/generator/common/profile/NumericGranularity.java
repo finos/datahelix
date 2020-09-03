@@ -16,11 +16,11 @@
 
 package com.scottlogic.datahelix.generator.common.profile;
 
+import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-
 import com.scottlogic.datahelix.generator.common.util.defaults.NumericDefaults;
-import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
+import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -39,16 +39,13 @@ public class NumericGranularity implements Granularity<BigDecimal> {
     public static NumericGranularity create(Object granularity)
     {
         BigDecimal asNumber = NumberUtils.coerceToBigDecimal(granularity);
-        if (asNumber == null)
-        {
-            throw new ValidationException("Can't interpret granularity expression: " + granularity);
+        if (asNumber == null) {
+            throw new ValidationException(String.format("Can't interpret numeric granularity expression: %s", ValidationResult.quote(granularity)));
         }
-        if (asNumber.compareTo(BigDecimal.ONE) > 0)
-        {
+        if (asNumber.compareTo(BigDecimal.ONE) > 0) {
             throw new ValidationException("Numeric granularity must be <= 1");
         }
-        if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale())))
-        {
+        if (!asNumber.equals(BigDecimal.ONE.scaleByPowerOfTen(-asNumber.scale()))) {
             throw new ValidationException("Numeric granularity must be fractional power of ten");
         }
         return new NumericGranularity(asNumber.scale());

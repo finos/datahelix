@@ -17,9 +17,7 @@
 package com.scottlogic.datahelix.generator.profile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.scottlogic.datahelix.generator.common.profile.SpecificFieldType;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.ProfileDTO;
@@ -31,119 +29,114 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static com.scottlogic.datahelix.generator.profile.creation.FieldDTOBuilder.fieldDTO;
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 
 
-public class FieldDeserialiserTests {
+public class FieldDeserialiserTests
+{
     @Test
-    public void shouldDeserialiseIntegerTypeWithoutException() throws IOException {
+    public void shouldDeserialiseIntegerTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"id\", \"type\": \"integer\" }";
+        final String json = "{ \"name\": \"id\", \"type\": \"integer\" }";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "id";
-        expected.type = StandardSpecificFieldType.INTEGER.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("id", StandardSpecificFieldType.INTEGER).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseStringTypeWithoutException() throws IOException {
+    public void shouldDeserialiseStringTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"country\", \"type\": \"string\" }\"";
+        final String json = "{ \"name\": \"country\", \"type\": \"string\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "country";
-        expected.type = StandardSpecificFieldType.STRING.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("country", StandardSpecificFieldType.STRING).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseDecimalTypeWithoutException() throws IOException {
+    public void shouldDeserialiseDecimalTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"tariff\", \"type\": \"decimal\" }\"";
+        final String json = "{ \"name\": \"tariff\", \"type\": \"decimal\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "tariff";
-        expected.type = StandardSpecificFieldType.DECIMAL.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("tariff", StandardSpecificFieldType.DECIMAL).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseDateTimeTypeWithoutException() throws IOException {
+    public void shouldDeserialiseDateTimeTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"time\", \"type\": \"datetime\" }\"";
+        final String json = "{ \"name\": \"time\", \"type\": \"datetime\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "time";
-        expected.type = StandardSpecificFieldType.DATETIME.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("time", StandardSpecificFieldType.DATETIME).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseFirstNameTypeWithoutException() throws IOException {
+    public void shouldDeserialiseFirstNameTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"first_name\", \"type\": \"firstname\" }\"";
+        final String json = "{ \"name\": \"first_name\", \"type\": \"firstname\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "first_name";
-        expected.type = StandardSpecificFieldType.FIRST_NAME.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("first_name", StandardSpecificFieldType.FIRST_NAME).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseLastNameTypeWithoutException() throws IOException {
+    public void shouldDeserialiseLastNameTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"last_name\", \"type\": \"lastname\" }\"";
+        final String json = "{ \"name\": \"last_name\", \"type\": \"lastname\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "last_name";
-        expected.type = StandardSpecificFieldType.LAST_NAME.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("last_name", StandardSpecificFieldType.LAST_NAME).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    public void shouldDeserialiseFullNameTypeWithoutException() throws IOException {
+    public void shouldDeserialiseFullNameTypeWithoutException() throws IOException
+    {
         // Arrange
-        final String json ="{ \"name\": \"full_name\", \"type\": \"fullname\" }\"";
+        final String json = "{ \"name\": \"full_name\", \"type\": \"fullname\" }\"";
 
         // Act
         FieldDTO actual = deserialiseJsonString(json);
 
         // Assert
-        FieldDTO expected = new FieldDTO();
-        expected.name = "full_name";
-        expected.type = StandardSpecificFieldType.FULL_NAME.toSpecificFieldType().getType();
+        FieldDTO expected = fieldDTO("full_name", StandardSpecificFieldType.FULL_NAME).build();
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -159,7 +152,8 @@ public class FieldDeserialiserTests {
     }
 
     @Test
-    public void shouldDeserialiseFieldAndThrowInvalidTypeValueException() throws IOException {
+    public void shouldDeserialiseFieldAndThrowInvalidTypeValueException() throws IOException
+    {
         // Arrange
         final String json = "{ \"name\": \"id\", \"type\": \"intger\" }";
         FieldDTO fieldDTO = deserialiseJsonString(json);
@@ -173,7 +167,8 @@ public class FieldDeserialiserTests {
 
     }
 
-    private FieldDTO deserialiseJsonString(String json) throws IOException {
+    private FieldDTO deserialiseJsonString(String json) throws IOException
+    {
         return new ObjectMapper().readerFor(FieldDTO.class).readValue(json);
     }
 }

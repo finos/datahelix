@@ -17,12 +17,11 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-
-import com.scottlogic.datahelix.generator.common.ValidationException;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.*;
 import org.hamcrest.Matcher;
@@ -165,7 +164,8 @@ public class GeneralTestStep {
     }
 
     @But("^the profile is invalid with error \"(.+)\"$")
-    public void profileIsInvalidWithErrorMessage(String expectedError) {
+    public void profileIsInvalidWithErrorMessage(String expectedError)
+    {
         state.expectExceptions = true;
         cucumberTestHelper.generateAndGetData();
 
@@ -175,13 +175,31 @@ public class GeneralTestStep {
 
         if (errors.size() == 0) {
             Assert.fail("No profile validation errors were raised");
+        } else if (errors.size() != 1) {
+            Assert.fail("More than one profile validation errors were raised");
         } else {
-            Assert.assertEquals(errors.get(0), expectedError);
+            Assert.assertThat(
+                "Expected profile validation error",
+                errors.get(0), equalTo(expectedError));
         }
     }
 
+    @But("^the profile is invalid with errors:$")
+    public void profileIsInvalidWithErrorMessages(List<String> expectedErrors)
+    {
+        state.expectExceptions = true;
+        cucumberTestHelper.generateAndGetData();
+
+        List<String> errors = this.cucumberTestHelper
+            .getProfileValidationErrors()
+            .collect(Collectors.toList());
+
+        Assert.assertThat("Expected profile validation errors", errors, containsInAnyOrder(expectedErrors.toArray()));
+    }
+
     @But("^the profile is invalid with error containing \"(.+)\"$")
-    public void profileIsInvalidWithErrorContainingErrorMessage(String expectedError) {
+    public void profileIsInvalidWithErrorContainingErrorMessage(String expectedError)
+    {
         state.expectExceptions = true;
         cucumberTestHelper.generateAndGetData();
 
@@ -191,8 +209,12 @@ public class GeneralTestStep {
 
         if (errors.size() == 0) {
             Assert.fail("No profile validation errors were raised");
+        } else if (errors.size() != 1) {
+            Assert.fail("More than one profile validation errors were raised");
         } else {
-            Assert.assertTrue(errors.get(0).contains(expectedError));
+            Assert.assertThat(
+                "Expected profile validation error",
+                errors.get(0), containsString(expectedError));
         }
     }
 
