@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile.validators.profile.constraints;
+package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.grammatical;
 
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;

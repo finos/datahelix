@@ -48,6 +48,11 @@ public class ProfileValidator implements Validator<ProfileDTO>
     @Override
     public ValidationResult validate(ProfileDTO dto)
     {
+        ValidationResult fieldsAndConstraintsMustBeSpecified = ValidationResult.combine(
+            fieldsMustBeSpecified(dto.fields),
+            constraintsMustBeSpecified(dto));
+        if (!fieldsAndConstraintsMustBeSpecified.isSuccess) return fieldsAndConstraintsMustBeSpecified;
+
         ValidationResult fieldsMustBeValid = fieldsMustBeValid(dto.fields);
         if (!fieldsMustBeValid.isSuccess) return fieldsMustBeValid;
 
@@ -73,28 +78,23 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
         fields.forEach(field ->
         {
-            if(!fieldNames.add(field.name))
-            {
+            if (!fieldNames.add(field.name)) {
                 duplicateFieldNames.add(field.name);
             }
         });
 
         return duplicateFieldNames.isEmpty()
             ? ValidationResult.success()
-            : ValidationResult.failure("Field names must be unique | Duplicates: "
-            + String.join(", ", duplicateFieldNames));
+            : ValidationResult.failure(String.format("Field names must be unique | Duplicates: %s", ValidationResult.quote(duplicateFieldNames)));
     }
 
     private ValidationResult fieldsMustBeValid(List<FieldDTO> fields)
     {
-        ValidationResult fieldsMustBeSpecified = fieldsMustBeSpecified(fields);
-        if (!fieldsMustBeSpecified.isSuccess) return fieldsMustBeSpecified;
-
-        ValidationResult fieldsMustBeUnique  = fieldsMustBeUnique(fields);
-        if(!fieldsMustBeUnique.isSuccess) return fieldsMustBeUnique;
-
         FieldValidator fieldValidator = new FieldValidator();
-        return ValidationResult.combine(fields.stream().map(fieldValidator::validate));
+        ValidationResult eachFieldsMustBeValid = ValidationResult.combine(fields.stream().map(fieldValidator::validate));
+        if (!eachFieldsMustBeValid.isSuccess) return eachFieldsMustBeValid;
+
+        return fieldsMustBeUnique(fields);
     }
 
     private ValidationResult uniqueFieldsMustNotBeInIfStatements(ProfileDTO dto)
@@ -113,7 +113,7 @@ public class ProfileValidator implements Validator<ProfileDTO>
             .collect(Collectors.toSet());
 
         List<String> errors = uniqueFields.stream().filter(ifConstraintFields::contains)
-            .map(f -> "Unique field "+f+" cannot be referenced in IF statement")
+            .map(f -> String.format("Unique field %s cannot be referenced in IF statement", ValidationResult.quote(f)))
             .collect(Collectors.toList());
 
         return errors.isEmpty()
@@ -123,23 +123,25 @@ public class ProfileValidator implements Validator<ProfileDTO>
 
     private ValidationResult uniqueFieldsMustNotBePresentUsingMinimalCombinationStrategy(ProfileDTO dto)
     {
-        if(configSource == null)
-        {
+        if (configSource == null) {
             return ValidationResult.success();
         }
-        if (configSource.getCombinationStrategyType() != MINIMAL && dto.fields.stream().anyMatch(f -> f.unique))
-        {
+        if (configSource.getCombinationStrategyType() != MINIMAL && dto.fields.stream().anyMatch(f -> f.unique)) {
             return ValidationResult.failure("Unique fields do not work when not using Minimal combination strategy");
         }
         return ValidationResult.success();
     }
 
-
-    public ValidationResult constraintsMustBeValid(ProfileDTO dto)
+    public ValidationResult constraintsMustBeSpecified(ProfileDTO dto)
     {
         return dto.constraints == null
             ? ValidationResult.failure("Constraints must be specified")
-            : ValidationResult.combine(dto.constraints.stream()
+            : ValidationResult.success();
+    }
+
+    public ValidationResult constraintsMustBeValid(ProfileDTO dto)
+    {
+        return ValidationResult.combine(dto.constraints.stream()
             .map(c -> ConstraintValidator.validateConstraint(c, dto.fields)));
     }
 }

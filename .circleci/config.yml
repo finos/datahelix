@@ -51,6 +51,21 @@ jobs:
       - codecov/upload:
           file: generator/target/jacoco-reports/jacoco.xml
 
+  test_playground_status:
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - run: gradle :playground:test
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+
   # Release generates version x.y.z for:
   # x - BREAKING CHANGE included in commit message body
   # y - feat
@@ -85,6 +100,16 @@ jobs:
 
 workflows:
   version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - test_playground_status
   build_and_test:
     jobs:
       - build:

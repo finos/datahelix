@@ -28,24 +28,27 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.lang.Float.NaN;
+import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstraintDTOBuilder.atomicConstraintDTO;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class NumericConstraintValidatorTests {
+public class NumericConstraintValidatorTests
+{
 
     private final List<FieldDTO> fields = Arrays.asList
         (
-            FieldDTOBuilder.create("integer", StandardSpecificFieldType.INTEGER.toSpecificFieldType())
+            FieldDTOBuilder.fieldDTO("integer", StandardSpecificFieldType.INTEGER).build(),
+            FieldDTOBuilder.fieldDTO("text", StandardSpecificFieldType.STRING).build()
         );
 
     @Test
     public void validateNumericConstraint_withValidData_succeeds()
     {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "integer";
-        dto.value = 1;
+        LessThanConstraintDTO dto = atomicConstraintDTO("integer").buildLessThan(1);
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
@@ -58,86 +61,104 @@ public class NumericConstraintValidatorTests {
     public void validateNumericConstraint_withNullField_fails()
     {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = null;
-        dto.value = 1;
+        LessThanConstraintDTO dto = atomicConstraintDTO(null).buildLessThan(1);
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'lessThan'"));
     }
 
     @Test
     public void validateNumericConstraint_withEmptyField_fails()
     {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "";
-        dto.value = 1;
+        LessThanConstraintDTO dto = atomicConstraintDTO("").buildLessThan(1);
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'lessThan'"));
     }
 
     @Test
     public void validateNumericConstraint_withUndefinedField_fails()
     {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "unknown";
-        dto.value = 1;
+        LessThanConstraintDTO dto = atomicConstraintDTO("unknown").buildLessThan(1);
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'lessThan'"));
     }
 
     @Test
-    public void validateNumericConstraint_withNullValue_fails() {
+    public void validateNumericConstraint_withNullValue_fails()
+    {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "integer";
-        dto.value = null;
+        LessThanConstraintDTO dto = atomicConstraintDTO("integer").buildLessThan(null);
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Number must be specified | Field: 'integer' | Constraint: 'lessThan'"));
     }
 
     @Test
-    public void validateNumericConstraint_withValueLessThanMin_fails() {
+    public void validateNumericConstraint_withValueLessThanMin_fails()
+    {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "integer";
-        dto.value = Defaults.NUMERIC_MIN.subtract(new BigDecimal(1));
+        LessThanConstraintDTO dto = atomicConstraintDTO("integer").buildLessThan(Defaults.NUMERIC_MIN.subtract(new BigDecimal(1)));
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Number must have a value >= -100000000000000000000, currently is -100000000000000000001"));
     }
 
     @Test
-    public void validateNumericConstraint_withValueGreaterThanMax_fails() {
+    public void validateNumericConstraint_withValueGreaterThanMax_fails()
+    {
         // Arrange
-        LessThanConstraintDTO dto = new LessThanConstraintDTO();
-        dto.field = "integer";
-        dto.value = Defaults.NUMERIC_MAX.add(new BigDecimal(1));
+        LessThanConstraintDTO dto = atomicConstraintDTO("integer").buildLessThan(Defaults.NUMERIC_MAX.add(new BigDecimal(1)));
 
         // Act
         ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Number must have a value <= 100000000000000000000, currently is 100000000000000000001"));
+    }
+
+    @Test
+    public void validateNumericConstraint_withInvalidFieldType_fails()
+    {
+        // Arrange
+        LessThanConstraintDTO dto = atomicConstraintDTO("text").buildLessThan(1);
+
+        // Act
+        ValidationResult validationResult = new NumericConstraintValidator(fields, FieldType.NUMERIC).validate(dto);
+
+        // Assert
+        assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Expected field type NUMERIC doesn't match field type STRING | Field: 'text' | Constraint: 'lessThan'"));
     }
 }

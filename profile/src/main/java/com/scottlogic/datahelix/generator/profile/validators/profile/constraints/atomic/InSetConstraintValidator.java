@@ -16,9 +16,12 @@
 
 package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
 
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.ValueTypeValidator;
 
 import java.util.List;
 
@@ -32,8 +35,8 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
     @Override
     public final ValidationResult validate(InSetConstraintDTO dto)
     {
-        ValidationResult result = ValidationResult.combine(valuesMustBeSpecified(dto),fieldMustBeValid(dto));
-        if(!result.isSuccess) return result;
+        ValidationResult result = ValidationResult.combine(valuesMustBeSpecified(dto), fieldMustBeValid(dto));
+        if (!result.isSuccess) return result;
 
         return fieldTypeMustBeValid(dto);
     }
@@ -47,6 +50,8 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
 
     private ValidationResult fieldTypeMustBeValid(InSetConstraintDTO dto)
     {
-        return ValidationResult.combine(dto.values.stream().map(v -> fieldTypeMustMatchValueType(dto, v)));
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
+        ValueTypeValidator valueTypeValidator = new ValueTypeValidator(fieldType, getErrorInfo(dto));
+        return ValidationResult.combine(dto.values.stream().map(valueTypeValidator::validate));
     }
 }

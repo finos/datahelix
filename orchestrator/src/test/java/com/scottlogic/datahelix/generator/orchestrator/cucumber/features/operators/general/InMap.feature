@@ -94,3 +94,22 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Scotland"         | "Edinburgh" | 2   | "two" |
       | "Wales"            | "Cardiff"   | 1   | "one" |
       | "Wales"            | "Cardiff"   | 2   | "two" |
+
+
+  Scenario: Running an 'inMap' with text a restriction
+    Given the following non nullable fields exist:
+      | HomeNation |
+      | Population    |
+    And the file "testFile" contains the following data:
+      | Country          | Population |
+      | England          |   56286961 |
+      | Scotland         |    5463300 |
+      | Wales            |   ~3150000 |
+      | Northern Ireland |        TBC |
+    And HomeNation has type "string"
+    And Population has type "integer"
+    And HomeNation is from Country in testFile
+    And Population is from Population in testFile
+    But the profile is invalid with errors:
+      | Value '~3150000' must be a number \| Constraint: 'inMap' |
+      | Value 'TBC' must be a number \| Constraint: 'inMap' |

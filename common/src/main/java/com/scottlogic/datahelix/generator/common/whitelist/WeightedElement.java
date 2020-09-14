@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.common.whitelist;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * Wrapper containing specified element with a weight.
@@ -57,6 +58,10 @@ public class WeightedElement<E> {
     @SuppressWarnings("unchecked")
     public static <T> WeightedElement<T> ofNull() {
         return (WeightedElement<T>) NULL;
+    }
+
+    public static Object parseValue(WeightedElement element, Function<Object, Object> parse) {
+        return new WeightedElement<>(parse.apply(element.element()), element.weight());
     }
 
     @Override

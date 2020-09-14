@@ -25,26 +25,28 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstraintDTOBuilder.atomicConstraintDTO;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class GranularToConstraintValidatorTests {
-    
+public class GranularToConstraintValidatorTests
+{
+
     private final List<FieldDTO> fields = Arrays.asList
         (
-            FieldDTOBuilder.create("text", StandardSpecificFieldType.STRING.toSpecificFieldType()),
-            FieldDTOBuilder.create("decimal", StandardSpecificFieldType.DECIMAL.toSpecificFieldType()),
-            FieldDTOBuilder.create("boolean", StandardSpecificFieldType.BOOLEAN.toSpecificFieldType())
-
+            FieldDTOBuilder.fieldDTO("text", StandardSpecificFieldType.STRING).build(),
+            FieldDTOBuilder.fieldDTO("decimal", StandardSpecificFieldType.DECIMAL).build(),
+            FieldDTOBuilder.fieldDTO("boolean", StandardSpecificFieldType.BOOLEAN).build()
         );
 
     @Test
     public void validateGranularToConstraint_withValidNumericData_succeeds()
     {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = "decimal";
-        dto.value = 0.1;
+        GranularToConstraintDTO dto = atomicConstraintDTO("decimal").buildGranularTo(0.1);
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
@@ -57,72 +59,74 @@ public class GranularToConstraintValidatorTests {
     public void validateGranularToConstraint_withNullField_fails()
     {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = null;
-        dto.value = 0.1;
+        GranularToConstraintDTO dto = atomicConstraintDTO(null).buildGranularTo(0.1);
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: NULL | Constraint: 'granularTo'"));
     }
 
     @Test
     public void validateGranularToConstraint_withEmptyField_fails()
     {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = "";
-        dto.value = 0.1;
+        GranularToConstraintDTO dto = atomicConstraintDTO("").buildGranularTo(0.1);
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Field must be specified | Field: '' | Constraint: 'granularTo'"));
     }
 
     @Test
     public void validateGranularToConstraint_withUndefinedField_fails()
     {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = "unknown";
-        dto.value = 0.1;
+        GranularToConstraintDTO dto = atomicConstraintDTO("unknown").buildGranularTo(0.1);
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("'unknown' must be defined in fields | Field: 'unknown' | Constraint: 'granularTo'"));
     }
 
     @Test
-    public void validateGranularToConstraint_withValueTypeBoolean_fails() {
+    public void validateGranularToConstraint_withValueTypeBoolean_fails()
+    {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = "boolean";
-        dto.value = true;
+        GranularToConstraintDTO dto = atomicConstraintDTO("boolean").buildGranularTo(true);
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Granularity true is not supported for boolean fields | Field: 'boolean' | Constraint: 'granularTo'"));
     }
 
     @Test
-    public void validateGranularToConstraint_withValueTypeString_fails() {
+    public void validateGranularToConstraint_withValueTypeString_fails()
+    {
         // Arrange
-        GranularToConstraintDTO dto = new GranularToConstraintDTO();
-        dto.field = "text";
-        dto.value = "test";
+        GranularToConstraintDTO dto = atomicConstraintDTO("text").buildGranularTo("test");
 
         // Act
         ValidationResult validationResult = new GranularToConstraintValidator(fields).validate(dto);
 
         // Assert
         assertFalse(validationResult.isSuccess);
+        assertThat(validationResult.errors, iterableWithSize(1));
+        assertThat(validationResult.errors, hasItem("Granularity 'test' is not supported for string fields | Field: 'text' | Constraint: 'granularTo'"));
     }
 }

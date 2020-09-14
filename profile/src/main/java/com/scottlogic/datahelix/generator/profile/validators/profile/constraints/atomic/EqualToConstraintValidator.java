@@ -16,9 +16,12 @@
 
 package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
 
+import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.validators.profile.FieldValidator;
+import com.scottlogic.datahelix.generator.profile.validators.profile.constraints.capabilities.ValueTypeValidator;
 
 import java.util.List;
 
@@ -33,8 +36,10 @@ public class EqualToConstraintValidator extends AtomicConstraintValidator<EqualT
     public final ValidationResult validate(EqualToConstraintDTO dto)
     {
         ValidationResult fieldMustBeValid = fieldMustBeValid(dto);
-        if(!fieldMustBeValid.isSuccess) return fieldMustBeValid;
-        return fieldTypeMustMatchValueType(dto, dto.value);
+        if (!fieldMustBeValid.isSuccess) return fieldMustBeValid;
+
+        FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
+        return new ValueTypeValidator(fieldType, getErrorInfo(dto)).validate(dto.value);
     }
 
 }

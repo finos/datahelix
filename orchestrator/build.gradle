@@ -56,8 +56,9 @@ dependencies {
     testCompile "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testCompile group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
-    
+
     testCompile project(':core').sourceSets.test.output
+    testCompile project(':profile').sourceSets.test.output
 
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
 

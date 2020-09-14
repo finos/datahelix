@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.profile;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
@@ -110,7 +111,25 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.values = Collections.singletonList("test");
+        expected.values = Collections.singletonList(new WeightedElement<>("test", 1.0));
+
+        assertThat(actual, sameBeanAs(expected));
+    }
+
+    @Test
+    public void shouldDeserialiseWeightedInSetCsvFile() throws IOException {
+        // Arrange
+        final String json = "{\"field\": \"country\", \"inSet\": \"countries.csv\" }";
+        // Act
+        ConstraintDTO actual = deserialiseJsonString(new TestFileReader(true), json);
+
+        // Assert
+        InSetConstraintDTO expected = new InSetConstraintDTO();
+        expected.field = "country";
+        expected.values = Arrays.asList(
+            new WeightedElement<>("test1", 0.2),
+            new WeightedElement<>("test2", 0.8)
+        );
 
         assertThat(actual, sameBeanAs(expected));
     }

@@ -26,4 +26,5 @@ include 'common'
 include 'orchestrator'
 include 'output'
 include 'custom'
+include 'playground'
 
