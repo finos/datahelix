@@ -41,12 +41,12 @@ public class DistributedList<T> {
 
     private static <T> List<WeightedElement<T>> normalise(final List<WeightedElement<T>> denormalised) {
         final double total = denormalised.stream()
-            .map(WeightedElement::weight)
+            .map(WeightedElement::getWeight)
             .reduce(0.0D, Double::sum);
 
         // Stream (even with 0 elements) ensure a copy of the original set is returned
         return denormalised.stream()
-            .map(holder -> new WeightedElement<>(holder.element(), holder.weight() / total))
+            .map(holder -> new WeightedElement<>(holder.getElement(), holder.getWeight() / total))
             .collect(Collectors.toList());
     }
 
@@ -75,8 +75,8 @@ public class DistributedList<T> {
         List<WeightedElement<T>> cumulative = new LinkedList<>();
         double runningTotal = 0.0D;
         for (WeightedElement<T> holder : nonCumulative) {
-            runningTotal += holder.weight();
-            cumulative.add(new WeightedElement<>(holder.element(), runningTotal));
+            runningTotal += holder.getWeight();
+            cumulative.add(new WeightedElement<>(holder.getElement(), runningTotal));
         }
 
         if (!cumulative.isEmpty()) {
@@ -90,7 +90,7 @@ public class DistributedList<T> {
         int lastIndex = cumulative.size() - 1;
         WeightedElement<T> last = cumulative.get(lastIndex);
         cumulative.remove(lastIndex);
-        cumulative.add(new WeightedElement<>(last.element(), 1.0D));
+        cumulative.add(new WeightedElement<>(last.getElement(), 1.0D));
     }
 
     @SuppressWarnings("unchecked")
@@ -108,12 +108,12 @@ public class DistributedList<T> {
 
     private T getElementFromCumulativeDistribution(final double value) {
         List<Double> weights = underlyingCumulativeWeights.stream()
-            .map(WeightedElement::weight)
+            .map(WeightedElement::getWeight)
             .collect(Collectors.toList());
 
         final int index = binarySearch(weights, value);
 
-        return underlyingCumulativeWeights.get(index).element();
+        return underlyingCumulativeWeights.get(index).getElement();
     }
 
     private static int binarySearch(List<Double> weights, double target) {
@@ -149,7 +149,7 @@ public class DistributedList<T> {
     }
 
     public Stream<T> stream() {
-        return distributedList().stream().map(WeightedElement::element);
+        return distributedList().stream().map(WeightedElement::getElement);
     }
 
     public List<T> list() {

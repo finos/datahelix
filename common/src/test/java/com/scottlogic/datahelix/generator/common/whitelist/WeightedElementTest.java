@@ -36,7 +36,7 @@ class WeightedElementTest {
         final double weight = 64.0D;
         WeightedElement<String> weightedElement = new WeightedElement<>("A string", weight);
 
-        assertEquals(weight, weightedElement.weight());
+        assertEquals(weight, weightedElement.getWeight());
     }
 
     @Test
@@ -50,6 +50,6 @@ class WeightedElementTest {
             e -> Integer.toString((int) e)
         );
 
-        assertTrue(parsedElement.element() instanceof String);
+        assertTrue(parsedElement.getElement() instanceof String);
     }
 }

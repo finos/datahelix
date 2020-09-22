@@ -68,7 +68,7 @@ public class FieldSpecMerger {
 
     private static WeightedElement<Object> mergeElements(WeightedElement<Object> left,
                                                          WeightedElement<Object> right) {
-        return new WeightedElement<>(left.element(), left.weight() + right.weight());
+        return new WeightedElement<>(left.getElement(), left.getWeight() + right.getWeight());
     }
 
     //TODO try a performance test with this replaced with combineSetWithRestrictions()
@@ -85,13 +85,13 @@ public class FieldSpecMerger {
         return addNullability(left.isNullable(), right.isNullable(), newFieldSpec);
     }
     private static <T> boolean elementsEqual(WeightedElement<T> left, WeightedElement<T> right) {
-        return left.element().equals(right.element());
+        return left.getElement().equals(right.getElement());
     }
 
     private Optional<FieldSpec> combineSetWithRestrictions(WhitelistFieldSpec set, FieldSpec restrictions) {
         DistributedList<Object> newSet = new DistributedList<>(
             set.getWhitelist().distributedList().stream()
-                .filter(holder -> restrictions.canCombineWithWhitelistValue(holder.element()))
+                .filter(holder -> restrictions.canCombineWithWhitelistValue(holder.getElement()))
                 .distinct()
                 .collect(Collectors.toList()));
 

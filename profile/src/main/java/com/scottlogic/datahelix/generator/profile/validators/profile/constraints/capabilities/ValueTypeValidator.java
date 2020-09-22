@@ -39,7 +39,7 @@ public class ValueTypeValidator implements Validator<Object>
             return ValidationResult.failure("Values must be specified" + errorInfo);
         }
         if (value instanceof WeightedElement) {
-            return validate(((WeightedElement) value).element());
+            return validate(((WeightedElement) value).getElement());
         }
 
         switch (expectedFieldType) {

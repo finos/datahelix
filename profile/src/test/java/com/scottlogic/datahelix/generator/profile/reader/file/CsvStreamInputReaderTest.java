@@ -55,7 +55,7 @@ class CsvStreamInputReaderTest {
 
     private <T> boolean checkAllWeightsAreEquals(DistributedList<T> set) {
         return set.distributedList().stream()
-            .map(WeightedElement::weight)
+            .map(WeightedElement::getWeight)
             .distinct()
             .limit(2).count() <= 1;
     }

@@ -51,7 +51,7 @@ public class NameRetrievalService
     private static <T> DistributedList<Object> downcastToObject(DistributedList<T> higher) {
         return new DistributedList<>(
             higher.distributedList().stream()
-                .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
+                .map(holder -> new WeightedElement<Object>(holder.getElement(), holder.getWeight()))
                 .distinct()
                 .collect(Collectors.toList()));
     }
@@ -77,8 +77,8 @@ public class NameRetrievalService
 
     private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,
                                                             WeightedElement<String> last) {
-        String name = String.format("%s %s", first.element(), last.element());
-        double frequency = first.weight() + last.weight();
+        String name = String.format("%s %s", first.getElement(), last.getElement());
+        double frequency = first.getWeight() + last.getWeight();
         return new WeightedElement<>(name, frequency);
     }
 }

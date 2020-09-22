@@ -43,11 +43,11 @@ public class WeightedElement<E> {
         this.weight = weight;
     }
 
-    public E element() {
+    public E getElement() {
         return element;
     }
 
-    public double weight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -61,7 +61,7 @@ public class WeightedElement<E> {
     }
 
     public static Object parseValue(WeightedElement element, Function<Object, Object> parse) {
-        return new WeightedElement<>(parse.apply(element.element()), element.weight());
+        return new WeightedElement<>(parse.apply(element.getElement()), element.getWeight());
     }
 
     @Override

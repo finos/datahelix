@@ -56,7 +56,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
                 .getWhitelist()
                 .distributedList()
                 .stream()
-                .map(x -> new WeightedElement<>(offsetGranularity.getNext((T) x.element(), offset), x.weight()))
+                .map(x -> new WeightedElement<>(offsetGranularity.getNext((T) x.getElement(), offset), x.getWeight()))
                 .collect(Collectors.toList());
             return FieldSpecFactory.fromList((DistributedList) new DistributedList<>(modified));
         }
