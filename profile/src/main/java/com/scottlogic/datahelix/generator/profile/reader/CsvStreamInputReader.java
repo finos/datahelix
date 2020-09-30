@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class CsvStreamInputReader implements CsvInputReader {
     private final InputStream stream;
     private final String file;
+    private List<CSVRecord> records;
 
     public CsvStreamInputReader(InputStream stream, String file) {
         this.stream = stream;
@@ -39,14 +40,14 @@ public class CsvStreamInputReader implements CsvInputReader {
     }
 
     public DistributedList<String> retrieveLines() {
-        List<CSVRecord> records = parse(stream);
+        records = parse(stream);
         return new DistributedList<>(records.stream()
             .map(this::createWeightedElementFromRecord)
             .collect(Collectors.toList()));
     }
 
     public DistributedList<String> retrieveLines(String key) {
-        List<CSVRecord> records = parse(stream);
+        records = parse(stream);
 
         int index = getIndexForKey(records.get(0), key);
 
@@ -57,6 +58,15 @@ public class CsvStreamInputReader implements CsvInputReader {
             .map(record -> record.get(index))
             .map(record -> createWeightedElement(record, Optional.empty()))
             .collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean isWeightedSet() {
+        if( records == null) {
+            throw new RuntimeException("isWeightedSet called before retrieveLines. Please call retrieveLines first to load records.");
+        }
+        if (records.size() == 0) return false;
+        return records.get(0).size() == 2;
     }
 
     private static int getIndexForKey(CSVRecord header, String key) {

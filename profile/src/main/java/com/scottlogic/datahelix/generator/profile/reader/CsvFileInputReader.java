@@ -24,6 +24,7 @@ import java.io.*;
 public class CsvFileInputReader implements CsvInputReader {
     private final File path;
     private final CsvInputStreamReaderFactory csvInputStreamReaderFactory;
+    private CsvInputReader reader;
 
     public CsvFileInputReader(File path) {
         this.path = path;
@@ -32,7 +33,8 @@ public class CsvFileInputReader implements CsvInputReader {
 
     public DistributedList<String> retrieveLines() {
         try (InputStream stream = createStream()) {
-            return csvInputStreamReaderFactory.getReaderForStream(stream, path.getName()).retrieveLines();
+            reader = csvInputStreamReaderFactory.getReaderForStream(stream, path.getName());
+            return reader.retrieveLines();
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
@@ -40,10 +42,18 @@ public class CsvFileInputReader implements CsvInputReader {
 
     public DistributedList<String> retrieveLines(String key) {
         try (InputStream stream = createStream()) {
-            return csvInputStreamReaderFactory.getReaderForStream(stream, path.getName()).retrieveLines(key);
+            reader = csvInputStreamReaderFactory.getReaderForStream(stream, path.getName());
+            return reader.retrieveLines(key);
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
+    }
+
+    public boolean isWeightedSet() {
+        if( reader == null) {
+            throw new RuntimeException("isWeightedSet called before retrieveLines. Please call retrieveLines first to load records.");
+        }
+        return reader.isWeightedSet();
     }
 
     private InputStream createStream() {

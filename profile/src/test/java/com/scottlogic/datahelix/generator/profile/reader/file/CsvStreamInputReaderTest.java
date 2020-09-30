@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CsvStreamInputReaderTest {
     @Test
@@ -60,4 +60,44 @@ class CsvStreamInputReaderTest {
             .limit(2).count() <= 1;
     }
 
+    @Test
+    public void testReadingLinesFromFileWithFrequencies() {
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final InputStream is = loader.getResourceAsStream("csv/with-frequencies.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "csv/with-frequencies.csv");
+
+        final DistributedList<String> set = reader.retrieveLines();
+
+        assertFalse(checkAllWeightsAreEquals(set));
+    }
+
+    @Test
+    public void testReadingLinesFromFileWithFrequenciesIsWeightedSet() {
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final InputStream is = loader.getResourceAsStream("csv/with-frequencies.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "csv/with-frequencies.csv");
+
+        reader.retrieveLines();
+        assertTrue(reader.isWeightedSet());
+    }
+
+    @Test
+    public void testReadingLinesFromFileWithoutFrequenciesIsNotWeightedSet() {
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final InputStream is = loader.getResourceAsStream("csv/without-frequencies.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "csv/without-frequencies.csv");
+
+        reader.retrieveLines();
+        assertFalse(reader.isWeightedSet());
+    }
+
+    @Test
+    public void testReadingLinesFromFileWithEqualFrequenciesIsWeightedSet() {
+        final ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        final InputStream is = loader.getResourceAsStream("csv/with-equal-frequencies.csv");
+        final CsvInputReader reader = new CsvStreamInputReader(is, "csv/with-equal-frequencies.csv");
+
+        reader.retrieveLines();
+        assertTrue(reader.isWeightedSet());
+    }
 }
