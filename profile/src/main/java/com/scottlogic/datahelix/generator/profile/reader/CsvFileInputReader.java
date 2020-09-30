@@ -23,14 +23,16 @@ import java.io.*;
 
 public class CsvFileInputReader implements CsvInputReader {
     private final File path;
+    private final CsvInputStreamReaderFactory csvInputStreamReaderFactory;
 
     public CsvFileInputReader(File path) {
         this.path = path;
+        this.csvInputStreamReaderFactory = new CsvInputStreamReaderFactory();
     }
 
     public DistributedList<String> retrieveLines() {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path.getName()).retrieveLines();
+            return csvInputStreamReaderFactory.getReaderForStream(stream, path.getName()).retrieveLines();
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
@@ -38,7 +40,7 @@ public class CsvFileInputReader implements CsvInputReader {
 
     public DistributedList<String> retrieveLines(String key) {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path.getName()).retrieveLines(key);
+            return csvInputStreamReaderFactory.getReaderForStream(stream, path.getName()).retrieveLines(key);
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
