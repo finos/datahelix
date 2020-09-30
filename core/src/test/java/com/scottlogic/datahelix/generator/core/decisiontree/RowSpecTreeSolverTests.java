@@ -92,42 +92,49 @@ class RowSpecTreeSolverTests {
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F))),
+                    false
                 ),
                 new InSetConstraint(
                     city,
                     new DistributedList<>(new ArrayList<>(Arrays.asList(
                         new WeightedElement<>("New York", 1.0F),
-                        new WeightedElement<>("Washington DC", 1.0F)))
-                    ))),
+                        new WeightedElement<>("Washington DC", 1.0F)))),
+                    false)),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F))),
+                    false
                 ),
                 new InSetConstraint(
                     city,
                     new DistributedList<>(new ArrayList<>(Arrays.asList(
                         new WeightedElement<>("Bristol", 1.0F),
                         new WeightedElement<>("London", 1.0F)))
-                    ))),
+                    ),
+                    false)),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F))),
+                    false
                 ),
                 new InSetConstraint(
                     currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F))),
+                    false
                 )),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F))),
+                    false
                 ),
                 new InSetConstraint(
                     currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
+                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F))),
+                    false
                 )));
 
         Profile profile = new Profile(fields, constraints, new ArrayList<>());

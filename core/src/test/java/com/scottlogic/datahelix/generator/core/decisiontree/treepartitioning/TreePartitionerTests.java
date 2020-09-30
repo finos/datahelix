@@ -278,7 +278,8 @@ class TreePartitionerTests {
                 createField(fieldName),
                 new DistributedList<>(
                     Collections.singletonList(
-                        new WeightedElement<>("sample-value", 1.0F))));
+                        new WeightedElement<>("sample-value", 1.0F))),
+                false);
             this.constraints.put(fieldName, constraint);
         }
 

@@ -39,7 +39,8 @@ public class TestAtomicConstraintBuilder {
     public TestConstraintNodeBuilder isInSet(Object... legalValues) {
         InSetConstraint inSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues));
+            whitelistOf(legalValues),
+            false);
         testConstraintNodeBuilder.constraints.add(inSetConstraint);
         return testConstraintNodeBuilder;
     }
@@ -47,7 +48,8 @@ public class TestAtomicConstraintBuilder {
     public TestConstraintNodeBuilder isNotInSet(Object... legalValues) {
         AtomicConstraint isInSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues)
+            whitelistOf(legalValues),
+            false
         ).negate();
         testConstraintNodeBuilder.constraints.add(isInSetConstraint);
         return testConstraintNodeBuilder;

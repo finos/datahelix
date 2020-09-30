@@ -115,7 +115,7 @@ public abstract class AtomicConstraintFactory {
                 : this.parseValue(value)
             )
             .collect(Collectors.toList()));
-        return new InSetConstraint(field, values);
+        return new InSetConstraint(field, values, false);
     }
 
     private AtomicConstraint createIsNullConstraint(IsNullConstraintDTO dto, Fields fields)

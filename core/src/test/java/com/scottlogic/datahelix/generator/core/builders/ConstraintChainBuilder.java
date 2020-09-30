@@ -93,7 +93,8 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(
             new InSetConstraint(
                 barField,
-                DistributedList.singleton(referenceValue)));
+                DistributedList.singleton(referenceValue),
+                false));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -111,7 +112,8 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         return saveAndSet(new InSetConstraint(
             field,
-            DistributedList.uniform(SetUtils.setOf(legalArray))));
+            DistributedList.uniform(SetUtils.setOf(legalArray)),
+            false));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {

@@ -30,10 +30,12 @@ import java.util.stream.Collectors;
 public class InSetConstraint implements AtomicConstraint {
     public final Field field;
     public final DistributedList<Object> legalValues;
+    private final boolean isWeightedSet;
 
-    public InSetConstraint(Field field, DistributedList<Object> legalValues) {
+    public InSetConstraint(Field field, DistributedList<Object> legalValues, boolean isWeightedSet) {
         this.field = field;
         this.legalValues = legalValues;
+        this.isWeightedSet = isWeightedSet;
 
         if (legalValues.distributedList().isEmpty()) {
             throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
@@ -48,6 +50,10 @@ public class InSetConstraint implements AtomicConstraint {
 
     public List<Object> legalValuesWithoutFrequency() {
         return legalValues.list();
+    }
+
+    public boolean isWeightedSet() {
+        return isWeightedSet;
     }
 
     @Override

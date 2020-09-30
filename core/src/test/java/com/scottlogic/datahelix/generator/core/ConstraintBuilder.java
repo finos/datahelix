@@ -40,15 +40,18 @@ public class ConstraintBuilder {
     }
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
-        constraints.add(new InSetConstraint(fields.get(fieldname),
-            DistributedList.uniform(values)));
+        constraints.add(new InSetConstraint(
+            fields.get(fieldname),
+            DistributedList.uniform(values),
+            false));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new InSetConstraint(
             fields.get(fieldname),
-            DistributedList.singleton(value)));
+            DistributedList.singleton(value),
+            false));
         return this;
     }
 

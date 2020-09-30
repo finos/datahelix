@@ -123,7 +123,8 @@ class DecisionTreeFactoryTests {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraint0 = new InSetConstraint(
             inputFieldList.get(0),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),
+            false);
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         Profile testInput = new Profile(inputFieldList, Arrays.asList(constraint0, constraint1, constraint2), new ArrayList<>());
@@ -144,7 +145,8 @@ class DecisionTreeFactoryTests {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
         InSetConstraint constraint0 = new InSetConstraint(
             inputFieldList.get(0),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),
+            false);
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
         List<Constraint> inputConstraints = Arrays.asList(constraint0, constraint1, constraint2);
@@ -166,7 +168,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoDecisions_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
@@ -185,7 +187,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithAllAtomicConstraintsInAtomicConstraintsCollection_IfProfileContainsOnlyAtomicConstraintsAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraint0, constraint1));
         MatchesRegexConstraint constraint2 = new MatchesRegexConstraint(inputFieldList.get(1), Pattern.compile("start.*end"));
@@ -209,15 +211,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithDecisionForEachOrConstraint() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraint0 = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraint1 = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraint0, constraint1));
         InSetConstraint constraint2 = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))),false);
         InSetConstraint constraint3 = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))),false);
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraint2, constraint3));
         Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
@@ -233,15 +235,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithNoAtomicConstraints_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         InSetConstraint constraintC = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))),false);
         InSetConstraint constraintD = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))),false);
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
@@ -257,15 +259,15 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, constraintB));
         InSetConstraint constraintC = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))),false);
         InSetConstraint constraintD = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))),false);
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintC, constraintD));
         Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
@@ -292,17 +294,17 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfAllAtomicConstraintsInProfileAreChildrenOfOrAndAndConstraints() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(0));
         GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(0), NumberUtils.coerceToBigDecimal(5));
         AndConstraint andConstraint0 = new AndConstraint(Arrays.asList(constraintC, constraintB));
         OrConstraint orConstraint0 = new OrConstraint(Arrays.asList(constraintA, andConstraint0));
         InSetConstraint constraintD = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("steam", 1.0F))),false);
         InSetConstraint constraintE = new InSetConstraint(
             inputFieldList.get(1),
-            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))));
+            new DistributedList<>(Collections.singletonList(new WeightedElement<>("diesel", 1.0F))),false);
         OrConstraint orConstraint1 = new OrConstraint(Arrays.asList(constraintD, constraintE));
         Profile testInput = new Profile(inputFieldList, Arrays.asList(orConstraint0, orConstraint1), new ArrayList<>());
         DecisionTreeFactory testObject = new DecisionTreeFactory();
@@ -329,7 +331,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
         GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(20));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
@@ -358,7 +360,7 @@ class DecisionTreeFactoryTests {
     // Checks IF (A OR B) THEN C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfConditionalConstraintWithNestedOrIsPresent() {
-        AtomicConstraint aEquals10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint aEquals10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         AtomicConstraint aGreaterThan10 = new GreaterThanConstraint(fieldA, NumberUtils.coerceToBigDecimal(10));
         AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
 
@@ -390,7 +392,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedConditionalConstraintIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(20));
         GreaterThanConstraint constraintC = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(10));
         ConditionalConstraint conditionalConstraint = new ConditionalConstraint(constraintA, constraintB, constraintC);
@@ -425,7 +427,7 @@ class DecisionTreeFactoryTests {
         // is equivalent to
         // A ^ ¬B
 
-        AtomicConstraint aEqualTo10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint aEqualTo10 = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         AtomicConstraint bGreaterThan20 = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
 
         Constraint inputRule = new ConditionalConstraint(aEqualTo10, bGreaterThan20).negate();
@@ -445,7 +447,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfDoubleNegationIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         Constraint notConstraint0 = constraintA.negate();
         Constraint notConstraint1 = notConstraint0.negate();
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(notConstraint1), new ArrayList<>());
@@ -467,7 +469,7 @@ class DecisionTreeFactoryTests {
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNegatedAndIsPresent() {
         List<Field> inputFieldList = Arrays.asList(createField("one"), createField("two"), createField("three"));
-        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        InSetConstraint constraintA = new InSetConstraint(inputFieldList.get(0), new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         GreaterThanConstraint constraintB = new GreaterThanConstraint(inputFieldList.get(1), NumberUtils.coerceToBigDecimal(5));
         NegatedGrammaticalConstraint notConstraint = (NegatedGrammaticalConstraint) new AndConstraint(Arrays.asList(constraintA, constraintB)).negate();
         Profile testInput = new Profile(inputFieldList, Collections.singletonList(notConstraint), new ArrayList<>());
@@ -491,7 +493,7 @@ class DecisionTreeFactoryTests {
     // (A OR B) OR C
     @Test
     void shouldReturnAnalysedRuleWithCorrectDecisionStructure_IfNestedOrsArePresent() {
-        AtomicConstraint constraintA = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))));
+        AtomicConstraint constraintA = new InSetConstraint(fieldA, new DistributedList<>(Collections.singletonList(new WeightedElement<>(10, 1.0F))),false);
         AtomicConstraint constraintB = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(20));
         AtomicConstraint constraintC = new GreaterThanConstraint(fieldB, NumberUtils.coerceToBigDecimal(10));
 

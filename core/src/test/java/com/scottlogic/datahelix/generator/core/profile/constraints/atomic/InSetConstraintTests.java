@@ -31,7 +31,7 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.empty()));
+            () -> new InSetConstraint(field1, DistributedList.empty(), false));
     }
 
     @Test
@@ -40,14 +40,14 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.singleton(null)));
+            () -> new InSetConstraint(field1, DistributedList.singleton(null), false));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new InSetConstraint(field1, DistributedList.singleton("foo")));
+            () -> new InSetConstraint(field1, DistributedList.singleton("foo"), false));
     }
 
 }

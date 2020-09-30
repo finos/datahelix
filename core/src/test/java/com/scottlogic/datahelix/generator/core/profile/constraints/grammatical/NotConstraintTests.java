@@ -69,11 +69,13 @@ public class NotConstraintTests {
         Field field2 = createField("TestField");
         Constraint constraint1 = new InSetConstraint(
             field1,
-            DistributedList.singleton("abc")
+            DistributedList.singleton("abc"),
+            false
             ).negate();
         Constraint constraint2 = new InSetConstraint(
             field2,
-            DistributedList.singleton("abcd")
+            DistributedList.singleton("abcd"),
+            false
             ).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }

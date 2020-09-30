@@ -88,13 +88,13 @@ public class ConstraintService {
             field -> new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FIRST_NAME.getType(),
-            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST), false));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.LAST_NAME.getType(),
-            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST), false));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FULL_NAME.getType(),
-            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL), false));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
             field -> new FakerConstraint(field, field.getSpecificType().getFakerMethod()));
