@@ -26,6 +26,8 @@ public class InSetConstraintDTO extends AtomicConstraintDTO
 {
     public static final String NAME = "inSet";
 
+    public boolean isWeightedList;
+
     @JsonProperty(NAME)
     public List<Object> values;
 }
