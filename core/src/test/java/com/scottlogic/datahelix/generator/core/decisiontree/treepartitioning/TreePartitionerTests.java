@@ -20,6 +20,7 @@ import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNodeBuilder;
@@ -276,10 +277,8 @@ class TreePartitionerTests {
         if (constraint == null) {
             constraint = new InSetConstraint(
                 createField(fieldName),
-                new DistributedList<>(
-                    Collections.singletonList(
-                        new WeightedElement<>("sample-value", 1.0F))),
-                false);
+                new UniformList<>(Collections.singletonList("sample-value"))
+            );
             this.constraints.put(fieldName, constraint);
         }
 

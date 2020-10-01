@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.*;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
@@ -82,7 +83,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
             return FieldSpecFactory.fromType(FieldType.DATETIME);
         }
         T offsetValue = offsetGranularity.getNext(value, offset);
-        return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
+        return FieldSpecFactory.fromList(UniformList.singleton(offsetValue));
     }
 
     @Override

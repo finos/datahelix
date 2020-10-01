@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RestrictionsFieldSpec;
@@ -159,13 +160,13 @@ class FieldSpecRelationTest {
 
     @Test
     public void equalTo_forSet_returns() {
-        DistributedList<Object> expectedValues = DistributedList.uniform(
+        DistributedList<Object> expectedValues = new UniformList<>(
             Stream.of("2", "3", "4")
                 .map(BigDecimal::new)
                 .collect(Collectors.toSet()));
         WhitelistFieldSpec expected = FieldSpecFactory.fromList(expectedValues);
 
-        DistributedList<Object> secondValues = DistributedList.uniform(
+        DistributedList<Object> secondValues = new UniformList<>(
             Stream.of("1", "2", "3")
                 .map(BigDecimal::new)
                 .collect(Collectors.toSet()));

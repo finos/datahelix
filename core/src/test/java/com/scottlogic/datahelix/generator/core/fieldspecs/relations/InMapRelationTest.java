@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
@@ -40,12 +41,12 @@ class InMapRelationTest {
         Field f2 = createField("field1");
         List<Object> values = Arrays.asList("foo", "bar");
 
-        testInstance = new InMapRelation(f1, f2, DistributedList.uniform(values));
+        testInstance = new InMapRelation(f1, f2, new UniformList<>(values));
     }
 
     @Test
     void reduceValueToFieldSpec_whenValidIndex_returnFieldSpec() {
-        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton("bar"));
+        FieldSpec expected = FieldSpecFactory.fromList(UniformList.singleton("bar"));
         FieldSpec actual = testInstance.createModifierFromOtherValue(new DataBagValue(BigDecimal.valueOf(1)));
 
         Assert.assertEquals(expected, actual);

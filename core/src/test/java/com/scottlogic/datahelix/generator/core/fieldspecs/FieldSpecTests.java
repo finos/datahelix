@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.*;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.*;
@@ -56,7 +57,7 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.singleton("whitelist"));
+        FieldSpec fieldSpec = FieldSpecFactory.fromList(UniformList.singleton("whitelist"));
 
         boolean result = fieldSpec.equals(FieldSpecFactory.fromType(FieldType.STRING));
 
@@ -71,7 +72,7 @@ class FieldSpecTests {
         FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);
 
         boolean result = fieldSpec.equals(
-            FieldSpecFactory.fromList(DistributedList.singleton("whitelist")));
+            FieldSpecFactory.fromList(UniformList.singleton("whitelist")));
 
         assertFalse(
             "Expected that when the field spec does not have set restrictions and the other object has set restrictions a false value is returned but was true",
@@ -81,10 +82,10 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3)));
+        FieldSpec fieldSpec = FieldSpecFactory.fromList(new UniformList<>(Arrays.asList(1, 2, 3)));
 
         boolean result = fieldSpec.equals(
-            FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3, 4))));
+            FieldSpecFactory.fromList(new UniformList<>(Arrays.asList(1, 2, 3, 4))));
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
@@ -131,8 +132,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("same"));
-        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("same"));
+        FieldSpec a = FieldSpecFactory.fromList(UniformList.singleton("same"));
+        FieldSpec b = FieldSpecFactory.fromList(UniformList.singleton("same"));
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -140,8 +141,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("not same"));
-        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("different"));
+        FieldSpec a = FieldSpecFactory.fromList(UniformList.singleton("not same"));
+        FieldSpec b = FieldSpecFactory.fromList(UniformList.singleton("different"));
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -247,14 +248,14 @@ class FieldSpecTests {
 
     @Test
     void permits_whenNotInWhiteList_returnsFalse() {
-        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
+        FieldSpec spec = FieldSpecFactory.fromList(UniformList.singleton(10));
 
         assertFalse(spec.canCombineWithWhitelistValue(11));
     }
 
     @Test
     void permits_whenInWhiteList_returnsTrue() {
-        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
+        FieldSpec spec = FieldSpecFactory.fromList(UniformList.singleton(10));
 
         assertTrue(spec.canCombineWithWhitelistValue(10));
     }

@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
@@ -31,7 +32,7 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.empty(), false));
+            () -> new InSetConstraint(field1, DistributedList.empty()));
     }
 
     @Test
@@ -40,14 +41,14 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.singleton(null), false));
+            () -> new InSetConstraint(field1, UniformList.singleton(null)));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new InSetConstraint(field1, DistributedList.singleton("foo"), false));
+            () -> new InSetConstraint(field1, UniformList.singleton("foo")));
     }
 
 }

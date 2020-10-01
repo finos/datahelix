@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
@@ -92,50 +93,45 @@ class RowSpecTreeSolverTests {
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F))),
-                    false
+                    new UniformList<>(Collections.singletonList("US"))
+
                 ),
                 new InSetConstraint(
                     city,
-                    new DistributedList<>(new ArrayList<>(Arrays.asList(
-                        new WeightedElement<>("New York", 1.0F),
-                        new WeightedElement<>("Washington DC", 1.0F)))),
-                    false)),
+                    new UniformList<>(new ArrayList<>(Arrays.asList("New York", "Washington DC")))
+                )
+            ),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F))),
-                    false
+                    new UniformList<>(Collections.singletonList("GB"))
+
                 ),
                 new InSetConstraint(
                     city,
-                    new DistributedList<>(new ArrayList<>(Arrays.asList(
-                        new WeightedElement<>("Bristol", 1.0F),
-                        new WeightedElement<>("London", 1.0F)))
-                    ),
-                    false)),
+                    new UniformList<>(new ArrayList<>(Arrays.asList("Bristol", "London")
+                    )))
+            ),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F))),
-                    false
+                    new UniformList<>(Collections.singletonList("US"))
                 ),
                 new InSetConstraint(
                     currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F))),
-                    false
-                )),
+                    new UniformList<>(Collections.singletonList("USD")))
+            ),
             new ConditionalConstraint(
                 new InSetConstraint(
                     country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F))),
-                    false
+                    new UniformList<>(Collections.singletonList("GB"))
                 ),
                 new InSetConstraint(
                     currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F))),
-                    false
-                )));
+                    new UniformList<>(Collections.singletonList("GBP"))
+                )
+            )
+        );
 
         Profile profile = new Profile(fields, constraints, new ArrayList<>());
 

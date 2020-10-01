@@ -88,7 +88,7 @@ public class ConstraintService {
             field -> new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FIRST_NAME.getType(),
-            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST), false));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.LAST_NAME.getType(),
             field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST), false));

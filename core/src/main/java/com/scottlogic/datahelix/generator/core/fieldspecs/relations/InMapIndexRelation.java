@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
@@ -49,7 +50,7 @@ public class InMapIndexRelation implements FieldSpecRelation
                 whiteList.add(BigDecimal.valueOf(i));
             }
         }
-        return FieldSpecFactory.fromList(DistributedList.uniform(whiteList)).withNotNull();
+        return FieldSpecFactory.fromList(new UniformList<>(whiteList)).withNotNull();
     }
 
     @Override

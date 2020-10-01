@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.generation;
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
@@ -60,7 +61,7 @@ public class FieldSpecGetFieldValueSourceTests {
 
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
-        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
+        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(new UniformList<>(new HashSet<>(Arrays.asList(15, 25))));
 
         FieldValueSource<?> sources = fieldSpecInSetAndNullNotDisallowed.getFieldValueSource();
 

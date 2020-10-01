@@ -50,10 +50,6 @@ public class DistributedList<T> {
             .collect(Collectors.toList());
     }
 
-    public static <T> DistributedList<T> singleton(final T element) {
-        return DistributedList.uniform(Collections.singleton(element));
-    }
-
     public static <T> DistributedList<T> weightedOrDefault(final Collection<T> underlyingSet) {
         return new DistributedList<>(
             underlyingSet.stream()
@@ -61,13 +57,6 @@ public class DistributedList<T> {
                         ? (WeightedElement<T>) element
                         : WeightedElement.withDefaultWeight(element)
                 )
-                .collect(Collectors.toList()));
-    }
-
-    public static <T> DistributedList<T> uniform(final Collection<T> underlyingSet) {
-        return new DistributedList<>(
-            underlyingSet.stream()
-                .map(WeightedElement::withDefaultWeight)
                 .collect(Collectors.toList()));
     }
 
@@ -128,6 +117,10 @@ public class DistributedList<T> {
         } else {
             return index;
         }
+    }
+
+    public boolean isDistributedList() {
+        return false;
     }
 
     @Override

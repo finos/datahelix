@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.core.walker.decisionbased;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.builders.TestConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
@@ -76,7 +77,7 @@ class RowSpecTreeSolverTests {
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList("1", "2", "3"))));
+        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromList(new UniformList<>(Arrays.asList("1", "2", "3"))));
         fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(fields, fieldToFieldSpec, Collections.emptyList()));
 
@@ -106,7 +107,7 @@ class RowSpecTreeSolverTests {
         expectedRowSpecs.add(new RowSpec(fields, option0, Collections.emptyList()));
         Map<Field, FieldSpec> option1 = new HashMap<>();
         option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList("1","2","3"))));
+        option1.put(fieldB, FieldSpecFactory.fromList(new UniformList<>(Arrays.asList("1","2","3"))));
         expectedRowSpecs.add(new RowSpec(fields, option1, Collections.emptyList()));
 
         assertThat(rowSpecs, sameBeanAs(expectedRowSpecs));

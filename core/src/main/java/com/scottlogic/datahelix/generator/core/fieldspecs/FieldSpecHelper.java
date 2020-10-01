@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 
-import static com.scottlogic.datahelix.generator.common.whitelist.DistributedList.singleton;
+import static com.scottlogic.datahelix.generator.common.whitelist.UniformList.singleton;
 
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {

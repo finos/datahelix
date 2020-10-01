@@ -16,6 +16,7 @@
 package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
@@ -43,7 +44,7 @@ public class EqualToConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromList(DistributedList.singleton(value));
+        return FieldSpecFactory.fromList(UniformList.singleton(value));
     }
 
     @Override

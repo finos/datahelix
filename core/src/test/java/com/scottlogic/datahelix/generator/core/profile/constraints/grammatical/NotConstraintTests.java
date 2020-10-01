@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.core.profile.constraints.grammatical;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
@@ -69,13 +70,11 @@ public class NotConstraintTests {
         Field field2 = createField("TestField");
         Constraint constraint1 = new InSetConstraint(
             field1,
-            DistributedList.singleton("abc"),
-            false
+            UniformList.singleton("abc")
             ).negate();
         Constraint constraint2 = new InSetConstraint(
             field2,
-            DistributedList.singleton("abcd"),
-            false
+            UniformList.singleton("abcd")
             ).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }

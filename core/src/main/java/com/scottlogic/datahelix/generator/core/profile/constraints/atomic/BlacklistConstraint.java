@@ -50,7 +50,7 @@ public class BlacklistConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new InSetConstraint(field, legalValues, false);
+        return new InSetConstraint(field, legalValues);
     }
 
     @Override

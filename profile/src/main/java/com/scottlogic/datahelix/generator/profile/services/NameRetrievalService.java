@@ -18,6 +18,7 @@ package com.scottlogic.datahelix.generator.profile.services;
 
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
@@ -38,7 +39,7 @@ public class NameRetrievalService
         this.csvReaderFactory = csvReaderFactory;
     }
 
-    public DistributedList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public UniformList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -48,8 +49,8 @@ public class NameRetrievalService
         }
     }
 
-    private static <T> DistributedList<Object> downcastToObject(DistributedList<T> higher) {
-        return new DistributedList<>(
+    private static <T> UniformList<Object> downcastToObject(DistributedList<T> higher) {
+        return new UniformList<>(
             higher.distributedList().stream()
                 .map(holder -> new WeightedElement<Object>(holder.getElement(), holder.getWeight()))
                 .distinct()

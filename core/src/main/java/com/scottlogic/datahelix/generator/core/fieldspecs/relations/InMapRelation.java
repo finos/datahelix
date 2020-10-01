@@ -17,9 +17,10 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
@@ -46,7 +47,7 @@ public class InMapRelation implements FieldSpecRelation
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         BigDecimal value = (BigDecimal) otherFieldGeneratedValue.getValue();
 
-        DistributedList<Object> newList = DistributedList.singleton(underlyingList.list().get(value.intValue()));
+        DistributedList<Object> newList = UniformList.singleton(underlyingList.list().get(value.intValue()));
         return FieldSpecFactory.fromList(newList);
     }
 

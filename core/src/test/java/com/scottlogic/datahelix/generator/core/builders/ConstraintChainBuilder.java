@@ -19,6 +19,7 @@ package com.scottlogic.datahelix.generator.core.builders;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
@@ -93,8 +94,8 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(
             new InSetConstraint(
                 barField,
-                DistributedList.singleton(referenceValue),
-                false));
+                UniformList.singleton(referenceValue)
+            ));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -112,8 +113,8 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         return saveAndSet(new InSetConstraint(
             field,
-            DistributedList.uniform(SetUtils.setOf(legalArray)),
-            false));
+            new UniformList<>(SetUtils.setOf(legalArray))
+        ));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {

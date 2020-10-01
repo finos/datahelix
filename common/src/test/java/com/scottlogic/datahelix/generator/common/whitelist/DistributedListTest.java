@@ -44,23 +44,6 @@ class DistributedListTest {
     }
 
     @Test
-    public void testUniformGeneratesUniformDistribution() {
-        final double uniformWeight = 10.0D;
-        WeightedElement<String> first = new WeightedElement<>("first", uniformWeight);
-        WeightedElement<String> second = new WeightedElement<>("second", uniformWeight);
-        WeightedElement<String> third = new WeightedElement<>("third", uniformWeight);
-
-        List<WeightedElement<String>> weightedElements = Arrays.asList(first, second, third);
-
-        DistributedList<String> manualSet = new DistributedList<>(weightedElements);
-
-        List<String> elements = Arrays.asList("first", "second", "third");
-        DistributedList<String> uniformSet = DistributedList.uniform(elements);
-
-        assertEquals(manualSet, uniformSet);
-    }
-
-    @Test
     public void testWeightedOrDefaultPassesThroughWeightedElements() {
         WeightedElement<String> firstManual = new WeightedElement<>("first", 0.2);
         WeightedElement<String> secondManual = new WeightedElement<>("second", 0.3);

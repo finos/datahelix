@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.core.builders;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
@@ -33,14 +34,14 @@ public class TestAtomicConstraintBuilder {
     }
 
     private DistributedList<Object> whitelistOf(Object... values) {
-        return DistributedList.uniform(SetUtils.setOf(values));
+        return new UniformList<>(SetUtils.setOf(values));
     }
 
     public TestConstraintNodeBuilder isInSet(Object... legalValues) {
         InSetConstraint inSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues),
-            false);
+            whitelistOf(legalValues)
+            );
         testConstraintNodeBuilder.constraints.add(inSetConstraint);
         return testConstraintNodeBuilder;
     }
@@ -48,8 +49,7 @@ public class TestAtomicConstraintBuilder {
     public TestConstraintNodeBuilder isNotInSet(Object... legalValues) {
         AtomicConstraint isInSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues),
-            false
+            whitelistOf(legalValues)
         ).negate();
         testConstraintNodeBuilder.constraints.add(isInSetConstraint);
         return testConstraintNodeBuilder;

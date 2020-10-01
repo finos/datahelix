@@ -16,6 +16,7 @@
 
 package com.scottlogic.datahelix.generator.core;
 
+import com.scottlogic.datahelix.generator.common.whitelist.UniformList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
@@ -42,16 +43,16 @@ public class ConstraintBuilder {
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
         constraints.add(new InSetConstraint(
             fields.get(fieldname),
-            DistributedList.uniform(values),
-            false));
+            new UniformList<>(values)
+        ));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new InSetConstraint(
             fields.get(fieldname),
-            DistributedList.singleton(value),
-            false));
+            UniformList.singleton(value)
+        ));
         return this;
     }
 
