@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 public class FileReader {
     private final CsvInputStreamReaderFactory csvReaderFactory;
+    private CsvInputReader reader;
 
     @Inject
     public FileReader(CsvInputStreamReaderFactory csvReaderFactory) {
@@ -31,7 +32,7 @@ public class FileReader {
     }
 
     public DistributedList<Object> setFromFile(File file) {
-        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        reader = csvReaderFactory.getReaderForFile(file);
         DistributedList<String> names = reader.retrieveLines();
 
         return new DistributedList<>(
@@ -42,12 +43,19 @@ public class FileReader {
     }
 
     public DistributedList<String> listFromMapFile(File file, String key) {
-        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
+        reader = csvReaderFactory.getReaderForFile(file);
         DistributedList<String> names = reader.retrieveLines(key);
 
         return new DistributedList<>(
             names.distributedList().stream()
                 .map(holder -> new WeightedElement<>(holder.getElement(), holder.getWeight()))
                 .collect(Collectors.toList()));
+    }
+
+    public boolean isWeightedSet() {
+        if( reader == null) {
+            throw new RuntimeException("isWeightedSet called before setFromFile. Please call setFromFile first to load reader.");
+        }
+        return reader.isWeightedSet();
     }
 }

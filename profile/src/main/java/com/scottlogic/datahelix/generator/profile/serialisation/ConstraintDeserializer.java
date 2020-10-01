@@ -89,6 +89,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
         InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
         inSetConstraintDTO.field = dto.field;
         inSetConstraintDTO.values = values;
+        inSetConstraintDTO.isWeightedList = fileReader.isWeightedSet();
         return inSetConstraintDTO;
     }
 
