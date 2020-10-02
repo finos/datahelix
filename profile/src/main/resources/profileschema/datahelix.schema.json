@@ -1008,7 +1008,14 @@
               "items": {
                 "$ref": "#/definitions/constraint"
               }
-            }
+            },
+            "relationships": {
+              "title": "Defines any child objects",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/relationship"
+              }
+            }        
           }
         },
         "extents": {
