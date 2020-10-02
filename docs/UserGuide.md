@@ -153,7 +153,7 @@ These sections are combined to form the [complete profile](#Example-Profile).
 * For a larger profile example see [The schema documentation](user/Schema.md)
 * Further examples can be found in [the Examples folder](https://github.com/finos/datahelix/tree/master/examples)
 
-A Beta feature has been developed for generating nested data (as a step towards support for relational data), for further information see [this](RelationalData.md) page.
+A Beta feature has been developed for generating nested data (as a step towards support for relational data), for further information see [the Relational data documentation](RelationalData.md).
 
 # Fields
 
