@@ -23,7 +23,7 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
@@ -52,17 +52,20 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DATE_FORMATTING;
+import static com.scottlogic.datahelix.generator.common.whitelist.WeightedElement.withDefaultWeight;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.core.IsNull.nullValue;
 
 
 public class JsonProfileReaderTests {
-    private DistributedList<Object> inSetReaderReturnValue = DistributedList.singleton("test");
-    private DistributedList<String> fromFileReaderReturnValue = DistributedList.singleton("test");
+    private final List<WeightedElement<String>> inSetReaderReturnValue = singletonList(withDefaultWeight("test"));
+    private final List<String> fromFileReaderReturnValue = singletonList("test");
 
     private class MockFromFileReader extends FileReader {
         public MockFromFileReader() {
@@ -70,13 +73,13 @@ public class JsonProfileReaderTests {
         }
 
         @Override
-        public DistributedList<Object> setFromFile(File file)
+        public List<WeightedElement<String>> setFromFile(File file)
         {
             return inSetReaderReturnValue;
         }
 
         @Override
-        public DistributedList<String> listFromMapFile(File file, String Key)
+        public List<String> listFromMapFile(File file, String Key)
         {
             return fromFileReaderReturnValue;
         }

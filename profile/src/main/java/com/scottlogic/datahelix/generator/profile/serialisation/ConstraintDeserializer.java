@@ -38,7 +38,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
     private final FileReader fileReader;
@@ -75,7 +74,8 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InMapConstraintDTO map(InMapFromFileConstraintDTO dto)
     {
-        List<Object> values = fileReader.listFromMapFile(getFile(dto.file), dto.key).stream().collect(Collectors.toList());
+        List<Object> values = new ArrayList<>(fileReader.listFromMapFile(getFile(dto.file), dto.key));
+
         InMapConstraintDTO inMapConstraintDTO = new InMapConstraintDTO();
         inMapConstraintDTO.field = dto.field;
         inMapConstraintDTO.otherField = dto.file;
@@ -85,7 +85,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InSetConstraintDTO map(InSetFromFileConstraintDTO dto)
     {
-        List<Object> values = new ArrayList<>(fileReader.setFromFile(getFile(dto.file)).distributedList());
+        List<Object> values = new ArrayList<>(fileReader.setFromFile(getFile(dto.file)));
         InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
         inSetConstraintDTO.field = dto.field;
         inSetConstraintDTO.values = values;

@@ -17,7 +17,6 @@
 package com.scottlogic.datahelix.generator.profile.services;
 
 import com.google.inject.Inject;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
@@ -25,6 +24,7 @@ import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFac
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes.*;
@@ -38,7 +38,7 @@ public class NameRetrievalService
         this.csvReaderFactory = csvReaderFactory;
     }
 
-    public DistributedList<Object> loadNamesFromFile(NameConstraintTypes configuration) {
+    public List<WeightedElement<Object>> loadNamesFromFile(NameConstraintTypes configuration) {
         if (configuration == FULL) {
             return downcastToObject(combineFirstWithLastNames(
                 generateNamesFromSingleFile(FIRST.getFilePath()),
@@ -48,15 +48,14 @@ public class NameRetrievalService
         }
     }
 
-    private static <T> DistributedList<Object> downcastToObject(DistributedList<T> higher) {
-        return new DistributedList<>(
-            higher.distributedList().stream()
+    private static <T> List<WeightedElement<Object>> downcastToObject(List<WeightedElement<T>> higher) {
+        return higher.stream()
                 .map(holder -> new WeightedElement<Object>(holder.element(), holder.weight()))
                 .distinct()
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
-    private DistributedList<String> generateNamesFromSingleFile(String source) {
+    private List<WeightedElement<String>> generateNamesFromSingleFile(String source) {
         try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(source))
         {
             return csvReaderFactory.getReaderForStream(stream, source).retrieveLines();
@@ -65,14 +64,14 @@ public class NameRetrievalService
         }
     }
 
-    private static DistributedList<String> combineFirstWithLastNames(DistributedList<String> firstNames,
-                                                                     DistributedList<String> lastNames) {
-        return new DistributedList<>(firstNames.distributedList().stream()
+    private static List<WeightedElement<String>> combineFirstWithLastNames(List<WeightedElement<String>> firstNames,
+                                                                         List<WeightedElement<String>> lastNames) {
+        return firstNames.stream()
             .flatMap(
-                first -> lastNames.distributedList().stream()
+                first -> lastNames.stream()
                     .map(last -> mergeFrequencies(first, last)))
             .distinct()
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
     }
 
     private static WeightedElement<String> mergeFrequencies(WeightedElement<String> first,

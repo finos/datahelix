@@ -17,13 +17,14 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
@@ -38,14 +39,14 @@ public class CsvStreamInputReader implements CsvInputReader {
         this.file = file;
     }
 
-    public DistributedList<String> retrieveLines() {
+    public List<WeightedElement<String>> retrieveLines() {
         List<CSVRecord> records = parse(stream);
-        return new DistributedList<>(records.stream()
+        return records.stream()
             .map(this::createWeightedElementFromRecord)
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
     }
 
-    public DistributedList<String> retrieveLines(String key) {
+    public List<String> retrieveLinesForColumn(String key) {
         List<CSVRecord> records = parse(stream);
 
         int index = getIndexForKey(records.get(0), key);
@@ -53,10 +54,9 @@ public class CsvStreamInputReader implements CsvInputReader {
         //Remove the header
         records.remove(0);
 
-        return new DistributedList<>(records.stream()
+        return records.stream()
             .map(record -> record.get(index))
-            .map(record -> createWeightedElement(record, Optional.empty()))
-            .collect(Collectors.toList()));
+            .collect(Collectors.toList());
     }
 
     private static int getIndexForKey(CSVRecord header, String key) {

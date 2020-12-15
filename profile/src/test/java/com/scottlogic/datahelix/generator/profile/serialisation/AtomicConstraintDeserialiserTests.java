@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile;
+package com.scottlogic.datahelix.generator.profile.serialisation;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +37,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textua
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
@@ -127,8 +126,8 @@ public class AtomicConstraintDeserialiserTests {
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
         expected.values = Arrays.asList(
-            new WeightedElement<>("test1", 0.2),
-            new WeightedElement<>("test2", 0.8)
+            new WeightedElement<>("test1", 20.0),
+            new WeightedElement<>("test2", 80.0)
         );
 
         assertThat(actual, sameBeanAs(expected));

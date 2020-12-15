@@ -96,7 +96,7 @@ Feature: User can specify that a field value belongs to a set of predetermined o
       | "Wales"            | "Cardiff"   | 2   | "two" |
 
 
-  Scenario: Running an 'inMap' with text a restriction
+  Scenario: Running an 'inMap' with invalid typed data
     Given the following non nullable fields exist:
       | HomeNation |
       | Population    |

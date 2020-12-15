@@ -15,13 +15,13 @@
  */
 package com.scottlogic.datahelix.generator.profile.reader.file;
 
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputReader;
 import com.scottlogic.datahelix.generator.profile.reader.CsvStreamInputReader;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,11 +35,14 @@ class CsvStreamInputReaderTest {
         final InputStream is = loader.getResourceAsStream("names/firstname.csv");
         final CsvInputReader reader = new CsvStreamInputReader(is, "names/firstname.csv");
 
-        final DistributedList<String> names = reader.retrieveLines();
+        final List<WeightedElement<String>> nameElements = reader.retrieveLines();
+        final Set<String> names = nameElements.stream()
+            .map(WeightedElement::element)
+            .collect(Collectors.toSet());
 
         final Set<String> sampleNames = Stream.of("Rory", "Kyle", "Grace").collect(Collectors.toSet());
 
-        assertTrue(names.list().containsAll(sampleNames));
+        assertTrue(names.containsAll(sampleNames));
     }
 
     @Test
@@ -48,13 +51,13 @@ class CsvStreamInputReaderTest {
         final InputStream is = loader.getResourceAsStream("csv/without-frequencies.csv");
         final CsvInputReader reader = new CsvStreamInputReader(is, "csv/without-frequencies.csv");
 
-        final DistributedList<String> set = reader.retrieveLines();
+        final List<WeightedElement<String>> set = reader.retrieveLines();
 
         assertTrue(checkAllWeightsAreEquals(set));
     }
 
-    private <T> boolean checkAllWeightsAreEquals(DistributedList<T> set) {
-        return set.distributedList().stream()
+    private <T> boolean checkAllWeightsAreEquals(List<WeightedElement<T>> set) {
+        return set.stream()
             .map(WeightedElement::weight)
             .distinct()
             .limit(2).count() <= 1;
