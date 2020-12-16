@@ -15,14 +15,12 @@
  */
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import javax.inject.Inject;
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CucumberFileReader extends FileReader {
     private final CucumberTestState testState;

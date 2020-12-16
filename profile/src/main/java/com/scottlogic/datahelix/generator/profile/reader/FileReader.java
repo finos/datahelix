@@ -16,7 +16,7 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 
 import java.io.File;
 import java.util.List;
@@ -29,8 +29,8 @@ public class FileReader {
         this.csvReaderFactory = csvReaderFactory;
     }
 
-    public List<WeightedElement<String>> setFromFile(File file) {
-        return csvReaderFactory.getReaderForFile(file).retrieveLines();
+    public List<InSetRecord> setFromFile(File file) {
+        return csvReaderFactory.getReaderForFile(file).retrieveInSetElements();
     }
 
     public List<String> listFromMapFile(File file, String key) {

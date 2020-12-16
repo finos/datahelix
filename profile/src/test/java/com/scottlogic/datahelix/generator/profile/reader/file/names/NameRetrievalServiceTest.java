@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.reader.file.names;
 
 
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
@@ -37,7 +37,7 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        List<WeightedElement<Object>> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
 
         assertEquals(704, names.size());
     }
@@ -47,7 +47,7 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        List<WeightedElement<Object>> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
 
         assertEquals(280, names.size());
     }
@@ -57,7 +57,7 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        List<WeightedElement<Object>> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
 
         assertEquals(197120, names.size());
     }
@@ -68,7 +68,7 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        List<WeightedElement<Object>> result = service.loadNamesFromFile(config);
+        List<InSetRecord> result = service.loadNamesFromFile(config);
 
         assertNotNull(result);
     }

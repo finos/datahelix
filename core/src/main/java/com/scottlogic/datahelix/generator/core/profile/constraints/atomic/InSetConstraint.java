@@ -18,10 +18,11 @@ package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
-
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,25 +30,27 @@ import java.util.stream.Collectors;
 
 public class InSetConstraint implements AtomicConstraint {
     public final Field field;
-    public final DistributedList<Object> legalValues;
+    public final List<InSetRecord> legalValues;
+    private final boolean negated;
 
-    public InSetConstraint(Field field, DistributedList<Object> legalValues) {
+    public InSetConstraint(Field field, List<InSetRecord> legalValues) {
+        this(field, legalValues, false);
+    }
+
+    private InSetConstraint(Field field, List<InSetRecord> legalValues, boolean negated) {
         this.field = field;
         this.legalValues = legalValues;
+        this.negated = negated;
 
-        if (legalValues.distributedList().isEmpty()) {
+        if (legalValues.isEmpty()) {
             throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
                 field.getName() + "' with an empty set");
         }
 
-        if (legalValues.list().contains(null)) {
+        if (legalValues.stream().map(InSetRecord::getElement).anyMatch(Objects::isNull)) {
             throw new ValidationException("Cannot create an IsInSetConstraint for field '" +
                 field.getName() + "' with a set containing null");
         }
-    }
-
-    public List<Object> legalValuesWithoutFrequency() {
-        return legalValues.list();
     }
 
     @Override
@@ -57,29 +60,41 @@ public class InSetConstraint implements AtomicConstraint {
 
     @Override
     public AtomicConstraint negate() {
-        return new BlacklistConstraint(field, legalValues);
+        return new InSetConstraint(field, legalValues, !negated);
     }
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromList(legalValues);
+        if (negated) {
+            return FieldSpecFactory.fromType(field.getType())
+                .withBlacklist(legalValues.stream().map(InSetRecord::getElement).collect(Collectors.toSet()));
+        }
+        return FieldSpecFactory.fromList(new DistributedList<>(legalValues.stream()
+            .map(v -> new WeightedElement<>(v.getElement(), v.getWeightValueOrDefault()))
+            .collect(Collectors.toList())));
     }
 
     public String toString(){
-        boolean overLimit = legalValues.list().size() > 3;
-        return String.format("%s in [%s%s](%d values)",
+        boolean overLimit = legalValues.size() > 3;
+        String legalValuesSummary = legalValues.stream().limit(3)
+            .map(InSetRecord::getElement)
+            .map(Object::toString)
+            .collect(Collectors.joining(", "));
+
+        return String.format("%s%s in [%s%s](%d values)",
             field.getName(),
-            legalValues.stream().limit(3).map(Object::toString).collect(Collectors.joining(", ")),
+            negated ? "not " : "",
+            legalValuesSummary,
             overLimit ? ", ..." : "",
-            legalValues.list().size());
+            legalValues.size());
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InSetConstraint constraint = (InSetConstraint) o;
-        return Objects.equals(field, constraint.field) && Objects.equals(legalValues, constraint.legalValues);
+        return negated == constraint.negated && Objects.equals(field, constraint.field) && Objects.equals(legalValues, constraint.legalValues);
     }
 
     @Override

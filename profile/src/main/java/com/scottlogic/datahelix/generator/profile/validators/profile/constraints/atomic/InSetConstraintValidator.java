@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.validators.profile.constraints.atomic;
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.profile.dtos.FieldDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetConstraintDTO;
@@ -52,6 +53,9 @@ public class InSetConstraintValidator extends AtomicConstraintValidator<InSetCon
     {
         FieldType fieldType = FieldValidator.getSpecificFieldType(getField(dto.field)).getFieldType();
         ValueTypeValidator valueTypeValidator = new ValueTypeValidator(fieldType, getErrorInfo(dto));
-        return ValidationResult.combine(dto.values.stream().map(valueTypeValidator::validate));
+        return ValidationResult.combine(dto.values.stream()
+                .map(InSetRecord::getElement)
+                .map(valueTypeValidator::validate)
+            );
     }
 }

@@ -22,12 +22,14 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.InvalidConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InMapFromFileConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetFromFileConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetFromListConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.InMapConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
@@ -38,6 +40,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
     private final FileReader fileReader;
@@ -63,7 +66,7 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
             case IN_SET:
                 JsonNode inSetNode = node.get(InSetConstraintDTO.NAME);
                 return (inSetNode.isNull() || inSetNode.isArray())
-                    ? mapper.treeToValue(node, InSetConstraintDTO.class)
+                    ? map(mapper.treeToValue(node, InSetFromListConstraintDTO.class))
                     : map(mapper.treeToValue(node, InSetFromFileConstraintDTO.class));
             case IN_MAP:
                 return map(mapper.treeToValue(node, InMapFromFileConstraintDTO.class));
@@ -85,7 +88,20 @@ public class ConstraintDeserializer extends JsonDeserializer<ConstraintDTO> {
 
     private InSetConstraintDTO map(InSetFromFileConstraintDTO dto)
     {
-        List<Object> values = new ArrayList<>(fileReader.setFromFile(getFile(dto.file)));
+        final List<InSetRecord> values = fileReader.setFromFile(getFile(dto.file));
+
+        InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
+        inSetConstraintDTO.field = dto.field;
+        inSetConstraintDTO.values = values;
+        return inSetConstraintDTO;
+    }
+
+    private InSetConstraintDTO map(InSetFromListConstraintDTO dto)
+    {
+        final List<InSetRecord> values = dto.values != null
+            ? dto.values.stream().map(InSetRecord::new).collect(Collectors.toList())
+            : null;
+
         InSetConstraintDTO inSetConstraintDTO = new InSetConstraintDTO();
         inSetConstraintDTO.field = dto.field;
         inSetConstraintDTO.values = values;

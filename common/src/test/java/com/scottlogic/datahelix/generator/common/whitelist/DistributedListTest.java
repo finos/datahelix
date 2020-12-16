@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.datahelix.generator.common.whitelist.WeightedElement.withDefaultWeight;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -54,8 +55,12 @@ class DistributedListTest {
 
         DistributedList<String> manualSet = new DistributedList<>(weightedElements);
 
-        List<String> elements = Arrays.asList("first", "second", "third");
-        DistributedList<String> uniformSet = DistributedList.uniform(elements);
+        List<WeightedElement<String>> elements = Arrays.asList(
+            withDefaultWeight("first"),
+            withDefaultWeight("second"),
+            withDefaultWeight("third")
+        );
+        DistributedList<String> uniformSet = new DistributedList(elements);
 
         assertEquals(manualSet, uniformSet);
     }
@@ -78,7 +83,7 @@ class DistributedListTest {
         DistributedList<String> manualSet = new DistributedList<>(manualElements);
 
         List<WeightedElement<String>> elements = Arrays.asList(first, second, third);
-        DistributedList<WeightedElement<String>> weightedSet = DistributedList.weightedOrDefault(elements);
+        DistributedList<WeightedElement<String>> weightedSet = new DistributedList(elements);
 
         assertEquals(manualSet, weightedSet);
     }

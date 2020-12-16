@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 
 import java.io.*;
 import java.util.List;
@@ -29,9 +29,9 @@ public class CsvFileInputReader implements CsvInputReader {
         this.path = path;
     }
 
-    public List<WeightedElement<String>> retrieveLines() {
+    public List<InSetRecord> retrieveInSetElements() {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path.getName()).retrieveLines();
+            return new CsvStreamInputReader(stream, path.getName()).retrieveInSetElements();
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }

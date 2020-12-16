@@ -15,7 +15,7 @@
  */
 package com.scottlogic.datahelix.generator.profile.reader.file;
 
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputReader;
 import com.scottlogic.datahelix.generator.profile.reader.CsvStreamInputReader;
 import org.junit.jupiter.api.Test;
@@ -35,14 +35,15 @@ class CsvStreamInputReaderTest {
         final InputStream is = loader.getResourceAsStream("names/firstname.csv");
         final CsvInputReader reader = new CsvStreamInputReader(is, "names/firstname.csv");
 
-        final List<WeightedElement<String>> nameElements = reader.retrieveLines();
-        final Set<String> names = nameElements.stream()
-            .map(WeightedElement::element)
+        final List<InSetRecord> nameElements = reader.retrieveInSetElements();
+        final Set<Object> names = nameElements.stream()
+            .map(InSetRecord::getElement)
             .collect(Collectors.toSet());
 
         final Set<String> sampleNames = Stream.of("Rory", "Kyle", "Grace").collect(Collectors.toSet());
 
         assertTrue(names.containsAll(sampleNames));
+        assertTrue(nameElements.stream().allMatch(InSetRecord::hasWeightPresent));
     }
 
     @Test
@@ -51,14 +52,15 @@ class CsvStreamInputReaderTest {
         final InputStream is = loader.getResourceAsStream("csv/without-frequencies.csv");
         final CsvInputReader reader = new CsvStreamInputReader(is, "csv/without-frequencies.csv");
 
-        final List<WeightedElement<String>> set = reader.retrieveLines();
+        final List<InSetRecord> set = reader.retrieveInSetElements();
 
         assertTrue(checkAllWeightsAreEquals(set));
+        assertTrue(set.stream().noneMatch(InSetRecord::hasWeightPresent));
     }
 
-    private <T> boolean checkAllWeightsAreEquals(List<WeightedElement<T>> set) {
+    private <T> boolean checkAllWeightsAreEquals(List<InSetRecord> set) {
         return set.stream()
-            .map(WeightedElement::weight)
+            .map(InSetRecord::getWeightValueOrDefault)
             .distinct()
             .limit(2).count() <= 1;
     }

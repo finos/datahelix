@@ -18,10 +18,14 @@ package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder.inSetRecordsFrom;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public class InSetConstraintTests
 {
@@ -31,7 +35,7 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.empty()));
+            () -> new InSetConstraint(field1, emptyList()));
     }
 
     @Test
@@ -40,14 +44,14 @@ public class InSetConstraintTests
 
         Assertions.assertThrows(
             ValidationException.class,
-            () -> new InSetConstraint(field1, DistributedList.singleton(null)));
+            () -> new InSetConstraint(field1, singletonList(new InSetRecord(null))));
     }
 
     @Test
     public void testConstraintThrowsNothingIfGivenAValidSet(){
         Field field1 = createField("TestField");
         Assertions.assertDoesNotThrow(
-            () -> new InSetConstraint(field1, DistributedList.singleton("foo")));
+            () -> new InSetConstraint(field1, inSetRecordsFrom("foo")));
     }
 
 }

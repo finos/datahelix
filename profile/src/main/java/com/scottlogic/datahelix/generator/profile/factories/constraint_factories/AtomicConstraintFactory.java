@@ -19,15 +19,19 @@ package com.scottlogic.datahelix.generator.profile.factories.constraint_factorie
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
+import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.InMapRelation;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanOrEqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanOrEqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
@@ -108,13 +112,10 @@ public abstract class AtomicConstraintFactory {
 
     private InSetConstraint createInSetConstraint(InSetConstraintDTO dto, Field field)
     {
-        DistributedList<Object> values = DistributedList.weightedOrDefault(dto.values.stream()
-            .distinct()
-            .map(value -> (value instanceof WeightedElement)
-                ? WeightedElement.parseValue((WeightedElement) value, this::parseValue)
-                : this.parseValue(value)
-            )
-            .collect(Collectors.toList()));
+        final List<InSetRecord> values = dto.values.stream()
+            .map(value -> value.mapValue(this::parseValue))
+            .collect(Collectors.toList());
+
         return new InSetConstraint(field, values);
     }
 

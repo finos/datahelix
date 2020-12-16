@@ -15,14 +15,13 @@
  */
 package com.scottlogic.datahelix.generator.profile.serialisation;
 
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.scottlogic.datahelix.generator.common.whitelist.WeightedElement.withDefaultWeight;
 import static java.util.Collections.singletonList;
 
 public class TestFileReader extends FileReader {
@@ -39,20 +38,20 @@ public class TestFileReader extends FileReader {
     }
 
     @Override
-    public List<WeightedElement<String>> setFromFile(File file) {
+    public List<InSetRecord> setFromFile(File file) {
         return weighted
             ? this.getDistributedListWithWeights()
-            : singletonList(withDefaultWeight("test"));
+            : singletonList(new InSetRecord("test"));
     }
     @Override
     public List<String> listFromMapFile(File file, String key) {
         return singletonList("test");
     }
 
-    private static List<WeightedElement<String>> getDistributedListWithWeights() {
+    private static List<InSetRecord> getDistributedListWithWeights() {
         return Arrays.asList(
-            new WeightedElement<>("test1", 20),
-            new WeightedElement<>("test2", 80)
+            new InSetRecord("test1", 20),
+            new InSetRecord("test2", 80)
         );
     }
 }

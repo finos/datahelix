@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CsvStreamInputReader implements CsvInputReader {
@@ -39,10 +38,10 @@ public class CsvStreamInputReader implements CsvInputReader {
         this.file = file;
     }
 
-    public List<WeightedElement<String>> retrieveLines() {
+    public List<InSetRecord> retrieveInSetElements() {
         List<CSVRecord> records = parse(stream);
         return records.stream()
-            .map(this::createWeightedElementFromRecord)
+            .map(this::createInSetRecord)
             .collect(Collectors.toList());
     }
 
@@ -70,24 +69,18 @@ public class CsvStreamInputReader implements CsvInputReader {
         throw new ValidationException("unable to find data for key " + key);
     }
 
-    private WeightedElement<String> createWeightedElementFromRecord(CSVRecord record) {
+    private InSetRecord createInSetRecord(CSVRecord record) {
+        final String value = record.get(0);
         try {
-            Optional<Double> weighting = record.size() == 1
-                ? Optional.empty()
-                : Optional.of(Double.parseDouble(record.get(1)));
-
-            return createWeightedElement(record.get(0), weighting);
+            return record.size() == 1
+                ? new InSetRecord(value)
+                : new InSetRecord(value, Double.parseDouble(record.get(1)));
         } catch (NumberFormatException e) {
             throw new RuntimeException(
                 "Weighting '" + record.get(1) + "' is not a valid number\n" +
                 "CSV lines containing 2 columns must hold a weighting (double) in the second column, e.g. <value>,0.5\n" +
-                "Value: '" + record.get(0) + "', File: '" + this.file + "', Line " + record.getRecordNumber(), e);
+                "Value: '" + value + "', File: '" + this.file + "', Line " + record.getRecordNumber(), e);
         }
-    }
-
-    private static WeightedElement<String> createWeightedElement(String element, Optional<Double> weight) {
-        return weight.map(integer -> new WeightedElement<>(element, integer))
-            .orElseGet(() -> WeightedElement.withDefaultWeight(element));
     }
 
     private static List<CSVRecord> parse(InputStream stream) {

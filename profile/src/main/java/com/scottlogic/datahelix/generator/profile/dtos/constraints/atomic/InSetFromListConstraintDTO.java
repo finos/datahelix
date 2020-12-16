@@ -17,14 +17,15 @@
 package com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 
-public class InSetConstraintDTO extends AtomicConstraintDTO
+@JsonDeserialize(as = InSetFromListConstraintDTO.class)
+public class InSetFromListConstraintDTO extends AtomicConstraintDTO
 {
     public static final String NAME = "inSet";
 
     @JsonProperty(NAME)
-    public List<InSetRecord> values;
+    public List<Object> values;
 }

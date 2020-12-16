@@ -18,12 +18,8 @@ package com.scottlogic.datahelix.generator.profile.reader;
 
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.common.profile.DateTimeGranularity;
-import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.datahelix.generator.common.profile.NumericGranularity;
+import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.common.util.FileUtils;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
@@ -56,7 +52,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.scottlogic.datahelix.generator.common.util.Defaults.DEFAULT_DATE_FORMATTING;
-import static com.scottlogic.datahelix.generator.common.whitelist.WeightedElement.withDefaultWeight;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -64,7 +59,7 @@ import static org.hamcrest.core.IsNull.nullValue;
 
 
 public class JsonProfileReaderTests {
-    private final List<WeightedElement<String>> inSetReaderReturnValue = singletonList(withDefaultWeight("test"));
+    private final List<InSetRecord> inSetReaderReturnValue = singletonList(new InSetRecord("test"));
     private final List<String> fromFileReaderReturnValue = singletonList("test");
 
     private class MockFromFileReader extends FileReader {
@@ -73,7 +68,7 @@ public class JsonProfileReaderTests {
         }
 
         @Override
-        public List<WeightedElement<String>> setFromFile(File file)
+        public List<InSetRecord> setFromFile(File file)
         {
             return inSetReaderReturnValue;
         }

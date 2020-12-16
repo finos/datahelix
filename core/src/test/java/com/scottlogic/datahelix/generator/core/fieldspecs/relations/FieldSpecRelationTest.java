@@ -23,13 +23,11 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RestrictionsFieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

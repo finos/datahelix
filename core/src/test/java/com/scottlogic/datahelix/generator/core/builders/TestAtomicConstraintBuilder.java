@@ -16,12 +16,16 @@
 
 package com.scottlogic.datahelix.generator.core.builders;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.SetUtils;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class TestAtomicConstraintBuilder {
     private TestConstraintNodeBuilder testConstraintNodeBuilder;
@@ -32,14 +36,22 @@ public class TestAtomicConstraintBuilder {
         this.field = field;
     }
 
-    private DistributedList<Object> whitelistOf(Object... values) {
-        return DistributedList.uniform(SetUtils.setOf(values));
+    public static List<InSetRecord> inSetRecordsFromList(List<Object> values) {
+        return inSetRecordsFromSet(SetUtils.setOf(values));
+    }
+
+    public static List<InSetRecord> inSetRecordsFrom(Object... values) {
+        return inSetRecordsFromSet(SetUtils.setOf(values));
+    }
+
+    private static List<InSetRecord> inSetRecordsFromSet(Set<Object> values) {
+        return values.stream().map(InSetRecord::new).collect(Collectors.toList());
     }
 
     public TestConstraintNodeBuilder isInSet(Object... legalValues) {
         InSetConstraint inSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues));
+            inSetRecordsFrom(legalValues));
         testConstraintNodeBuilder.constraints.add(inSetConstraint);
         return testConstraintNodeBuilder;
     }
@@ -47,7 +59,7 @@ public class TestAtomicConstraintBuilder {
     public TestConstraintNodeBuilder isNotInSet(Object... legalValues) {
         AtomicConstraint isInSetConstraint = new InSetConstraint(
             field,
-            whitelistOf(legalValues)
+            inSetRecordsFrom(legalValues)
         ).negate();
         testConstraintNodeBuilder.constraints.add(isInSetConstraint);
         return testConstraintNodeBuilder;

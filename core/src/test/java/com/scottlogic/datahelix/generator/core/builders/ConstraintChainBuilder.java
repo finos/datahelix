@@ -16,20 +16,20 @@
 
 package com.scottlogic.datahelix.generator.core.builders;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.OrConstraint;
-import com.scottlogic.datahelix.generator.common.SetUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -93,7 +93,7 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
         return saveAndSet(
             new InSetConstraint(
                 barField,
-                DistributedList.singleton(referenceValue)));
+                TestAtomicConstraintBuilder.inSetRecordsFrom(referenceValue)));
     }
 
     public ConstraintChainBuilder<T> withOrConstraint(ConstraintChainBuilder<OrConstraint> orBuilder) {
@@ -111,7 +111,8 @@ public abstract class ConstraintChainBuilder<T> extends BaseConstraintBuilder<T>
     public ConstraintChainBuilder<T> withInSetConstraint(Field field, Object[] legalArray) {
         return saveAndSet(new InSetConstraint(
             field,
-            DistributedList.uniform(SetUtils.setOf(legalArray))));
+            TestAtomicConstraintBuilder.inSetRecordsFromList(Arrays.asList(legalArray))
+        ));
     }
 
     public ConstraintChainBuilder<T> withOfLengthConstraint(Field fooField, int length) {

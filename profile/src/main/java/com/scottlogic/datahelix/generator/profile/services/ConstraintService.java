@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.profile.services;
 
 import com.google.inject.Inject;
 import com.scottlogic.datahelix.generator.common.profile.*;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
@@ -89,13 +88,13 @@ public class ConstraintService {
             field -> new MatchesStandardConstraint(field, StandardConstraintTypes.RIC));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FIRST_NAME.getType(),
-            field -> new InSetConstraint(field, new DistributedList(nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST))));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FIRST)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.LAST_NAME.getType(),
-            field -> new InSetConstraint(field, new DistributedList(nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST))));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.LAST)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FULL_NAME.getType(),
-            field -> new InSetConstraint(field, new DistributedList(nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL))));
+            field -> new InSetConstraint(field, nameRetrievalService.loadNamesFromFile(NameConstraintTypes.FULL)));
         fieldTypeToConstraint.put(
             StandardSpecificFieldType.FAKER.getType(),
             field -> new FakerConstraint(field, field.getSpecificType().getFakerMethod()));
