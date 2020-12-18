@@ -21,6 +21,8 @@ import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.Cann
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class WhitelistFieldSpec extends FieldSpec {
     private final DistributedList<Object> whitelist;
@@ -50,6 +52,13 @@ public class WhitelistFieldSpec extends FieldSpec {
 
     public DistributedList<Object> getWhitelist() {
         return whitelist;
+    }
+
+    public WhitelistFieldSpec withMappedValues(Function<Object, Object> parse) {
+        DistributedList<Object> allowedValuesList = new DistributedList<>(whitelist.distributedList().stream()
+            .map(value -> value.withMappedValue(parse)).collect(Collectors.toList()));
+
+        return new WhitelistFieldSpec(allowedValuesList, nullable);
     }
 
     @Override

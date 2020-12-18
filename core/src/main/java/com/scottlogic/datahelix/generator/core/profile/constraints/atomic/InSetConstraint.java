@@ -19,8 +19,6 @@ package com.scottlogic.datahelix.generator.core.profile.constraints.atomic;
 import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 
@@ -69,9 +67,7 @@ public class InSetConstraint implements AtomicConstraint {
             return FieldSpecFactory.fromType(field.getType())
                 .withBlacklist(legalValues.stream().map(InSetRecord::getElement).collect(Collectors.toSet()));
         }
-        return FieldSpecFactory.fromList(new DistributedList<>(legalValues.stream()
-            .map(v -> new WeightedElement<>(v.getElement(), v.getWeightValueOrDefault()))
-            .collect(Collectors.toList())));
+        return FieldSpecFactory.fromInSetRecords(legalValues);
     }
 
     public String toString(){

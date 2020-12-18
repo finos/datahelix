@@ -23,7 +23,6 @@ import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecHelper;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecMerger;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.LongerThanConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.ShorterThanConstraint;
@@ -65,9 +64,9 @@ class TreePrunerTests {
     @Test
     public void pruneConstraintNode_leafNodeContradictionsWithParent_returnsContradictory() {
         //Arrange
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a", "b"));
         ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new LongerThanConstraint(field, 5)).build();
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -84,10 +83,9 @@ class TreePrunerTests {
     @Test
     public void pruneConstraintNode_leafNodeNoContradictionsWithParent_returnsLeafNode() {
         //Arrange
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a", "b"));
         ConstraintNode tree = new ConstraintNodeBuilder().addAtomicConstraints(new ShorterThanConstraint(field, 5)).build();
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(
-            (DistributedList.uniform(inputWhitelist)));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList);
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -109,8 +107,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("c"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("c"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -133,8 +131,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        DistributedList<Object> inputWhitelist = DistributedList.uniform(new HashSet<>(Arrays.asList("a", "b")));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(inputWhitelist).withNotNull();
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a", "b"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList).withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 
@@ -156,8 +154,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("a"),
                     constraintNode().where(field).isInSet("b"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -183,8 +181,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("b"),
                     constraintNode().where(field).isInSet("c"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -211,8 +209,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("c"))
                 .build();
 
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("a", "b"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("a", "b"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -243,8 +241,8 @@ class TreePrunerTests {
                     constraintNode().where(field).isInSet("contradictory"),
                     constraintNode().where(field).isInSet("contradictory"))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("valid"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -273,8 +271,8 @@ class TreePrunerTests {
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("valid"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -304,8 +302,8 @@ class TreePrunerTests {
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
                 .build();
-        Set<Object> inputWhitelist = Collections.singleton("valid");
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = Collections.singleton("valid");
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -337,8 +335,8 @@ class TreePrunerTests {
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("valid"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -371,8 +369,8 @@ class TreePrunerTests {
                             constraintNode().where(field).isInSet("contradiction")
                         ))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(inputWhitelist))
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("valid"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList)
             .withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
@@ -399,9 +397,8 @@ class TreePrunerTests {
                             constraintNode().where(unrelatedField).isInSet("unrelated2")
                         ))
                 .build();
-        Set<Object> inputWhitelist = new HashSet<>(Arrays.asList("valid"));
-        FieldSpec inputFieldSpec = FieldSpecFactory.fromList((DistributedList.uniform(inputWhitelist)))
-            .withNotNull();
+        Set<Object> inputAllowedList = new HashSet<>(Arrays.asList("valid"));
+        FieldSpec inputFieldSpec = FieldSpecFactory.fromAllowedList(inputAllowedList).withNotNull();
 
         when(fieldSpecHelper.getFieldSpecForValue(any())).thenReturn(inputFieldSpec);
 

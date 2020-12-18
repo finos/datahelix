@@ -51,6 +51,10 @@ public class WeightedElement<E> {
         return weight;
     }
 
+    public <F> WeightedElement<F> withMappedValue(Function<E, F> parse) {
+        return new WeightedElement<F>(parse.apply(element), weight);
+    }
+
     public static <T> WeightedElement<T> withDefaultWeight(final T element) {
         return new WeightedElement<>(element, DEFAULT_WEIGHT);
     }

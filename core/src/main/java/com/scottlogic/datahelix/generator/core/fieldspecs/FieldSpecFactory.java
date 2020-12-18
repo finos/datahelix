@@ -17,23 +17,45 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
 import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
 import com.scottlogic.datahelix.generator.core.restrictions.bool.BooleanRestrictions;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory.*;
 import static com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory.forMaxLength;
+import static java.util.Collections.singletonList;
 
 public class FieldSpecFactory {
     private static final NullOnlyFieldSpec NULL_ONLY_FIELD_SPEC = new NullOnlyFieldSpec();
 
     private FieldSpecFactory() {
         throw new IllegalArgumentException("Should not instantiate factory");
+    }
+
+    public static WhitelistFieldSpec fromAllowedList(Collection<Object> allowedList) {
+        return fromList(DistributedList.uniform(allowedList));
+    }
+
+    public static WhitelistFieldSpec fromInSetRecords(List<InSetRecord> inSetRecords) {
+        DistributedList<Object> distributedList = new DistributedList<>(inSetRecords.stream()
+            .map(v -> new WeightedElement<>(v.getElement(), v.getWeightValueOrDefault()))
+            .collect(Collectors.toList()));
+
+        return fromList(distributedList);
+    }
+
+    public static WhitelistFieldSpec fromAllowedSingleValue(Object value) {
+        return fromAllowedList(singletonList(value));
     }
 
     public static WhitelistFieldSpec fromList(DistributedList<Object> whitelist) {

@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.generation;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
@@ -48,7 +47,7 @@ import static org.mockito.Mockito.*;
 class FieldSpecValueGeneratorTests {
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(10, 20, 30)))
+        WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromAllowedList(Arrays.asList(10, 20, 30))
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             RANDOM,

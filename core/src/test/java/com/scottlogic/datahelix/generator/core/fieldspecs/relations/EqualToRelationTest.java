@@ -19,7 +19,6 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +48,7 @@ class EqualToRelationTest {
 
         FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton(value));
+        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue(value);
         assertThat(result, sameBeanAs(expected));
     }
 

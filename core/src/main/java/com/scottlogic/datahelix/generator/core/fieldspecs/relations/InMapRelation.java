@@ -19,19 +19,19 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class InMapRelation implements FieldSpecRelation
 {
     private final Field main;
     private final Field other;
-    private final DistributedList<Object> underlyingList;
+    private final List<Object> underlyingList;
 
-    public InMapRelation(Field main, Field other, DistributedList<Object> underlyingList) {
+    public InMapRelation(Field main, Field other, List<Object> underlyingList) {
         this.main = main;
         this.other = other;
         this.underlyingList = underlyingList;
@@ -46,8 +46,7 @@ public class InMapRelation implements FieldSpecRelation
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         BigDecimal value = (BigDecimal) otherFieldGeneratedValue.getValue();
 
-        DistributedList<Object> newList = DistributedList.singleton(underlyingList.list().get(value.intValue()));
-        return FieldSpecFactory.fromList(newList);
+        return FieldSpecFactory.fromAllowedSingleValue(underlyingList.get(value.intValue()));
     }
 
     @Override
@@ -63,10 +62,6 @@ public class InMapRelation implements FieldSpecRelation
     @Override
     public Field other() {
         return other;
-    }
-
-    public DistributedList<Object> getUnderlyingList() {
-        return this.underlyingList;
     }
 
     @Override

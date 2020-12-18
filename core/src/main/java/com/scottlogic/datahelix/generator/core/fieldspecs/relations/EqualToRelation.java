@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
@@ -43,7 +42,7 @@ public class EqualToRelation implements FieldSpecRelation
         if (otherFieldGeneratedValue.getValue() == null){
             return FieldSpecFactory.nullOnly();
         }
-        return FieldSpecFactory.fromList(DistributedList.singleton(otherFieldGeneratedValue.getValue()));
+        return FieldSpecFactory.fromAllowedSingleValue(otherFieldGeneratedValue.getValue());
     }
 
     @Override

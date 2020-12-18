@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +33,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.singleton("value"))
-            .withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue("value").withNotNull();
 
         assertEquals(actual, expected);
     }

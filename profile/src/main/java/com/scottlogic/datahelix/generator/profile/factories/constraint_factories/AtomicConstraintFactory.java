@@ -20,7 +20,6 @@ import com.scottlogic.datahelix.generator.common.ValidationException;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.relations.InMapRelation;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.*;
@@ -91,7 +90,7 @@ public abstract class AtomicConstraintFactory {
         Field main = fields.getByName(dto.field);
         Field other = fields.getByName(dto.otherField);
         List<Object> values = dto.values.stream().map(this::parseValue).collect(Collectors.toList());
-        return new InMapRelation(main, other, DistributedList.uniform(values));
+        return new InMapRelation(main, other, values);
     }
 
     abstract Object parseValue(Object value);
