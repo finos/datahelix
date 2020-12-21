@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.common.whitelist;
+package com.scottlogic.datahelix.generator.common.distribution;
 
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import org.junit.jupiter.api.Test;
@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.scottlogic.datahelix.generator.common.whitelist.WeightedElement.withDefaultWeight;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.scottlogic.datahelix.generator.common.distribution.WeightedElement.withDefaultWeight;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

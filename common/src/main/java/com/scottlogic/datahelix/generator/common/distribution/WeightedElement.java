@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.common.whitelist;
+package com.scottlogic.datahelix.generator.common.distribution;
 
 import java.util.Objects;
 import java.util.function.Function;

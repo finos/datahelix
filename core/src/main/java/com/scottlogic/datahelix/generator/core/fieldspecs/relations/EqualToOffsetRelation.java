@@ -45,9 +45,9 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         if (otherFieldSpec instanceof NullOnlyFieldSpec) {
             return FieldSpecFactory.nullOnly();
         }
-        if (otherFieldSpec instanceof WhitelistFieldSpec) {
-            WhitelistFieldSpec whitelistFieldSpec = (WhitelistFieldSpec) otherFieldSpec;
-            return whitelistFieldSpec.withMappedValues(x-> offsetGranularity.getNext((T) x, offset));
+        if (otherFieldSpec instanceof ValuesFieldSpec) {
+            ValuesFieldSpec valuesFieldSpec = (ValuesFieldSpec) otherFieldSpec;
+            return valuesFieldSpec.withMappedValues(x-> offsetGranularity.getNext((T) x, offset));
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
@@ -71,7 +71,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
             return FieldSpecFactory.fromType(FieldType.DATETIME);
         }
         T offsetValue = offsetGranularity.getNext(value, offset);
-        return FieldSpecFactory.fromAllowedSingleValue(offsetValue);
+        return FieldSpecFactory.fromSingleLegalValue(offsetValue);
     }
 
     @Override

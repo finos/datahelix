@@ -42,7 +42,7 @@ public class EqualToConstraint implements AtomicConstraint {
 
     @Override
     public FieldSpec toFieldSpec() {
-        return FieldSpecFactory.fromAllowedSingleValue(value);
+        return FieldSpecFactory.fromSingleLegalValue(value);
     }
 
     @Override

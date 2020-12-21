@@ -40,15 +40,15 @@ public class InMapIndexRelation implements FieldSpecRelation
 
     @Override
     public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
-        List<Object> allowedList = new ArrayList<>();
+        List<Object> legalValuesList = new ArrayList<>();
 
         for (int i = 0; i < underlyingList.size(); i++) {
             Object testingElement = underlyingList.get(i);
-            if (otherFieldSpec.canCombineWithWhitelistValue(testingElement)) {
-                allowedList.add(BigDecimal.valueOf(i));
+            if (otherFieldSpec.canCombineWithLegalValue(testingElement)) {
+                legalValuesList.add(BigDecimal.valueOf(i));
             }
         }
-        return FieldSpecFactory.fromAllowedList(allowedList).withNotNull();
+        return FieldSpecFactory.fromLegalValuesList(legalValuesList).withNotNull();
     }
 
     @Override

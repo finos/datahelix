@@ -57,7 +57,7 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromAllowedSingleValue("whitelist");
+        FieldSpec fieldSpec = FieldSpecFactory.fromSingleLegalValue("legalValue");
 
         boolean result = fieldSpec.equals(FieldSpecFactory.fromType(FieldType.STRING));
 
@@ -71,7 +71,7 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNullAndOtherObjectHasSetRestrictions_returnsFalse() {
         FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);
 
-        boolean result = fieldSpec.equals(FieldSpecFactory.fromAllowedSingleValue("whitelist"));
+        boolean result = fieldSpec.equals(FieldSpecFactory.fromSingleLegalValue("legalValue"));
 
         assertFalse(
             "Expected that when the field spec does not have set restrictions and the other object has set restrictions a false value is returned but was true",
@@ -81,9 +81,9 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromAllowedList(Arrays.asList(1, 2, 3));
+        FieldSpec fieldSpec = FieldSpecFactory.fromLegalValuesList(Arrays.asList(1, 2, 3));
 
-        boolean result = fieldSpec.equals(FieldSpecFactory.fromAllowedList(Arrays.asList(1, 2, 3, 4)));
+        boolean result = fieldSpec.equals(FieldSpecFactory.fromLegalValuesList(Arrays.asList(1, 2, 3, 4)));
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
@@ -130,8 +130,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpecFactory.fromAllowedSingleValue("same");
-        FieldSpec b = FieldSpecFactory.fromAllowedSingleValue("same");
+        FieldSpec a = FieldSpecFactory.fromSingleLegalValue("same");
+        FieldSpec b = FieldSpecFactory.fromSingleLegalValue("same");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -139,8 +139,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpecFactory.fromAllowedSingleValue("not same");
-        FieldSpec b = FieldSpecFactory.fromAllowedSingleValue("different");
+        FieldSpec a = FieldSpecFactory.fromSingleLegalValue("not same");
+        FieldSpec b = FieldSpecFactory.fromSingleLegalValue("different");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -197,7 +197,7 @@ class FieldSpecTests {
         LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpecFactory.fromRestriction(numeric);
 
-        assertFalse(spec.canCombineWithWhitelistValue(BigDecimal.ONE));
+        assertFalse(spec.canCombineWithLegalValue(BigDecimal.ONE));
     }
 
     @Test
@@ -207,7 +207,7 @@ class FieldSpecTests {
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        assertFalse(spec.canCombineWithWhitelistValue(time.plusNanos(1_000_000)));
+        assertFalse(spec.canCombineWithLegalValue(time.plusNanos(1_000_000)));
     }
 
     @Test
@@ -241,21 +241,21 @@ class FieldSpecTests {
 
         FieldSpec spec = FieldSpecFactory.fromRestriction(mockTypedRestrictions);
 
-        assertFalse(spec.canCombineWithWhitelistValue("Anything"));
+        assertFalse(spec.canCombineWithLegalValue("Anything"));
     }
 
     @Test
-    void permits_whenNotInWhiteList_returnsFalse() {
-        FieldSpec spec = FieldSpecFactory.fromAllowedSingleValue(10);
+    void permits_whenCanCombineWithLegalValue_returnsFalse() {
+        FieldSpec spec = FieldSpecFactory.fromSingleLegalValue(10);
 
-        assertFalse(spec.canCombineWithWhitelistValue(11));
+        assertFalse(spec.canCombineWithLegalValue(11));
     }
 
     @Test
-    void permits_whenInWhiteList_returnsTrue() {
-        FieldSpec spec = FieldSpecFactory.fromAllowedSingleValue(10);
+    void permits_whenCanCombineWithLegalValue_returnsTrue() {
+        FieldSpec spec = FieldSpecFactory.fromSingleLegalValue(10);
 
-        assertTrue(spec.canCombineWithWhitelistValue(10));
+        assertTrue(spec.canCombineWithLegalValue(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {

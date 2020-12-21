@@ -16,16 +16,15 @@
 
 package com.scottlogic.datahelix.generator.core.fieldspecs;
 
+import com.scottlogic.datahelix.generator.common.distribution.DistributedList;
+import com.scottlogic.datahelix.generator.common.distribution.WeightedElement;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.common.util.Defaults;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
 import com.scottlogic.datahelix.generator.core.restrictions.bool.BooleanRestrictions;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -42,24 +41,29 @@ public class FieldSpecFactory {
         throw new IllegalArgumentException("Should not instantiate factory");
     }
 
-    public static WhitelistFieldSpec fromAllowedList(Collection<Object> allowedList) {
-        return fromList(DistributedList.uniform(allowedList));
+    public static LegalValuesFieldSpec fromLegalValuesList(List<Object> legalValues) {
+        return new LegalValuesFieldSpec(legalValues, true);
     }
 
-    public static WhitelistFieldSpec fromInSetRecords(List<InSetRecord> inSetRecords) {
-        DistributedList<Object> distributedList = new DistributedList<>(inSetRecords.stream()
-            .map(v -> new WeightedElement<>(v.getElement(), v.getWeightValueOrDefault()))
-            .collect(Collectors.toList()));
-
-        return fromList(distributedList);
+    public static LegalValuesFieldSpec fromSingleLegalValue(Object legalValue) {
+        return new LegalValuesFieldSpec(singletonList(legalValue), true);
     }
 
-    public static WhitelistFieldSpec fromAllowedSingleValue(Object value) {
-        return fromAllowedList(singletonList(value));
+    public static FieldSpec fromInSetRecords(List<InSetRecord> inSetRecords) {
+        if (inSetRecords.stream().anyMatch(InSetRecord::hasWeightPresent)) {
+            DistributedList<Object> distributedList = new DistributedList<>(inSetRecords.stream()
+                .map(v -> new WeightedElement<>(v.getElement(), v.getWeightValueOrDefault()))
+                .collect(Collectors.toList()));
+
+            return new WeightedLegalValuesFieldSpec(distributedList, true);
+        } else {
+            List<Object> legalValues = inSetRecords.stream().map(InSetRecord::getElement).collect(Collectors.toList());
+            return new LegalValuesFieldSpec(legalValues, true);
+        }
     }
 
-    public static WhitelistFieldSpec fromList(DistributedList<Object> whitelist) {
-        return new WhitelistFieldSpec(whitelist, true);
+    public static WeightedLegalValuesFieldSpec fromList(DistributedList<Object> weightedLegalValues) {
+        return new WeightedLegalValuesFieldSpec(weightedLegalValues, true);
     }
 
     public static RestrictionsFieldSpec fromRestriction(TypedRestrictions restrictions) {

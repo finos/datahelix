@@ -42,7 +42,7 @@ public class EqualToRelation implements FieldSpecRelation
         if (otherFieldGeneratedValue.getValue() == null){
             return FieldSpecFactory.nullOnly();
         }
-        return FieldSpecFactory.fromAllowedSingleValue(otherFieldGeneratedValue.getValue());
+        return FieldSpecFactory.fromSingleLegalValue(otherFieldGeneratedValue.getValue());
     }
 
     @Override

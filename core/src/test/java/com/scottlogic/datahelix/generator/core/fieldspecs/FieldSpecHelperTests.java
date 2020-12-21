@@ -33,7 +33,7 @@ class FieldSpecHelperTests {
 
         FieldSpec actual = fieldSpecHelper.getFieldSpecForValue(input);
 
-        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue("value").withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromSingleLegalValue("value").withNotNull();
 
         assertEquals(actual, expected);
     }

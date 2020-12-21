@@ -22,6 +22,6 @@ public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
         return (fieldValue.getValue() == null)
             ? FieldSpecFactory.nullOnly()
-            : FieldSpecFactory.fromAllowedSingleValue(fieldValue.getValue()).withNotNull();
+            : FieldSpecFactory.fromSingleLegalValue(fieldValue.getValue()).withNotNull();
     }
 }

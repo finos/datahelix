@@ -44,7 +44,7 @@ class InMapRelationTest {
 
     @Test
     void reduceValueToFieldSpec_whenValidIndex_returnFieldSpec() {
-        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue("bar");
+        FieldSpec expected = FieldSpecFactory.fromSingleLegalValue("bar");
         FieldSpec actual = testInstance.createModifierFromOtherValue(new DataBagValue(BigDecimal.valueOf(1)));
 
         Assert.assertEquals(expected, actual);

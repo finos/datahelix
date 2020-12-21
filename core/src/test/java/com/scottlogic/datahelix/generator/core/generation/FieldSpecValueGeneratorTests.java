@@ -20,7 +20,6 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.StandardSpecificFieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
@@ -33,6 +32,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +47,8 @@ import static org.mockito.Mockito.*;
 class FieldSpecValueGeneratorTests {
     @Test
     void generate_fieldSpecMustContainRestrictionNullAndSetRestrictionsHasValues_returnsDataBagsWithValuesInSetRestrictions() {
-        WhitelistFieldSpec fieldSpec = FieldSpecFactory.fromAllowedList(Arrays.asList(10, 20, 30))
+        final List<Object> legalValuesList = Arrays.asList(10, 20, 30);
+        FieldSpec fieldSpec = FieldSpecFactory.fromLegalValuesList(legalValuesList)
             .withNotNull();
         FieldSpecValueGenerator fieldSpecFulfiller = new FieldSpecValueGenerator(
             RANDOM,
@@ -55,7 +56,7 @@ class FieldSpecValueGeneratorTests {
 
         final Set<DataBagValue> result = fieldSpecFulfiller.generate(createField(null), fieldSpec).limit(3).collect(Collectors.toSet());
 
-        Set<DataBagValue> expectedDataBags = fieldSpec.getWhitelist().list()
+        Set<DataBagValue> expectedDataBags = legalValuesList
             .stream()
             .map(DataBagValue::new)
             .collect(Collectors.toSet());

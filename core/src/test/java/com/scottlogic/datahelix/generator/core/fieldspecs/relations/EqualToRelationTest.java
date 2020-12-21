@@ -48,7 +48,7 @@ class EqualToRelationTest {
 
         FieldSpec result = equalToDateRelations.createModifierFromOtherValue(generatedValue);
 
-        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue(value);
+        FieldSpec expected = FieldSpecFactory.fromSingleLegalValue(value);
         assertThat(result, sameBeanAs(expected));
     }
 

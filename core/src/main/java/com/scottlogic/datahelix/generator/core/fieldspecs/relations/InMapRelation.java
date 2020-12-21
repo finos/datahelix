@@ -46,7 +46,7 @@ public class InMapRelation implements FieldSpecRelation
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
         BigDecimal value = (BigDecimal) otherFieldGeneratedValue.getValue();
 
-        return FieldSpecFactory.fromAllowedSingleValue(underlyingList.get(value.intValue()));
+        return FieldSpecFactory.fromSingleLegalValue(underlyingList.get(value.intValue()));
     }
 
     @Override

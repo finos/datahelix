@@ -19,9 +19,12 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullAppendingValueSource;
 
+import java.util.Optional;
+
 public abstract class FieldSpec {
-    public abstract boolean canCombineWithWhitelistValue(Object value);
+    public abstract boolean canCombineWithLegalValue(Object value);
     public abstract FieldValueSource getFieldValueSource();
+    public abstract Optional<FieldSpec> merge(FieldSpec other, boolean useFinestGranularityAvailable);
     public abstract FieldSpec withNotNull();
 
     protected final boolean nullable;

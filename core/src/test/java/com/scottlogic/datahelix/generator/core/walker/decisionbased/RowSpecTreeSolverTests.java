@@ -75,7 +75,7 @@ class RowSpecTreeSolverTests {
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
         Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromAllowedList(Arrays.asList("1", "2", "3")));
+        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2", "3")));
         fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
         expectedRowSpecs.add(new RowSpec(fields, fieldToFieldSpec, Collections.emptyList()));
 
@@ -105,7 +105,7 @@ class RowSpecTreeSolverTests {
         expectedRowSpecs.add(new RowSpec(fields, option0, Collections.emptyList()));
         Map<Field, FieldSpec> option1 = new HashMap<>();
         option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromAllowedList(Arrays.asList("1","2","3")));
+        option1.put(fieldB, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1","2","3")));
         expectedRowSpecs.add(new RowSpec(fields, option1, Collections.emptyList()));
 
         assertThat(rowSpecs, sameBeanAs(expectedRowSpecs));

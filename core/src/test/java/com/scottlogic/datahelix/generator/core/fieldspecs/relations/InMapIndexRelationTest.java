@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -45,20 +44,20 @@ class InMapIndexRelationTest {
     }
 
     @Test
-    void reduceToRelatedFieldSpec_whenAllValid_returnCompleteAllowedList() {
+    void reduceToRelatedFieldSpec_whenAllValid_returnCompleteLegalValuesList() {
         FieldSpec parameter = FieldSpecFactory.fromType(FieldType.STRING);
 
-        FieldSpec expected = FieldSpecFactory.fromAllowedList(Arrays.asList(0, 1)).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromLegalValuesList(Arrays.asList(0, 1)).withNotNull();
         FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    void reduceToRelatedFieldSpec_whenSomeValid_returnReducedAllowedList() {
+    void reduceToRelatedFieldSpec_whenSomeValid_returnReducedLegalValuesList() {
         FieldSpec parameter = FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringContaining(Pattern.compile("^f.*"), false));
 
-        FieldSpec expected = FieldSpecFactory.fromAllowedSingleValue(0).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromSingleLegalValue(0).withNotNull();
         FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
