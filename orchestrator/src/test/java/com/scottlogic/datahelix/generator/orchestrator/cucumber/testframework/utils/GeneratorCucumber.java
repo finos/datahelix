@@ -16,29 +16,39 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
-import cucumber.api.junit.Cucumber;
-import cucumber.runtime.junit.FeatureRunner;
+import io.cucumber.junit.Cucumber;
+import org.junit.runner.Description;
+import org.junit.runner.Runner;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.model.InitializationError;
 
-public class GeneratorCucumber extends Cucumber {
+public class GeneratorCucumber extends Runner {
     private RunNotifier notifier;
+    private Class clazz;
+    private Cucumber cucumber;
 
     /**
      * Constructor called by JUnit.
      *
-     * @param clazz the class with the @RunWith annotation.
+     * @param clazzValue the class with the @RunWith annotation.
      * @throws InitializationError if there is another problem
      */
-    public GeneratorCucumber(Class clazz) throws InitializationError {
-        super(clazz);
+    public GeneratorCucumber(Class clazzValue) throws InitializationError {
+        clazz = clazzValue;
+        cucumber = new Cucumber(clazzValue);
     }
 
     @Override
-    protected void runChild(FeatureRunner child, RunNotifier notifier) {
-        if (this.notifier == null)
-            this.notifier = new TreatUndefinedCucumberStepsAsTestFailuresRunNotifier(notifier); //NOTE: Not thread safe
+    public Description getDescription() {
+        return cucumber.getDescription();
+    }
 
-        super.runChild(child, this.notifier);
+    @Override
+    public void run(RunNotifier notifier) {
+        if (this.notifier == null) {
+            this.notifier = new TreatUndefinedCucumberStepsAsTestFailuresRunNotifier(notifier); //NOTE: Not thread safe
+        }
+
+        cucumber.run(this.notifier);
     }
 }

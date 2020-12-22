@@ -16,15 +16,22 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.When;
+import io.cucumber.java.ParameterType;
+import io.cucumber.java.en.When;
 
 public class BooleanValueStep {
     private final CucumberTestState state;
 
     public BooleanValueStep(CucumberTestState state) {
         this.state = state;
+    }
+
+    @ParameterType(name = "boolean", value = "(true|false)$")
+    public Boolean defineBoolean(String value) throws JsonParseException {
+        return Boolean.valueOf(value);
     }
 
     @When("{fieldVar} is equal to {boolean}")

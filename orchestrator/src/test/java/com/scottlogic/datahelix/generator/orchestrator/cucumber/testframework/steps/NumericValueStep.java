@@ -16,11 +16,14 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
+import io.cucumber.java.ParameterType;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -35,6 +38,11 @@ public class NumericValueStep {
     public NumericValueStep(CucumberTestState state, CucumberTestHelper helper) {
         this.state = state;
         this.helper = helper;
+    }
+
+    @ParameterType(name = "number", value = "([+-]?\\d+(\\.\\d+)?)")
+    public Number defineNumber(String value) throws JsonParseException {
+        return (Number) GeneratorTestUtilities.parseNumber(value);
     }
 
     @And("^([A-z0-9]+) is equal to (-?[0-9\\.]+)$")
