@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Scott Logic Ltd
+ * Copyright 2019-2021 Scott Logic Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,14 @@ public class InSetRecord {
     private final Double weight;
 
     public InSetRecord(Object element) {
-        this.element = element;
-        this.weight = null;
+        this(element, null);
     }
 
     public InSetRecord(Object element, double weight) {
+        this(element, (Double)weight);
+    }
+
+    public InSetRecord(Object element, Double weight) {
         this.element = element;
         this.weight = weight;
     }
