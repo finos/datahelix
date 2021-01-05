@@ -33,6 +33,15 @@ dependencies {
     compile "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
     compile group: "com.google.inject", name: "guice", version: "${GUICE_VERSION}"
 
+    constraints {
+        compile('com.google.guava:guava:30.0-jre') {
+            because 'Versions prior to 30.0 are impacted by CVE-2020-8908'
+        }
+        compile('com.google.guava:guava:30.0-android') {
+            because 'Versions prior to 30.0 are impacted by CVE-2020-8908'
+        }
+    }
+
     implementation "org.threeten:threeten-extra:${THREE_TEN_VERSION}"
     testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
     testCompile "junit:junit:${JUNIT_4_VERSION}"
