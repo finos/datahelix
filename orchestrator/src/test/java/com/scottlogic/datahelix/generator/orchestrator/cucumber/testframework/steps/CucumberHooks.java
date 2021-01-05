@@ -16,8 +16,8 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.Before;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import org.junit.AssumptionViolatedException;
 
 public class CucumberHooks {

@@ -16,11 +16,14 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
+import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.When;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SetValueStep {
     private final CucumberTestState state;
@@ -30,12 +33,29 @@ public class SetValueStep {
     }
 
     @When("^([A-z0-9]+) is in set:")
-    public void whenFieldIsConstrainedBySetValue(String fieldName, List<Object> values) {
-        this.state.addConstraint(fieldName, ConstraintType.IN_SET, values);
+    public void whenFieldIsConstrainedBySetValue(String fieldName, List<String> values) {
+        final List<Object> parsedInput = values.stream()
+            .map(this::parseInputSafely)
+            .collect(Collectors.toList());
+
+        this.state.addConstraint(fieldName, ConstraintType.IN_SET, parsedInput);
     }
 
     @When("^([A-z0-9]+) is anything but in set:")
-    public void whenFieldIsNotConstrainedBySetValue(String fieldName, List<Object> values) {
-        this.state.addNotConstraint(fieldName, ConstraintType.IN_SET, values);
+    public void whenFieldIsNotConstrainedBySetValue(String fieldName, List<String> values) {
+        final List<Object> parsedInput = values.stream()
+            .map(this::parseInputSafely)
+            .collect(Collectors.toList());
+
+        this.state.addNotConstraint(fieldName, ConstraintType.IN_SET, parsedInput);
+    }
+
+    private Object parseInputSafely(String value) {
+        try {
+            return GeneratorTestUtilities.parseInput(value);
+        } catch (JsonParseException e) {
+            state.addException(e);
+            return value;
+        }
     }
 }

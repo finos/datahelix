@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.s
 
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.When;
 
 public class DateValueStep {
     private final CucumberTestState state;

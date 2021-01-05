@@ -16,25 +16,16 @@
 
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
-import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import io.cucumber.java.en.And;
+import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategyType;
+import io.cucumber.java.ParameterType;
 
-import java.util.List;
+import java.util.Arrays;
 
-public class MapValueStep {
-    private final CucumberTestState state;
-
-    public MapValueStep(CucumberTestState state) {
-        this.state = state;
-    }
-
-    @And("the file {string} contains the following data:")
-    public void whenMapDataStructure(String name, List<List<String>> values) {
-        state.addMapFile(name, values);
-    }
-
-    @And("{word} is from {word} in {word}")
-    public void whenFieldIsInMap(String field, String key, String map) {
-        state.addInMapConstraint(field, key, map);
+public class CombinationStrategyStep {
+    @ParameterType(name = "combinationStrategy", value = "(.*)$")
+    public CombinationStrategyType defineCombinationStrategy(String value) {
+        return Arrays.stream(CombinationStrategyType.values())
+            .filter(val -> val.toString().equalsIgnoreCase(value))
+            .findFirst().orElse(CombinationStrategyType.PINNING);
     }
 }

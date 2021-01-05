@@ -19,8 +19,9 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.s
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.ParameterType;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import java.util.regex.Pattern;
 
@@ -31,6 +32,16 @@ public class RegexValueStep {
     public RegexValueStep(CucumberTestState state, CucumberTestHelper helper) {
         this.state = state;
         this.helper = helper;
+    }
+
+    @ParameterType(name = "regex", value = "/(.+)/$")
+    public String defineRegex(String value) {
+        return value;
+    }
+
+    @ParameterType(name = "fieldVar", value = "^(.+)")
+    public String defineFieldVar(String value) {
+        return value;
     }
 
     @When("^([A-z0-9]+) is matching regex /(.+)/$")

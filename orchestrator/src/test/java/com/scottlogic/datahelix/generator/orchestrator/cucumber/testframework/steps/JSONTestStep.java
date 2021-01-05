@@ -17,7 +17,7 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.steps;
 
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
-import cucumber.api.java.en.And;
+import io.cucumber.java.en.And;
 
 import java.io.IOException;
 

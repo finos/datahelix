@@ -17,8 +17,8 @@
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework;
 
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.GeneratorCucumber;
+import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
-import cucumber.api.CucumberOptions;
 
 @RunWith(GeneratorCucumber.class)
 @CucumberOptions(
