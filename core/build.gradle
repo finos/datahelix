@@ -23,7 +23,7 @@ dependencies {
     implementation "com.github.javafaker:javafaker:${FAKER_VERSION}"
     implementation ('org.yaml:snakeyaml') {
         version {
-            strictly '1.26'
+            require '1.26'
         }
     }
 
