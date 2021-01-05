@@ -41,9 +41,9 @@ Feature: Correct Constraint Types, validation exceptions should be raised if the
     Given there is a non nullable field foo
     And foo has type "datetime"
     And foo is in set:
-      | "aaa"|
-      | "bbb |
-      | "ccc |
+      | "aaa" |
+      | "bbb" |
+      | "ccc" |
     Then the profile is invalid
 
   Scenario Outline: <wrongType> constraint <constraint> cannot be applied to <type> fields
