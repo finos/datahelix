@@ -22,8 +22,8 @@ import com.scottlogic.datahelix.generator.core.config.detail.CombinationStrategy
 import com.scottlogic.datahelix.generator.core.config.detail.DataGenerationType;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.*;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.Before;
-import cucumber.api.java.en.*;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.*;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
 
@@ -351,6 +351,14 @@ public class GeneralTestStep {
         GeneratedTestData(List<Map<String, Object>> expectedData, List<Map<String, Object>> generatedData) {
             this.expectedData = expectedData;
             this.generatedData = generatedData;
+        }
+
+        @Override
+        public String toString() {
+            return "GeneratedTestData{" +
+                "expectedData=" + expectedData +
+                ", generatedData=" + generatedData +
+                '}';
         }
     }
 }

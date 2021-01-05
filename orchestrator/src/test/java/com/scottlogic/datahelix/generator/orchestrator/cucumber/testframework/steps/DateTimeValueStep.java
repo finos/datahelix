@@ -20,12 +20,16 @@ import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.ut
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.GeneratorTestUtilities;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import io.cucumber.java.ParameterType;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DateTimeValueStep {
     public static final String DATETIME_REGEX = "(-?(\\d{4,19})-(\\d{2})-(\\d{2}T(\\d{2}:\\d{2}:\\d{2}\\.\\d{3}))Z?)";
@@ -35,6 +39,20 @@ public class DateTimeValueStep {
     public DateTimeValueStep(CucumberTestState state, CucumberTestHelper helper){
         this.state = state;
         this.helper = helper;
+    }
+
+    @ParameterType(name = "date", value = DateTimeValueStep.DATETIME_REGEX)
+    public String defineDate(String value) {
+        return extractConstraint(value);
+    }
+
+    private String extractConstraint(String gherkinConstraint) {
+        List<String> allConstraints = Arrays.asList(gherkinConstraint.split(" "));
+        return allConstraints.get(0) + allConstraints
+            .stream()
+            .skip(1)
+            .map(value -> value.substring(0, 1).toUpperCase() + value.substring(1))
+            .collect(Collectors.joining());
     }
 
     @When("^([A-z0-9]+) is equal to boolean true")

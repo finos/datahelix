@@ -18,7 +18,7 @@ package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.s
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestHelper;
 import com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils.CucumberTestState;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintType;
-import cucumber.api.java.en.When;
+import io.cucumber.java.en.When;
 
 public class TimeValueStep {
     public static final String TIME_REGEX = "([0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3})";
