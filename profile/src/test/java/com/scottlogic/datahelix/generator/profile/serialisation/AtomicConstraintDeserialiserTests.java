@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile;
+package com.scottlogic.datahelix.generator.profile.serialisation;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.ConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
@@ -28,7 +28,10 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.IsNull
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.LongerThanConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.OfLengthConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.integer.ShorterThanConstraintDTO;
-import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.*;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.GreaterThanOrEqualToConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanConstraintDTO;
+import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.numeric.LessThanOrEqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.AfterOrAtConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.temporal.BeforeConstraintDTO;
@@ -37,7 +40,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textua
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.MatchesRegexConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.relations.*;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
@@ -45,11 +47,11 @@ import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static com.shazam.shazamcrest.MatcherAssert.assertThat;
 import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public class AtomicConstraintDeserialiserTests {
     @Rule
@@ -96,7 +98,10 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "type";
-        expected.values = Arrays.asList("X_092", "0001-01-01T00:00:00.000Z");
+        expected.values = asList(
+            new InSetRecord("X_092"),
+            new InSetRecord("0001-01-01T00:00:00.000Z")
+        );
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -111,7 +116,7 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.values = Collections.singletonList(new WeightedElement<>("test", 1.0));
+        expected.values = singletonList(new InSetRecord("test"));
 
         assertThat(actual, sameBeanAs(expected));
     }
@@ -126,9 +131,9 @@ public class AtomicConstraintDeserialiserTests {
         // Assert
         InSetConstraintDTO expected = new InSetConstraintDTO();
         expected.field = "country";
-        expected.values = Arrays.asList(
-            new WeightedElement<>("test1", 0.2),
-            new WeightedElement<>("test2", 0.8)
+        expected.values = asList(
+            new InSetRecord("test1", 20.0),
+            new InSetRecord("test2", 80.0)
         );
 
         assertThat(actual, sameBeanAs(expected));
@@ -146,7 +151,7 @@ public class AtomicConstraintDeserialiserTests {
         InMapConstraintDTO expected = new InMapConstraintDTO();
         expected.field = "country";
         expected.otherField = "countries.csv";
-        expected.values = Collections.singletonList("test");
+        expected.values = singletonList("test");
 
         assertThat(actual, sameBeanAs(expected));
     }

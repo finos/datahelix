@@ -17,15 +17,18 @@
 package com.scottlogic.datahelix.generator.profile.reader.file.names;
 
 
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.NameConstraintTypes;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.services.NameRetrievalService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class NameRetrievalServiceTest
 {
@@ -34,9 +37,9 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.FIRST);
 
-        assertEquals(704, names.distributedList().size());
+        assertEquals(704, names.size());
     }
 
     @Test
@@ -44,9 +47,9 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.LAST);
 
-        assertEquals(280, names.distributedList().size());
+        assertEquals(280, names.size());
     }
 
     @Test
@@ -54,9 +57,9 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        DistributedList<Object> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
+        List<InSetRecord> names = service.loadNamesFromFile(NameConstraintTypes.FULL);
 
-        assertEquals(197120, names.distributedList().size());
+        assertEquals(197120, names.size());
     }
 
     @ParameterizedTest
@@ -65,7 +68,7 @@ public class NameRetrievalServiceTest
         CsvInputStreamReaderFactory csvReaderFactory = new CsvInputStreamReaderFactory();
         NameRetrievalService service = new NameRetrievalService(csvReaderFactory);
 
-        DistributedList<Object> result = service.loadNamesFromFile(config);
+        List<InSetRecord> result = service.loadNamesFromFile(config);
 
         assertNotNull(result);
     }

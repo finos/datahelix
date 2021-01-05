@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.profile.validators.profile.constraint
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.validators.ValidationResult;
 import com.scottlogic.datahelix.generator.common.validators.Validator;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 
 public class ValueTypeValidator implements Validator<Object>
 {
@@ -37,9 +36,6 @@ public class ValueTypeValidator implements Validator<Object>
     {
         if (value == null) {
             return ValidationResult.failure("Values must be specified" + errorInfo);
-        }
-        if (value instanceof WeightedElement) {
-            return validate(((WeightedElement) value).element());
         }
 
         switch (expectedFieldType) {

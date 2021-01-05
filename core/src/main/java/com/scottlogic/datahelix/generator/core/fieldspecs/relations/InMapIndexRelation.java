@@ -19,7 +19,6 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 
@@ -31,9 +30,9 @@ public class InMapIndexRelation implements FieldSpecRelation
 {
     private final Field main;
     private final Field other;
-    private final DistributedList<Object> underlyingList;
+    private final List<Object> underlyingList;
 
-    public InMapIndexRelation(Field main, Field other, DistributedList<Object> underlyingList) {
+    public InMapIndexRelation(Field main, Field other, List<Object> underlyingList) {
         this.main = main;
         this.other = other;
         this.underlyingList = underlyingList;
@@ -41,20 +40,20 @@ public class InMapIndexRelation implements FieldSpecRelation
 
     @Override
     public FieldSpec createModifierFromOtherFieldSpec(FieldSpec otherFieldSpec) {
-        List<Object> whiteList = new ArrayList<>();
+        List<Object> legalValuesList = new ArrayList<>();
 
-        for (int i = 0; i < underlyingList.list().size(); i++) {
-            Object testingElement = underlyingList.list().get(i);
-            if (otherFieldSpec.canCombineWithWhitelistValue(testingElement)) {
-                whiteList.add(BigDecimal.valueOf(i));
+        for (int i = 0; i < underlyingList.size(); i++) {
+            Object testingElement = underlyingList.get(i);
+            if (otherFieldSpec.canCombineWithLegalValue(testingElement)) {
+                legalValuesList.add(BigDecimal.valueOf(i));
             }
         }
-        return FieldSpecFactory.fromList(DistributedList.uniform(whiteList)).withNotNull();
+        return FieldSpecFactory.fromLegalValuesList(legalValuesList).withNotNull();
     }
 
     @Override
     public FieldSpec createModifierFromOtherValue(DataBagValue otherFieldGeneratedValue) {
-        throw new UnsupportedOperationException("reduceToFieldSpec is unsuported in InMapIndexRelation");
+        throw new UnsupportedOperationException("reduceToFieldSpec is unsupported in InMapIndexRelation");
     }
 
     @Override
@@ -70,10 +69,6 @@ public class InMapIndexRelation implements FieldSpecRelation
     @Override
     public Field other() {
         return other;
-    }
-
-    public DistributedList<Object> getUnderlyingList() {
-        return this.underlyingList;
     }
 
     @Override

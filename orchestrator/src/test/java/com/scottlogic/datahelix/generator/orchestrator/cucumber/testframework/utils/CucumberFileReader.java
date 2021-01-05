@@ -15,12 +15,12 @@
  */
 package com.scottlogic.datahelix.generator.orchestrator.cucumber.testframework.utils;
 
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.List;
 
 public class CucumberFileReader extends FileReader {
     private final CucumberTestState testState;
@@ -32,8 +32,8 @@ public class CucumberFileReader extends FileReader {
     }
 
     @Override
-    public DistributedList<String> listFromMapFile(File file, String key) {
-        return DistributedList.uniform(testState.getValuesFromMap(file.getName(), key));
+    public List<String> listFromMapFile(File file, String key) {
+        return testState.getValuesFromMap(file.getName(), key);
     }
 }
 

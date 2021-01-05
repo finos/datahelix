@@ -29,9 +29,7 @@ import static com.scottlogic.datahelix.generator.profile.creation.AtomicConstrai
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.iterableWithSize;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class InSetConstraintValidatorTests
 {
@@ -56,7 +54,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withValidField_succeeds()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSet(stringValues);
+        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSetFromList(stringValues);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -69,7 +67,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withNullField_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO(null).buildInSet(stringValues);
+        InSetConstraintDTO dto = atomicConstraintDTO(null).buildInSetFromList(stringValues);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -84,7 +82,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withEmptyField_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("").buildInSet(stringValues);
+        InSetConstraintDTO dto = atomicConstraintDTO("").buildInSetFromList(stringValues);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -99,7 +97,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withUndefinedField_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("unknown").buildInSet(stringValues);
+        InSetConstraintDTO dto = atomicConstraintDTO("unknown").buildInSetFromList(stringValues);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -114,7 +112,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withEmptyValue_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSet(emptyList());
+        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSetFromList(emptyList());
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -129,7 +127,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withNullValue_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSet(null);
+        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSetFromList(null);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);
@@ -144,7 +142,7 @@ public class InSetConstraintValidatorTests
     public void validateInSetConstraint_withInvalidData_fails()
     {
         // Arrange
-        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSet(valuesOfAllTypes);
+        InSetConstraintDTO dto = atomicConstraintDTO("text").buildInSetFromList(valuesOfAllTypes);
 
         // Act
         ValidationResult validationResult = new InSetConstraintValidator(fields).validate(dto);

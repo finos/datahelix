@@ -16,6 +16,7 @@
 
 package com.scottlogic.datahelix.generator.profile.creation;
 
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.EqualToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.GranularToConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.InSetConstraintDTO;
@@ -28,6 +29,7 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.tempor
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic.textual.ContainsRegexConstraintDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AtomicConstraintDTOBuilder
 {
@@ -67,7 +69,16 @@ public class AtomicConstraintDTOBuilder
         return dto;
     }
 
-    public InSetConstraintDTO buildInSet(List<Object> values)
+    public InSetConstraintDTO buildInSetFromList(List<Object> values)
+    {
+        final List<InSetRecord> inSetRecords = values != null
+            ? values.stream().map(InSetRecord::new).collect(Collectors.toList())
+            : null;
+
+        return buildInSetFromRecords(inSetRecords);
+    }
+
+    public InSetConstraintDTO buildInSetFromRecords(List<InSetRecord> values)
     {
         InSetConstraintDTO dto = new InSetConstraintDTO();
         dto.field = field;

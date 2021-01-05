@@ -16,14 +16,22 @@
 
 package com.scottlogic.datahelix.generator.core.fieldspecs;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.bool.BooleanRestrictionsMerger;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsMerger;
+import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsMerger;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class RestrictionsFieldSpec extends FieldSpec {
+    private static final RestrictionsMergeOperation restrictionMergeOperation =
+        new RestrictionsMergeOperation(new LinearRestrictionsMerger(), new StringRestrictionsMerger(), new BooleanRestrictionsMerger());
+
     private final TypedRestrictions restrictions;
     private final Set<Object> blacklist;
 
@@ -34,7 +42,7 @@ public class RestrictionsFieldSpec extends FieldSpec {
     }
 
     @Override
-    public boolean canCombineWithWhitelistValue(Object value) {
+    public boolean canCombineWithLegalValue(Object value) {
         return !blacklist.contains(value) && restrictions.match(value);
     }
 
@@ -42,6 +50,23 @@ public class RestrictionsFieldSpec extends FieldSpec {
     public FieldValueSource getFieldValueSource() {
         return appendNullSource(
             restrictions.createFieldValueSource(blacklist));
+    }
+
+    @Override
+    public Optional<FieldSpec> merge(FieldSpec other, boolean useFinestGranularityAvailable) {
+        final boolean notNullable = !isNullable() || !other.isNullable();
+
+        final TypedRestrictions otherRestrictions = ((RestrictionsFieldSpec) other).getRestrictions();
+        final Optional<TypedRestrictions> restrictions = restrictionMergeOperation.applyMergeOperation(getRestrictions(), otherRestrictions, useFinestGranularityAvailable);
+
+        if (!restrictions.isPresent()) {
+            return notNullable ? Optional.empty() : Optional.of(FieldSpecFactory.nullOnly());
+        }
+
+        final RestrictionsFieldSpec merged = FieldSpecFactory.fromRestriction(restrictions.get())
+            .withBlacklist(SetUtils.union(getBlacklist(), ((RestrictionsFieldSpec)other).getBlacklist()));
+
+        return Optional.of(notNullable ? merged.withNotNull(): merged);
     }
 
     @Override

@@ -16,15 +16,17 @@
 
 package com.scottlogic.datahelix.generator.core;
 
+import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.AndConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ConstraintBuilder {
@@ -41,14 +43,14 @@ public class ConstraintBuilder {
 
     public ConstraintBuilder addInSetConstraint(String fieldname, List<Object> values) {
         constraints.add(new InSetConstraint(fields.get(fieldname),
-            DistributedList.uniform(values)));
+            TestAtomicConstraintBuilder.inSetRecordsFromList(values)));
         return this;
     }
 
     public ConstraintBuilder addEqualToConstraint(String fieldname, Object value) {
         constraints.add(new InSetConstraint(
             fields.get(fieldname),
-            DistributedList.singleton(value)));
+            TestAtomicConstraintBuilder.inSetRecordsFrom(value)));
         return this;
     }
 

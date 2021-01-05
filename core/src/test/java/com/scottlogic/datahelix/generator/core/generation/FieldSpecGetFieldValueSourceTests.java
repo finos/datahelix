@@ -18,7 +18,6 @@ package com.scottlogic.datahelix.generator.core.generation;
 
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
@@ -32,8 +31,10 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory.createNumericRestrictions;
 import static org.hamcrest.core.Is.is;
@@ -60,7 +61,7 @@ public class FieldSpecGetFieldValueSourceTests {
 
     @Test
     public void shouldReturnNullSourceLastWithInSetRestrictionsAndNullNotDisallowed() {
-        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromList(DistributedList.uniform(new HashSet<>(Arrays.asList(15, 25))));
+        FieldSpec fieldSpecInSetAndNullNotDisallowed = FieldSpecFactory.fromLegalValuesList(Arrays.asList(15, 25));
 
         FieldValueSource<?> sources = fieldSpecInSetAndNullNotDisallowed.getFieldValueSource();
 

@@ -16,9 +16,11 @@
 
 package com.scottlogic.datahelix.generator.profile.reader;
 
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
+
+import java.util.List;
 
 public interface CsvInputReader{
-    DistributedList<String> retrieveLines();
-    DistributedList<String> retrieveLines(String key);
+    List<InSetRecord> retrieveInSetElements();
+    List<String> retrieveLinesForColumn(String key);
 }

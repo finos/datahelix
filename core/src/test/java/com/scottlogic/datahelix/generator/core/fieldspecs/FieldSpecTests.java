@@ -17,10 +17,11 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
-import com.scottlogic.datahelix.generator.core.restrictions.*;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.*;
+import com.scottlogic.datahelix.generator.core.restrictions.TypedRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.Limit;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
+import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictions;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 import static com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory.forMaxLength;
-import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.*;
+import static com.scottlogic.datahelix.generator.core.utils.GeneratorDefaults.NUMERIC_MAX_LIMIT;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertFalse;
@@ -56,7 +57,7 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecHasSetRestrictionsAndOtherObjectSetRestrictionsNull_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.singleton("whitelist"));
+        FieldSpec fieldSpec = FieldSpecFactory.fromSingleLegalValue("legalValue");
 
         boolean result = fieldSpec.equals(FieldSpecFactory.fromType(FieldType.STRING));
 
@@ -70,8 +71,7 @@ class FieldSpecTests {
     void equals_fieldSpecSetRestrictionsNullAndOtherObjectHasSetRestrictions_returnsFalse() {
         FieldSpec fieldSpec = FieldSpecFactory.fromType(FieldType.STRING);
 
-        boolean result = fieldSpec.equals(
-            FieldSpecFactory.fromList(DistributedList.singleton("whitelist")));
+        boolean result = fieldSpec.equals(FieldSpecFactory.fromSingleLegalValue("legalValue"));
 
         assertFalse(
             "Expected that when the field spec does not have set restrictions and the other object has set restrictions a false value is returned but was true",
@@ -81,10 +81,9 @@ class FieldSpecTests {
 
     @Test
     void equals_fieldSpecSetRestrictionsNotNullAndOtherObjectSetRestrictionsNotNullAndSetRestrictionsAreNotEqual_returnsFalse() {
-        FieldSpec fieldSpec = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3)));
+        FieldSpec fieldSpec = FieldSpecFactory.fromLegalValuesList(Arrays.asList(1, 2, 3));
 
-        boolean result = fieldSpec.equals(
-            FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(1, 2, 3, 4))));
+        boolean result = fieldSpec.equals(FieldSpecFactory.fromLegalValuesList(Arrays.asList(1, 2, 3, 4)));
 
         assertFalse(
             "Expected that when the items in the set restrictions are not equal a false value is returned but was true",
@@ -131,8 +130,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithEqualSetRestrictionsShouldBeEqual() {
-        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("same"));
-        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("same"));
+        FieldSpec a = FieldSpecFactory.fromSingleLegalValue("same");
+        FieldSpec b = FieldSpecFactory.fromSingleLegalValue("same");
 
         Assert.assertThat(a, equalTo(b));
         Assert.assertThat(a.hashCode(), equalTo(b.hashCode()));
@@ -140,8 +139,8 @@ class FieldSpecTests {
 
     @Test
     public void fieldSpecsWithUnequalSetRestrictionsShouldBeUnequal() {
-        FieldSpec a = FieldSpecFactory.fromList(DistributedList.singleton("not same"));
-        FieldSpec b = FieldSpecFactory.fromList(DistributedList.singleton("different"));
+        FieldSpec a = FieldSpecFactory.fromSingleLegalValue("not same");
+        FieldSpec b = FieldSpecFactory.fromSingleLegalValue("different");
 
         Assert.assertThat(a, not(equalTo(b)));
     }
@@ -198,7 +197,7 @@ class FieldSpecTests {
         LinearRestrictions<BigDecimal> numeric = LinearRestrictionsFactory.createNumericRestrictions(new Limit<>(BigDecimal.TEN, true), NUMERIC_MAX_LIMIT);
         FieldSpec spec = FieldSpecFactory.fromRestriction(numeric);
 
-        assertFalse(spec.canCombineWithWhitelistValue(BigDecimal.ONE));
+        assertFalse(spec.canCombineWithLegalValue(BigDecimal.ONE));
     }
 
     @Test
@@ -208,7 +207,7 @@ class FieldSpecTests {
 
         OffsetDateTime time = OffsetDateTime.of(100, 1, 1, 1, 1, 1, 1, ZoneOffset.UTC);
 
-        assertFalse(spec.canCombineWithWhitelistValue(time.plusNanos(1_000_000)));
+        assertFalse(spec.canCombineWithLegalValue(time.plusNanos(1_000_000)));
     }
 
     @Test
@@ -242,21 +241,21 @@ class FieldSpecTests {
 
         FieldSpec spec = FieldSpecFactory.fromRestriction(mockTypedRestrictions);
 
-        assertFalse(spec.canCombineWithWhitelistValue("Anything"));
+        assertFalse(spec.canCombineWithLegalValue("Anything"));
     }
 
     @Test
-    void permits_whenNotInWhiteList_returnsFalse() {
-        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
+    void permits_whenCanCombineWithLegalValue_returnsFalse() {
+        FieldSpec spec = FieldSpecFactory.fromSingleLegalValue(10);
 
-        assertFalse(spec.canCombineWithWhitelistValue(11));
+        assertFalse(spec.canCombineWithLegalValue(11));
     }
 
     @Test
-    void permits_whenInWhiteList_returnsTrue() {
-        FieldSpec spec = FieldSpecFactory.fromList(DistributedList.singleton(10));
+    void permits_whenCanCombineWithLegalValue_returnsTrue() {
+        FieldSpec spec = FieldSpecFactory.fromSingleLegalValue(10);
 
-        assertTrue(spec.canCombineWithWhitelistValue(10));
+        assertTrue(spec.canCombineWithLegalValue(10));
     }
 
     private class MockedRestrictions implements TypedRestrictions {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.common.whitelist;
+package com.scottlogic.datahelix.generator.common.distribution;
 
 import com.scottlogic.datahelix.generator.common.RandomNumberGenerator;
 
@@ -52,16 +52,6 @@ public class DistributedList<T> {
 
     public static <T> DistributedList<T> singleton(final T element) {
         return DistributedList.uniform(Collections.singleton(element));
-    }
-
-    public static <T> DistributedList<T> weightedOrDefault(final Collection<T> underlyingSet) {
-        return new DistributedList<>(
-            underlyingSet.stream()
-                .map(element -> element instanceof WeightedElement
-                        ? (WeightedElement<T>) element
-                        : WeightedElement.withDefaultWeight(element)
-                )
-                .collect(Collectors.toList()));
     }
 
     public static <T> DistributedList<T> uniform(final Collection<T> underlyingSet) {

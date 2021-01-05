@@ -17,17 +17,17 @@
 package com.scottlogic.datahelix.generator.core.decisiontree;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
-import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
-import com.scottlogic.datahelix.generator.core.profile.Profile;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
-import com.scottlogic.datahelix.generator.core.fieldspecs.*;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
+import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecHelper;
+import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecMerger;
+import com.scottlogic.datahelix.generator.core.fieldspecs.RowSpec;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
 import com.scottlogic.datahelix.generator.core.generation.databags.RowSpecDataBagGenerator;
+import com.scottlogic.datahelix.generator.core.profile.Profile;
+import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.grammatical.ConditionalConstraint;
 import com.scottlogic.datahelix.generator.core.reducer.ConstraintReducer;
 import com.scottlogic.datahelix.generator.core.walker.decisionbased.RowSpecTreeSolver;
 import com.scottlogic.datahelix.generator.core.walker.decisionbased.SequentialOptionPicker;
@@ -35,15 +35,18 @@ import com.scottlogic.datahelix.generator.core.walker.pruner.TreePruner;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder.inSetRecordsFrom;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 class RowSpecTreeSolverTests {
     private final FieldSpecMerger fieldSpecMerger = new FieldSpecMerger();
@@ -90,45 +93,21 @@ class RowSpecTreeSolverTests {
 
         List<Constraint> constraints = Arrays.asList(
             new ConditionalConstraint(
-                new InSetConstraint(
-                    country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
-                ),
-                new InSetConstraint(
-                    city,
-                    new DistributedList<>(new ArrayList<>(Arrays.asList(
-                        new WeightedElement<>("New York", 1.0F),
-                        new WeightedElement<>("Washington DC", 1.0F)))
-                    ))),
+                new InSetConstraint(country, inSetRecordsFrom("US")),
+                new InSetConstraint(city, inSetRecordsFrom("New York", "Washington DC"))
+            ),
             new ConditionalConstraint(
-                new InSetConstraint(
-                    country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
-                ),
-                new InSetConstraint(
-                    city,
-                    new DistributedList<>(new ArrayList<>(Arrays.asList(
-                        new WeightedElement<>("Bristol", 1.0F),
-                        new WeightedElement<>("London", 1.0F)))
-                    ))),
+                new InSetConstraint(country, inSetRecordsFrom("GB")),
+                new InSetConstraint(city, inSetRecordsFrom("Bristol",  "London"))
+            ),
             new ConditionalConstraint(
-                new InSetConstraint(
-                    country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("US", 1.0F)))
-                ),
-                new InSetConstraint(
-                    currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("USD", 1.0F)))
-                )),
+                new InSetConstraint(country, inSetRecordsFrom("US")),
+                new InSetConstraint(currency, inSetRecordsFrom("USD"))),
             new ConditionalConstraint(
-                new InSetConstraint(
-                    country,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GB", 1.0F)))
-                ),
-                new InSetConstraint(
-                    currency,
-                    new DistributedList<>(Collections.singletonList(new WeightedElement<>("GBP", 1.0F)))
-                )));
+                new InSetConstraint(country, inSetRecordsFrom("GB")),
+                new InSetConstraint(currency, inSetRecordsFrom("GBP"))
+            )
+        );
 
         Profile profile = new Profile(fields, constraints, new ArrayList<>());
 

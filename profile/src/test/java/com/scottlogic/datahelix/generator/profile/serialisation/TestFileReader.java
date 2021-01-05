@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.scottlogic.datahelix.generator.profile;
+package com.scottlogic.datahelix.generator.profile.serialisation;
 
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 public class TestFileReader extends FileReader {
     private final boolean weighted;
@@ -38,22 +38,21 @@ public class TestFileReader extends FileReader {
     }
 
     @Override
-    public DistributedList<Object> setFromFile(File file) {
+    public List<InSetRecord> setFromFile(File file) {
         return weighted
             ? this.getDistributedListWithWeights()
-            : DistributedList.uniform(Collections.singleton("test"));
+            : singletonList(new InSetRecord("test"));
     }
     @Override
-    public DistributedList<String> listFromMapFile(File file, String key) {
-        return DistributedList.uniform(Collections.singleton("test"));
+    public List<String> listFromMapFile(File file, String key) {
+        return singletonList("test");
     }
 
-    private static DistributedList<Object> getDistributedListWithWeights() {
-        List<Object> elements = Arrays.asList(
-            new WeightedElement<>("test1", 20),
-            new WeightedElement<>("test2", 80)
+    private static List<InSetRecord> getDistributedListWithWeights() {
+        return Arrays.asList(
+            new InSetRecord("test1", 20),
+            new InSetRecord("test2", 80)
         );
-        return DistributedList.weightedOrDefault(elements);
     }
 }
 

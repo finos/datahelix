@@ -19,13 +19,11 @@ import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.restrictions.string.StringRestrictionsFactory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -42,24 +40,24 @@ class InMapIndexRelationTest {
         Field f2 = createField("field1");
         List<Object> values = Arrays.asList("foo", "bar");
 
-        testInstance = new InMapIndexRelation(f1, f2, DistributedList.uniform(values));
+        testInstance = new InMapIndexRelation(f1, f2, values);
     }
 
     @Test
-    void reduceToRelatedFieldSpec_whenAllValid_returnCompleteWhiteList() {
+    void reduceToRelatedFieldSpec_whenAllValid_returnCompleteLegalValuesList() {
         FieldSpec parameter = FieldSpecFactory.fromType(FieldType.STRING);
 
-        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Arrays.asList(0, 1))).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromLegalValuesList(Arrays.asList(0, 1)).withNotNull();
         FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));
     }
 
     @Test
-    void reduceToRelatedFieldSpec_whenSomeValid_returnReducedWhiteList() {
+    void reduceToRelatedFieldSpec_whenSomeValid_returnReducedLegalValuesList() {
         FieldSpec parameter = FieldSpecFactory.fromRestriction(StringRestrictionsFactory.forStringContaining(Pattern.compile("^f.*"), false));
 
-        FieldSpec expected = FieldSpecFactory.fromList(DistributedList.uniform(Collections.singletonList(0))).withNotNull();
+        FieldSpec expected = FieldSpecFactory.fromSingleLegalValue(0).withNotNull();
         FieldSpec actual = testInstance.createModifierFromOtherFieldSpec(parameter);
 
         assertThat(actual, sameBeanAs(expected));

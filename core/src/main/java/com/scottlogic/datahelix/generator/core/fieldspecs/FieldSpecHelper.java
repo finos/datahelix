@@ -18,15 +18,10 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 
-import static com.scottlogic.datahelix.generator.common.whitelist.DistributedList.singleton;
-
 public class FieldSpecHelper {
     public FieldSpec getFieldSpecForValue(DataBagValue fieldValue) {
-        if (fieldValue.getValue() == null) {
-            return FieldSpecFactory.nullOnly();
-        }
-
-        return FieldSpecFactory.fromList(singleton(fieldValue.getValue()))
-            .withNotNull();
+        return (fieldValue.getValue() == null)
+            ? FieldSpecFactory.nullOnly()
+            : FieldSpecFactory.fromSingleLegalValue(fieldValue.getValue()).withNotNull();
     }
 }
