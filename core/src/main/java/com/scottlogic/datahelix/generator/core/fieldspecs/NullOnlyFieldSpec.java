@@ -19,13 +19,15 @@ package com.scottlogic.datahelix.generator.core.fieldspecs;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.NullOnlySource;
 
+import java.util.Optional;
+
 public class NullOnlyFieldSpec extends FieldSpec {
     NullOnlyFieldSpec() {
         super(true);
     }
 
     @Override
-    public boolean canCombineWithWhitelistValue(Object value) {
+    public boolean canCombineWithLegalValue(Object value) {
         return false;
     }
 
@@ -35,7 +37,13 @@ public class NullOnlyFieldSpec extends FieldSpec {
     }
 
     @Override
+    public Optional<FieldSpec> merge(FieldSpec other, boolean useFinestGranularityAvailable) {
+        return other.isNullable() ? Optional.of(FieldSpecFactory.nullOnly()) : Optional.empty();
+    }
+
+    @Override
     public FieldSpec withNotNull() {
         throw new UnsupportedOperationException("not null on NullOnlyFieldSpec not allowed");
     }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Scott Logic Ltd
+ * Copyright 2019-2021 Scott Logic Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.scottlogic.datahelix.generator.core.fieldspecs;
 
-package com.scottlogic.datahelix.generator.profile.dtos.constraints.atomic;
+import java.util.function.Function;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
-
-import java.util.List;
-
-public class InSetConstraintDTO extends AtomicConstraintDTO
-{
-    public static final String NAME = "inSet";
-
-    @JsonProperty(NAME)
-    public List<InSetRecord> values;
+public interface ValuesFieldSpec {
+    FieldSpec withMappedValues(Function<Object, Object> parse);
 }

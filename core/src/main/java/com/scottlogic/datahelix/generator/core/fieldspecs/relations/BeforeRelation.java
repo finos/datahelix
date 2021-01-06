@@ -48,7 +48,7 @@ public class BeforeRelation<T extends Comparable<T>> implements FieldSpecRelatio
         if (otherFieldSpec instanceof NullOnlyFieldSpec){
             return FieldSpecFactory.nullOnly();
         }
-        if (otherFieldSpec instanceof WhitelistFieldSpec) {
+        if (otherFieldSpec instanceof WeightedLegalValuesFieldSpec) {
             throw new UnsupportedOperationException("cannot combine sets with before relation, Issue #1489");
         }
 

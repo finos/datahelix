@@ -48,7 +48,7 @@ public class AfterRelation<T extends Comparable<T>> implements FieldSpecRelation
         if (otherFieldSpec instanceof NullOnlyFieldSpec) {
             return FieldSpecFactory.nullOnly();
         }
-        if (otherFieldSpec instanceof WhitelistFieldSpec) {
+        if (otherFieldSpec instanceof WeightedLegalValuesFieldSpec) {
             throw new UnsupportedOperationException("cannot combine sets with after relation, Issue #1489");
         }
 

@@ -152,7 +152,7 @@ public class CucumberTestState {
                     field = fieldName;
                     file = (String) _value;
                 }}
-                    : new InSetConstraintDTO() {{
+                    : new InSetFromListConstraintDTO() {{
                     field = fieldName;
                     values = (List<Object>) _value;
                 }};

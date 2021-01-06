@@ -16,11 +16,11 @@
 
 package com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionNode;
@@ -28,7 +28,6 @@ import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 import com.scottlogic.datahelix.generator.core.decisiontree.testutils.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
-import com.scottlogic.datahelix.generator.common.SetUtils;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -276,9 +275,7 @@ class TreePartitionerTests {
         if (constraint == null) {
             constraint = new InSetConstraint(
                 createField(fieldName),
-                new DistributedList<>(
-                    Collections.singletonList(
-                        new WeightedElement<>("sample-value", 1.0F))));
+                TestAtomicConstraintBuilder.inSetRecordsFrom("sample-value"));
             this.constraints.put(fieldName, constraint);
         }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile;
+package com.scottlogic.datahelix.generator.profile.serialisation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;

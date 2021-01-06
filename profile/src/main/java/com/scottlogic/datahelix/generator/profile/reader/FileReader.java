@@ -16,11 +16,10 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.google.inject.Inject;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 
 import java.io.File;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class FileReader {
     private final CsvInputStreamReaderFactory csvReaderFactory;
@@ -30,24 +29,11 @@ public class FileReader {
         this.csvReaderFactory = csvReaderFactory;
     }
 
-    public DistributedList<Object> setFromFile(File file) {
-        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
-        DistributedList<String> names = reader.retrieveLines();
-
-        return new DistributedList<>(
-            names.distributedList().stream()
-                .map(holder -> new WeightedElement<>((Object) holder.element(), holder.weight()))
-                .distinct()
-                .collect(Collectors.toList()));
+    public List<InSetRecord> setFromFile(File file) {
+        return csvReaderFactory.getReaderForFile(file).retrieveInSetElements();
     }
 
-    public DistributedList<String> listFromMapFile(File file, String key) {
-        CsvInputReader reader = csvReaderFactory.getReaderForFile(file);
-        DistributedList<String> names = reader.retrieveLines(key);
-
-        return new DistributedList<>(
-            names.distributedList().stream()
-                .map(holder -> new WeightedElement<>(holder.element(), holder.weight()))
-                .collect(Collectors.toList()));
+    public List<String> listFromMapFile(File file, String key) {
+        return csvReaderFactory.getReaderForFile(file).retrieveLinesForColumn(key);
     }
 }

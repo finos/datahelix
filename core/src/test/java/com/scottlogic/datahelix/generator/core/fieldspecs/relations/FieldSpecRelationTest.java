@@ -17,19 +17,16 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 
 import com.scottlogic.datahelix.generator.common.profile.*;
 import com.scottlogic.datahelix.generator.common.util.defaults.DateTimeDefaults;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
 import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RestrictionsFieldSpec;
-import com.scottlogic.datahelix.generator.core.fieldspecs.WhitelistFieldSpec;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
-import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictionsFactory;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -159,17 +156,11 @@ class FieldSpecRelationTest {
 
     @Test
     public void equalTo_forSet_returns() {
-        DistributedList<Object> expectedValues = DistributedList.uniform(
-            Stream.of("2", "3", "4")
-                .map(BigDecimal::new)
-                .collect(Collectors.toSet()));
-        WhitelistFieldSpec expected = FieldSpecFactory.fromList(expectedValues);
+        List<Object> expectedValues = Stream.of("2", "3", "4").map(BigDecimal::new).collect(Collectors.toList());
+        FieldSpec expected = FieldSpecFactory.fromLegalValuesList(expectedValues);
 
-        DistributedList<Object> secondValues = DistributedList.uniform(
-            Stream.of("1", "2", "3")
-                .map(BigDecimal::new)
-                .collect(Collectors.toSet()));
-        WhitelistFieldSpec second = FieldSpecFactory.fromList(secondValues);
+        List<Object> secondValues = Stream.of("1", "2", "3").map(BigDecimal::new).collect(Collectors.toList());
+        FieldSpec second = FieldSpecFactory.fromLegalValuesList(secondValues);
 
         Field firstField = FieldBuilder.createField("first");
         Field secondField = FieldBuilder.createField("second");

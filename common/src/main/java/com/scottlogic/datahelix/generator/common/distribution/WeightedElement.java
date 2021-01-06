@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.common.whitelist;
+package com.scottlogic.datahelix.generator.common.distribution;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -49,6 +49,10 @@ public class WeightedElement<E> {
 
     public double weight() {
         return weight;
+    }
+
+    public <F> WeightedElement<F> withMappedValue(Function<E, F> parse) {
+        return new WeightedElement<F>(parse.apply(element), weight);
     }
 
     public static <T> WeightedElement<T> withDefaultWeight(final T element) {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.scottlogic.datahelix.generator.profile;
+package com.scottlogic.datahelix.generator.profile.serialisation;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,7 +32,6 @@ import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.C
 import com.scottlogic.datahelix.generator.profile.dtos.constraints.grammatical.NotConstraintDTO;
 import com.scottlogic.datahelix.generator.profile.reader.CsvInputStreamReaderFactory;
 import com.scottlogic.datahelix.generator.profile.reader.FileReader;
-import com.scottlogic.datahelix.generator.profile.serialisation.ConstraintDeserializer;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

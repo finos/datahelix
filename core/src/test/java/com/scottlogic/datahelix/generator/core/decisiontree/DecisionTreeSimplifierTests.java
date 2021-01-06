@@ -19,8 +19,6 @@ package com.scottlogic.datahelix.generator.core.decisiontree;
 import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
@@ -31,31 +29,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder.inSetRecordsFrom;
 
 class DecisionTreeSimplifierTests {
-    // TODO: Simplifier tests needs fleshing out
-
-    private static DistributedList<Object> setOf(Object... objects) {
-        return new DistributedList<>(Stream.of(objects)
-            .map(element -> new WeightedElement<>(element, 1.0F))
-            .collect(Collectors.toList()));
-    }
 
     @Test
     void simplify_decisionContainsSingleOptiontWithMatchingConstraintOnRootNode_doesNotSimplifyTree() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
-                new InSetConstraint(createField("Field 1"), setOf(1, 2)),
+                new InSetConstraint(createField("Field 1"), inSetRecordsFrom(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singleton(
                 new DecisionNode(
                     Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
-                            new InSetConstraint(createField("Field 1"), setOf(1, 2))
+                            new InSetConstraint(createField("Field 1"), inSetRecordsFrom(1, 2))
                         )).setDecisions(Collections.emptySet()).build()
                     )
                 )
@@ -76,13 +66,13 @@ class DecisionTreeSimplifierTests {
     void simplify_decisionContainsSingleOptionWithDifferingConstraintOnRootNode_simplifiesDecision() {
         DecisionTree tree = new DecisionTree(
             new ConstraintNodeBuilder().addAtomicConstraints(SetUtils.setOf(
-                new InSetConstraint(createField("Field 1"), setOf(1, 2)),
+                new InSetConstraint(createField("Field 1"), inSetRecordsFrom(1, 2)),
                 new IsNullConstraint(createField("Field 1")).negate()
             )).setDecisions(Collections.singleton(
                 new DecisionNode(
                     Collections.singleton(
                         new ConstraintNodeBuilder().addAtomicConstraints(Collections.singleton(
-                            new InSetConstraint(createField("Field 2"), setOf("A", "B"))
+                            new InSetConstraint(createField("Field 2"), inSetRecordsFrom("A", "B"))
                         )).setDecisions(Collections.emptySet()).build()
                     )
                 )
@@ -96,9 +86,9 @@ class DecisionTreeSimplifierTests {
         final DecisionTree result = simplifier.simplify(tree);
 
         final List<AtomicConstraint> expectedConstraints = Arrays.asList(
-            new InSetConstraint(createField("Field 1"), setOf(1, 2)),
+            new InSetConstraint(createField("Field 1"), inSetRecordsFrom(1, 2)),
             new IsNullConstraint(createField("Field 1")).negate(),
-            new InSetConstraint(createField("Field 2"), setOf("A", "B"))
+            new InSetConstraint(createField("Field 2"), inSetRecordsFrom("A", "B"))
         );
         Assert.assertTrue(result.rootNode.getAtomicConstraints().containsAll(expectedConstraints));
         Assert.assertTrue(result.rootNode.getDecisions().isEmpty());

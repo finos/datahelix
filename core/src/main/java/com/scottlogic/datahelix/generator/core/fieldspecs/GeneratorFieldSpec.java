@@ -16,21 +16,23 @@
 package com.scottlogic.datahelix.generator.core.fieldspecs;
 
 import com.scottlogic.datahelix.generator.core.generation.fieldvaluesources.FieldValueSource;
+
+import java.util.Optional;
 import java.util.function.Predicate;
 
 public class GeneratorFieldSpec extends FieldSpec {
     private final FieldValueSource fieldValueSource;
-    private final Predicate<Object> acceptWhitelistValueFunction;
+    private final Predicate<Object> acceptLegalValueFunction;
 
-    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Predicate<Object> acceptWhitelistValueFunction, boolean nullable) {
+    public GeneratorFieldSpec(FieldValueSource fieldValueSource, Predicate<Object> acceptLegalValueFunction, boolean nullable) {
         super(nullable);
         this.fieldValueSource = fieldValueSource;
-        this.acceptWhitelistValueFunction = acceptWhitelistValueFunction;
+        this.acceptLegalValueFunction = acceptLegalValueFunction;
     }
 
     @Override
-    public boolean canCombineWithWhitelistValue(Object value) {
-        return acceptWhitelistValueFunction.test(value);
+    public boolean canCombineWithLegalValue(Object value) {
+        return acceptLegalValueFunction.test(value);
     }
 
     @Override
@@ -39,7 +41,18 @@ public class GeneratorFieldSpec extends FieldSpec {
     }
 
     @Override
+    public Optional<FieldSpec> merge(FieldSpec other, boolean useFinestGranularityAvailable) {
+        final boolean notNullable = !isNullable() || !other.isNullable();
+
+        if (other instanceof GeneratorFieldSpec) {
+            throw new UnsupportedOperationException("generators cannot be combined");
+        }
+
+        return Optional.of(notNullable ? withNotNull() : this);
+    }
+
+    @Override
     public FieldSpec withNotNull() {
-        return new GeneratorFieldSpec(fieldValueSource, acceptWhitelistValueFunction, false);
+        return new GeneratorFieldSpec(fieldValueSource, acceptLegalValueFunction, false);
     }
 }

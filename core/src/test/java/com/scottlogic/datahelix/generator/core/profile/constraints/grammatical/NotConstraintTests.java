@@ -17,13 +17,14 @@
 package com.scottlogic.datahelix.generator.core.profile.constraints.grammatical;
 
 import com.scottlogic.datahelix.generator.common.profile.Field;
+import com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.IsNullConstraint;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
 
 public class NotConstraintTests {
@@ -69,11 +70,11 @@ public class NotConstraintTests {
         Field field2 = createField("TestField");
         Constraint constraint1 = new InSetConstraint(
             field1,
-            DistributedList.singleton("abc")
+            TestAtomicConstraintBuilder.inSetRecordsFrom("abc")
             ).negate();
         Constraint constraint2 = new InSetConstraint(
             field2,
-            DistributedList.singleton("abcd")
+            TestAtomicConstraintBuilder.inSetRecordsFrom("abcd")
             ).negate();
         Assert.assertNotEquals(constraint1, constraint2);
     }

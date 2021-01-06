@@ -19,15 +19,10 @@ package com.scottlogic.datahelix.generator.core.fieldspecs.relations;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldType;
 import com.scottlogic.datahelix.generator.common.profile.Granularity;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
 import com.scottlogic.datahelix.generator.core.fieldspecs.*;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBagValue;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;
 import com.scottlogic.datahelix.generator.core.restrictions.linear.LinearRestrictions;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpecRelation {
     private final Field main;
@@ -50,15 +45,9 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
         if (otherFieldSpec instanceof NullOnlyFieldSpec) {
             return FieldSpecFactory.nullOnly();
         }
-        if (otherFieldSpec instanceof WhitelistFieldSpec) {
-            WhitelistFieldSpec whitelistFieldSpec = (WhitelistFieldSpec) otherFieldSpec;
-            List<WeightedElement<T>> modified = whitelistFieldSpec
-                .getWhitelist()
-                .distributedList()
-                .stream()
-                .map(x -> new WeightedElement<>(offsetGranularity.getNext((T) x.element(), offset), x.weight()))
-                .collect(Collectors.toList());
-            return FieldSpecFactory.fromList((DistributedList) new DistributedList<>(modified));
+        if (otherFieldSpec instanceof ValuesFieldSpec) {
+            ValuesFieldSpec valuesFieldSpec = (ValuesFieldSpec) otherFieldSpec;
+            return valuesFieldSpec.withMappedValues(x-> offsetGranularity.getNext((T) x, offset));
         }
 
         LinearRestrictions<T> otherRestrictions = (LinearRestrictions) ((RestrictionsFieldSpec) otherFieldSpec).getRestrictions();
@@ -82,7 +71,7 @@ public class EqualToOffsetRelation<T extends Comparable<T>> implements FieldSpec
             return FieldSpecFactory.fromType(FieldType.DATETIME);
         }
         T offsetValue = offsetGranularity.getNext(value, offset);
-        return FieldSpecFactory.fromList(DistributedList.singleton(offsetValue));
+        return FieldSpecFactory.fromSingleLegalValue(offsetValue);
     }
 
     @Override

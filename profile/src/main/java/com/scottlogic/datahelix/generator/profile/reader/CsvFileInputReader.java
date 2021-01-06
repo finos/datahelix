@@ -17,9 +17,10 @@
 package com.scottlogic.datahelix.generator.profile.reader;
 
 import com.scottlogic.datahelix.generator.common.ValidationException;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
 
 import java.io.*;
+import java.util.List;
 
 public class CsvFileInputReader implements CsvInputReader {
     private final File path;
@@ -28,17 +29,17 @@ public class CsvFileInputReader implements CsvInputReader {
         this.path = path;
     }
 
-    public DistributedList<String> retrieveLines() {
+    public List<InSetRecord> retrieveInSetElements() {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path.getName()).retrieveLines();
+            return new CsvStreamInputReader(stream, path.getName()).retrieveInSetElements();
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }
     }
 
-    public DistributedList<String> retrieveLines(String key) {
+    public List<String> retrieveLinesForColumn(String key) {
         try (InputStream stream = createStream()) {
-            return new CsvStreamInputReader(stream, path.getName()).retrieveLines(key);
+            return new CsvStreamInputReader(stream, path.getName()).retrieveLinesForColumn(key);
         } catch (IOException exc){
             throw new UncheckedIOException(exc);
         }

@@ -16,18 +16,16 @@
 
 package com.scottlogic.datahelix.generator.core.decisiontree.treepartitioning;
 
+import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.FieldBuilder;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
 import com.scottlogic.datahelix.generator.common.profile.ProfileFields;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNodeBuilder;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionNode;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
-import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
-import com.scottlogic.datahelix.generator.common.whitelist.WeightedElement;
-import com.scottlogic.datahelix.generator.common.SetUtils;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,18 +33,17 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
 import static com.scottlogic.datahelix.generator.common.profile.FieldBuilder.createField;
+import static com.scottlogic.datahelix.generator.core.builders.TestAtomicConstraintBuilder.inSetRecordsFrom;
 
 class ConstraintToFieldMapperTests {
-    private DistributedList<Object> whitelistOf(Object element) {
-        return new DistributedList<>(Collections.singletonList(new WeightedElement<>(element, 1.0F)));
-    }
 
     @Test
     void shouldFindConstraintMappings() {
         givenFields("A");
 
-        final AtomicConstraint constraint = new InSetConstraint(createField("A"), whitelistOf("test-value"));
+        final AtomicConstraint constraint = new InSetConstraint(createField("A"), inSetRecordsFrom("test-value"));
         givenConstraints(constraint);
         givenFields("A");
 
@@ -57,7 +54,7 @@ class ConstraintToFieldMapperTests {
     void shouldFindRootDecisionNodeMapping() {
         givenFields("B");
 
-        final AtomicConstraint constraint = new InSetConstraint(createField("B"), whitelistOf("test-value"));
+        final AtomicConstraint constraint = new InSetConstraint(createField("B"), inSetRecordsFrom("test-value"));
         final DecisionNode decision = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(constraint).build());
 
@@ -70,9 +67,9 @@ class ConstraintToFieldMapperTests {
     void shouldCreateCorrectNumberOfMappings() {
         givenFields("A", "B", "C");
 
-        final AtomicConstraint constraintA = new InSetConstraint(createField("A"), whitelistOf("test-value"));
-        final AtomicConstraint constraintB = new InSetConstraint(createField("B"), whitelistOf("test-value"));
-        final AtomicConstraint constraintC = new InSetConstraint(createField("C"), whitelistOf("test-value"));
+        final AtomicConstraint constraintA = new InSetConstraint(createField("A"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintB = new InSetConstraint(createField("B"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintC = new InSetConstraint(createField("C"), inSetRecordsFrom("test-value"));
 
         givenConstraints(constraintA, constraintB, constraintC);
 
@@ -83,12 +80,12 @@ class ConstraintToFieldMapperTests {
     void shouldMapTopLevelConstraintsToNestedFields() {
         givenFields("A", "B", "C", "D", "E", "F");
 
-        final AtomicConstraint constraintA = new InSetConstraint(createField("A"), whitelistOf("test-value"));
-        final AtomicConstraint constraintB = new InSetConstraint(createField("B"), whitelistOf("test-value"));
-        final AtomicConstraint constraintC = new InSetConstraint(createField("C"), whitelistOf("test-value"));
-        final AtomicConstraint constraintD = new InSetConstraint(createField("D"), whitelistOf("test-value"));
-        final AtomicConstraint constraintE = new InSetConstraint(createField("E"), whitelistOf("test-value"));
-        final AtomicConstraint constraintF = new InSetConstraint(createField("F"), whitelistOf("test-value"));
+        final AtomicConstraint constraintA = new InSetConstraint(createField("A"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintB = new InSetConstraint(createField("B"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintC = new InSetConstraint(createField("C"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintD = new InSetConstraint(createField("D"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintE = new InSetConstraint(createField("E"), inSetRecordsFrom("test-value"));
+        final AtomicConstraint constraintF = new InSetConstraint(createField("F"), inSetRecordsFrom("test-value"));
 
         final DecisionNode decisionABC = new DecisionNode(
             new ConstraintNodeBuilder().addAtomicConstraints(Collections.emptySet()).setDecisions(SetUtils.setOf(

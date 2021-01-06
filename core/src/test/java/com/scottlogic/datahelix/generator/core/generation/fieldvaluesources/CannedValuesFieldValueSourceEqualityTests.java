@@ -16,7 +16,7 @@
 
 package com.scottlogic.datahelix.generator.core.generation.fieldvaluesources;
 
-import com.scottlogic.datahelix.generator.common.whitelist.DistributedList;
+import com.scottlogic.datahelix.generator.common.distribution.DistributedList;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -30,9 +30,9 @@ import static org.hamcrest.core.IsNot.not;
 class CannedValuesFieldValueSourceEqualityTests {
     private FieldValueSource<Object> valueSourceOf(String... elements) {
         Set<Object> set = Arrays.stream(elements).collect(Collectors.toSet());
-        DistributedList<Object> whitelist = DistributedList.uniform(set);
+        DistributedList<Object> legalValues = DistributedList.uniform(set);
         //noinspection unchecked
-        return new CannedValuesFieldValueSource(whitelist);
+        return new CannedValuesFieldValueSource(legalValues);
     }
 
     @Test
