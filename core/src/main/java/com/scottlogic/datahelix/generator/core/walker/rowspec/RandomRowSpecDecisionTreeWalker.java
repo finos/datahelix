@@ -17,6 +17,7 @@
 package com.scottlogic.datahelix.generator.core.walker.rowspec;
 
 import com.google.inject.Inject;
+import com.scottlogic.datahelix.generator.common.distribution.WeightedElement;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
 import com.scottlogic.datahelix.generator.core.fieldspecs.RowSpec;
 import com.scottlogic.datahelix.generator.core.generation.databags.DataBag;
@@ -59,7 +60,7 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     private Stream<RowSpec> getFromCachedRowSpecs(DecisionTree tree) {
-        List<RowSpec> rowSpecCache = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
+        List<WeightedElement<RowSpec>> rowSpecCache = rowSpecTreeSolver.createRowSpecs(tree).collect(Collectors.toList());
         return Stream.generate(() -> getRandomRowSpec(rowSpecCache));
     }
 
@@ -79,11 +80,32 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
     }
 
     private Optional<RowSpec> getFirstRowSpec(DecisionTree tree) {
-        return rowSpecTreeSolver.createRowSpecs(tree).findFirst();
+        return rowSpecTreeSolver.createRowSpecs(tree).findFirst().map(WeightedElement::element);
     }
 
-    private RowSpec getRandomRowSpec(List<RowSpec> rowSpecCache) {
-        return rowSpecCache.get(random.nextInt(rowSpecCache.size()));
+    private RowSpec getRandomRowSpec(List<WeightedElement<RowSpec>> rowSpecCache) {
+        double totalRange = rowSpecCache.stream()
+            .mapToDouble(WeightedElement::weight).sum();
+
+        double nextRowSpecFromRange = random.nextInt((int)(totalRange * 100)) / 100d;
+
+        double currentPosition = 0d;
+        WeightedElement<RowSpec> lastRowSpec = null;
+
+        for (WeightedElement<RowSpec> weightedRowSpec: rowSpecCache) {
+            double thisRowSpecRange = weightedRowSpec.weight();
+            double newPosition = thisRowSpecRange + currentPosition;
+
+            if (newPosition >= nextRowSpecFromRange)
+            {
+                return weightedRowSpec.element();
+            }
+
+            currentPosition = newPosition;
+            lastRowSpec = weightedRowSpec;
+        }
+
+        return lastRowSpec.element();
     }
 
     private DataBag createDataBag(RowSpec rowSpec) {

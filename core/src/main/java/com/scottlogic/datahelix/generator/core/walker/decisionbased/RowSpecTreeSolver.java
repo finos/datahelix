@@ -16,15 +16,16 @@
 package com.scottlogic.datahelix.generator.core.walker.decisionbased;
 
 import com.google.inject.Inject;
+import com.scottlogic.datahelix.generator.common.distribution.WeightedElement;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.profile.Fields;
-import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpecFactory;
+import com.scottlogic.datahelix.generator.common.profile.InSetRecord;
+import com.scottlogic.datahelix.generator.core.fieldspecs.*;
 import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.AtomicConstraint;
 import com.scottlogic.datahelix.generator.core.decisiontree.ConstraintNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionNode;
 import com.scottlogic.datahelix.generator.core.decisiontree.DecisionTree;
-import com.scottlogic.datahelix.generator.core.fieldspecs.FieldSpec;
-import com.scottlogic.datahelix.generator.core.fieldspecs.RowSpec;
+import com.scottlogic.datahelix.generator.core.profile.constraints.atomic.InSetConstraint;
 import com.scottlogic.datahelix.generator.core.reducer.ConstraintReducer;
 import com.scottlogic.datahelix.generator.core.walker.pruner.Merged;
 import com.scottlogic.datahelix.generator.core.walker.pruner.TreePruner;
@@ -51,45 +52,91 @@ public class RowSpecTreeSolver {
         this.optionPicker = optionPicker;
     }
 
-    public Stream<RowSpec> createRowSpecs(DecisionTree tree) {
+    public Stream<WeightedElement<RowSpec>> createRowSpecs(DecisionTree tree) {
         return flatMap(reduceToRowNodes(tree.rootNode),
             rootNode -> toRowspec(tree.fields, rootNode));
     }
 
-    private Stream<RowSpec> toRowspec(Fields fields, ConstraintNode rootNode) {
-        Optional<RowSpec> result = constraintReducer.reduceConstraintsToRowSpec(fields, rootNode);
-        return result.map(Stream::of).orElseGet(Stream::empty);
+    private Stream<WeightedElement<RowSpec>> toRowspec(Fields fields, WeightedElement<ConstraintNode> rootNode) {
+        Optional<RowSpec> result = constraintReducer.reduceConstraintsToRowSpec(fields, rootNode.element());
+        return result
+            .map(rowSpec -> new WeightedElement<>(rowSpec, rootNode.weight()))
+            .map(Stream::of)
+            .orElseGet(Stream::empty);
     }
 
     /**
      * a row node is a constraint node with no further decisions
      */
-    private Stream<ConstraintNode> reduceToRowNodes(ConstraintNode rootNode) {
-        if (rootNode.getDecisions().isEmpty()) {
+    private Stream<WeightedElement<ConstraintNode>> reduceToRowNodes(ConstraintNode rootNode) {
+        return reduceToRowNodes(new WeightedElement<>(rootNode, 1));
+    }
+
+    private Stream<WeightedElement<ConstraintNode>> reduceToRowNodes(WeightedElement<ConstraintNode> rootNode) {
+        if (rootNode.element().getDecisions().isEmpty()) {
             return Stream.of(rootNode);
         }
 
-        DecisionNode decisionNode = optionPicker.pickDecision(rootNode);
-        ConstraintNode rootWithoutDecision = rootNode.builder().removeDecision(decisionNode).build();
+        DecisionNode decisionNode = optionPicker.pickDecision(rootNode.element());
+        ConstraintNode rootWithoutDecision = rootNode.element().builder().removeDecision(decisionNode).build();
 
-        Stream<ConstraintNode> rootOnlyConstraintNodes = optionPicker.streamOptions(decisionNode)
+        Stream<WeightedElement<ConstraintNode>> rootOnlyConstraintNodes = optionPicker.streamOptions(decisionNode)
             .map(option -> combineWithRootNode(rootWithoutDecision, option))
-            .filter(newNode -> !newNode.isContradictory())
-            .map(Merged::get);
+            .filter(newNode -> !newNode.element().isContradictory())
+            .map(weighted -> new WeightedElement<>(weighted.element().get(), weighted.weight()));
 
         return flatMap(
             rootOnlyConstraintNodes,
-            this::reduceToRowNodes);
+            weightedConstraintNode -> reduceToRowNodes(
+                new WeightedElement<ConstraintNode>(
+                    weightedConstraintNode.element(),
+                    weightedConstraintNode.weight() / rootNode.weight())));
     }
 
-    private Merged<ConstraintNode> combineWithRootNode(ConstraintNode rootNode, ConstraintNode option) {
+    private WeightedElement<Merged<ConstraintNode>> combineWithRootNode(ConstraintNode rootNode, ConstraintNode option) {
         ConstraintNode constraintNode = rootNode.builder()
             .addDecisions(option.getDecisions())
             .addAtomicConstraints(option.getAtomicConstraints())
             .addRelations(option.getRelations())
             .build();
 
-        return treePruner.pruneConstraintNode(constraintNode, getFields(option));
+        double applicabilityOfThisOption = option.getAtomicConstraints().stream()
+            .mapToDouble(optionAtomicConstraint -> rootNode.getAtomicConstraints().stream()
+                .filter(rootAtomicConstraint -> rootAtomicConstraint.getField().equals(optionAtomicConstraint.getField()))
+                .filter(rootAtomicConstraint -> rootAtomicConstraint instanceof InSetConstraint)
+                .map(rootAtomicConstraint -> (InSetConstraint)rootAtomicConstraint)
+                .findFirst()
+                .map(matchingRootAtomicConstraint -> {
+                    double totalWeighting = matchingRootAtomicConstraint.legalValues.stream()
+                        .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
+
+                    double relevantWeighting = matchingRootAtomicConstraint.legalValues.stream()
+                        .filter(legalValue -> optionAtomicConstraint.toFieldSpec().canCombineWithLegalValue(legalValue.getElement()))
+                        .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
+
+                    return relevantWeighting / totalWeighting;
+                })
+                .orElse(1d))
+            .sum();
+
+        if (applicabilityOfThisOption > 1){
+            double applicabilityFraction = applicabilityOfThisOption - (int) applicabilityOfThisOption;
+            applicabilityOfThisOption = applicabilityFraction == 0
+                ? 1
+                : applicabilityFraction;
+        }
+
+        if (applicabilityOfThisOption == 0){
+            return new WeightedElement<>(
+                Merged.contradictory(),
+                1
+            );
+        }
+
+        return new WeightedElement<>(
+            treePruner.pruneConstraintNode(constraintNode, getFields(option)),
+            applicabilityOfThisOption
+        );
     }
 
     private Map<Field, FieldSpec> getFields(ConstraintNode option) {
