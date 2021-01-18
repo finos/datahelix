@@ -100,6 +100,11 @@ public class RowSpecTreeSolver {
             .addRelations(option.getRelations())
             .build();
 
+        /*
+        Find the relevance of this option in the context of the the tree.
+        i.e. if this option says that a field must be equal to A in the possible set of A (20%), B (30%) and C (50%) yield the weighing of A (20%)
+        applicabilityOfThisOption should yield 0.2 in this case (20% of 1)
+        */
         double applicabilityOfThisOption = option.getAtomicConstraints().stream()
             .mapToDouble(optionAtomicConstraint -> rootNode.getAtomicConstraints().stream()
                 .filter(rootAtomicConstraint -> rootAtomicConstraint.getField().equals(optionAtomicConstraint.getField()))
@@ -116,6 +121,14 @@ public class RowSpecTreeSolver {
             .sum();
 
         if (applicabilityOfThisOption > 1) {
+            /*
+            the applicability of this option (e.g. A) is greater than 100%, retrieve the fractional part of the number.
+            if  there is no fractional part, treat the applicability as 1 otherwise use the fractional part as the percentage.
+
+            This can happen when other fields in the option match an inSet constraint, if they also have a weighting it
+            will be taken into account, otherwise 1 (100%) would be used, hence 100% (field1) + 20% (field2) = 1.2.
+            */
+
             double applicabilityFraction = applicabilityOfThisOption - (int) applicabilityOfThisOption;
             applicabilityOfThisOption = applicabilityFraction == 0
                 ? 1
@@ -123,12 +136,15 @@ public class RowSpecTreeSolver {
         }
 
         if (applicabilityOfThisOption == 0){
+            /*no options were applicable, maybe an option was given 0%, yield contradictory so the option isn't processed.*/
+
             return new WeightedElement<>(
                 Merged.contradictory(),
                 1
             );
         }
 
+        /*Yield a weighted element to inform the caller of the weighting of this constraint node*/
         return new WeightedElement<>(
             treePruner.pruneConstraintNode(constraintNode, getFields(option)),
             applicabilityOfThisOption
