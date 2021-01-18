@@ -83,6 +83,20 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
         return rowSpecTreeSolver.createRowSpecs(tree).findFirst().map(WeightedElement::element);
     }
 
+    /**
+     * Get a row spec from the rowSpecCache in a weighted manner.<br />
+     * I.e. if there are 2 rowSpecs, one with a 70% weighting and the other with 30%.<br />
+     * Calling this method 10 times should *ROUGHLY* emit 7 of the 70% weighted rowSpecs and 3 of the others.<br />
+     * It does this by producing a virtual rowSpec 'range', i.e.<br />
+     *  - values between 1 and 70 represent the 70% weighted rowSpec<br />
+     *  - values between 71 and 100 represent the 30% weighted rowSpec<br />
+     * <br />
+     *  The function then picks a random number between 1 and 100 and yields the rowSpec that encapsulates that value.<br />
+     * <br />
+     *  As this method uses a random number generator, it will not ALWAYS yield a correct split, but it is more LIKELY than not.<br />
+     * @param rowSpecCache a list of weighted rowSpecs (weighting is between 0 and 1)
+     * @return a rowSpec picked from the list of weighted rowSpecs
+     */
     private RowSpec getRandomRowSpec(List<WeightedElement<RowSpec>> rowSpecCache) {
         double totalRange = rowSpecCache.stream()
             .mapToDouble(WeightedElement::weight).sum();
