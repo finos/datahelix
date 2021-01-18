@@ -107,15 +107,12 @@ public class RandomRowSpecDecisionTreeWalker implements DecisionTreeWalker {
         WeightedElement<RowSpec> lastRowSpec = null;
 
         for (WeightedElement<RowSpec> weightedRowSpec: rowSpecCache) {
-            double thisRowSpecRange = weightedRowSpec.weight();
-            double newPosition = thisRowSpecRange + currentPosition;
+            currentPosition += weightedRowSpec.weight();
 
-            if (newPosition >= nextRowSpecFromRange)
-            {
+            if (currentPosition >= nextRowSpecFromRange) {
                 return weightedRowSpec.element();
             }
 
-            currentPosition = newPosition;
             lastRowSpec = weightedRowSpec;
         }
 
