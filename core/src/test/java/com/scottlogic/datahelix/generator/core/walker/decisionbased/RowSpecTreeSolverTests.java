@@ -59,10 +59,9 @@ class RowSpecTreeSolverTests {
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
-        Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
-        expectedRowSpecs.add(new RowSpec(fields, fieldToFieldSpec, Collections.emptyList()));
+        expectedRowSpecs.add(createRowSpec(
+            FieldSpecFactory.fromType(fieldA.getType()),
+            FieldSpecFactory.fromType(fieldB.getType())));
 
         assertThat(
             expectedRowSpecs,
@@ -80,10 +79,9 @@ class RowSpecTreeSolverTests {
 
         //Assert
         List<RowSpec> expectedRowSpecs = new ArrayList<>();
-        Map<Field, FieldSpec> fieldToFieldSpec = new HashMap<>();
-        fieldToFieldSpec.put(fieldA, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2", "3")));
-        fieldToFieldSpec.put(fieldB, FieldSpecFactory.fromType(fieldB.getType()));
-        expectedRowSpecs.add(new RowSpec(fields, fieldToFieldSpec, Collections.emptyList()));
+        expectedRowSpecs.add(createRowSpec(
+            FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2", "3")),
+            FieldSpecFactory.fromType(fieldB.getType())));
 
         assertThat(
             rowSpecs.map(WeightedElement::element).collect(Collectors.toList()),
@@ -107,14 +105,12 @@ class RowSpecTreeSolverTests {
 
         //Assert
         Set<RowSpec> expectedRowSpecs = new HashSet<>();
-        Map<Field, FieldSpec> option0 = new HashMap<>();
-        option0.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option0.put(fieldB, FieldSpecFactory.nullOnly());
-        expectedRowSpecs.add(new RowSpec(fields, option0, Collections.emptyList()));
-        Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1","2","3")));
-        expectedRowSpecs.add(new RowSpec(fields, option1, Collections.emptyList()));
+        expectedRowSpecs.add(createRowSpec(
+            FieldSpecFactory.fromType(fieldA.getType()),
+            FieldSpecFactory.nullOnly()));
+        expectedRowSpecs.add(createRowSpec(
+            FieldSpecFactory.fromType(fieldA.getType()),
+            FieldSpecFactory.fromLegalValuesList(Arrays.asList("1","2","3"))));
 
         assertThat(
             rowSpecs.stream().map(WeightedElement::element).collect(Collectors.toSet()),
@@ -141,14 +137,16 @@ class RowSpecTreeSolverTests {
 
         //Assert
         Set<WeightedElement<RowSpec>> expectedRowSpecs = new HashSet<>();
-        Map<Field, FieldSpec> option0 = new HashMap<>();
-        option0.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option0.put(fieldB, FieldSpecFactory.fromList(distributedListOfOneItem("1", 0.25)));
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option0, Collections.emptyList()), 0.25));
-        Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromList(distributedListOfOneItem("2", 0.75)));
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option1, Collections.emptyList()), 0.75));
+        expectedRowSpecs.add(new WeightedElement<>(
+            createRowSpec(
+                FieldSpecFactory.fromType(fieldA.getType()),
+                FieldSpecFactory.fromList(distributedListOfOneItem("1", 0.25))),
+            0.25));
+        expectedRowSpecs.add(new WeightedElement<>(
+            createRowSpec(
+                FieldSpecFactory.fromType(fieldA.getType()),
+                FieldSpecFactory.fromList(distributedListOfOneItem("2", 0.75))),
+            0.75));
 
         assertThat(
             rowSpecs,
@@ -197,14 +195,17 @@ class RowSpecTreeSolverTests {
 
         //Assert
         Set<WeightedElement<RowSpec>> expectedRowSpecs = new HashSet<>();
-        Map<Field, FieldSpec> option0 = new HashMap<>();
-        option0.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option0.put(fieldB, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2")));
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option0, Collections.emptyList()), 1));
-        Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2")));
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option1, Collections.emptyList()), 1));
+        expectedRowSpecs.add(
+            new WeightedElement<>(
+                createRowSpec(
+                    FieldSpecFactory.fromType(fieldA.getType()),
+                    FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2"))),
+                1));
+        expectedRowSpecs.add(new WeightedElement<>(
+            createRowSpec(
+                FieldSpecFactory.fromType(fieldA.getType()),
+                FieldSpecFactory.fromLegalValuesList(Arrays.asList("1", "2"))),
+            1));
 
         assertThat(
             rowSpecs,
@@ -229,22 +230,30 @@ class RowSpecTreeSolverTests {
 
         //Assert
         Set<WeightedElement<RowSpec>> expectedRowSpecs = new HashSet<>();
-        Map<Field, FieldSpec> option0 = new HashMap<>();
-        option0.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option0.put(fieldB, FieldSpecFactory.fromLegalValuesList(Collections.singletonList("1")).withNotNull());
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option0, Collections.emptyList()), 1));
-        Map<Field, FieldSpec> option1 = new HashMap<>();
-        option1.put(fieldA, FieldSpecFactory.fromType(fieldA.getType()));
-        option1.put(fieldB, FieldSpecFactory.fromLegalValuesList(Collections.singletonList("2")).withNotNull());
-        expectedRowSpecs.add(new WeightedElement<>(new RowSpec(fields, option1, Collections.emptyList()), 1));
+        expectedRowSpecs.add(new WeightedElement<>(
+            createRowSpec(
+                FieldSpecFactory.fromType(fieldA.getType()),
+                FieldSpecFactory.fromLegalValuesList(Collections.singletonList("1")).withNotNull()),
+            1));
+        expectedRowSpecs.add(new WeightedElement<>(
+            createRowSpec(
+                FieldSpecFactory.fromType(fieldA.getType()),
+                FieldSpecFactory.fromLegalValuesList(Collections.singletonList("2")).withNotNull()),
+            1));
 
         assertThat(
             rowSpecs,
             sameBeanAs(expectedRowSpecs));
     }
 
-    private static <T> DistributedList<T> distributedListOfOneItem(T item, double weight)
-    {
+    private RowSpec createRowSpec(FieldSpec fieldSpecA, FieldSpec fieldSpecB){
+        Map<Field, FieldSpec> option = new HashMap<>();
+        option.put(fieldA, fieldSpecA);
+        option.put(fieldB, fieldSpecB);
+        return new RowSpec(fields, option, Collections.emptyList());
+    }
+
+    private static <T> DistributedList<T> distributedListOfOneItem(T item, double weight) {
         ArrayList<WeightedElement<T>> list = new ArrayList<>();
         list.add(new WeightedElement<>(item, weight));
 
