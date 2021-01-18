@@ -107,19 +107,15 @@ public class RowSpecTreeSolver {
                 .map(rootAtomicConstraint -> (InSetConstraint)rootAtomicConstraint)
                 .findFirst()
                 .map(matchingRootAtomicConstraint -> {
-                    double totalWeighting = matchingRootAtomicConstraint.legalValues.stream()
-                        .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
-
-                    double relevantWeighting = matchingRootAtomicConstraint.legalValues.stream()
-                        .filter(legalValue -> optionAtomicConstraint.toFieldSpec().canCombineWithLegalValue(legalValue.getElement()))
-                        .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
+                    double totalWeighting = getWeightOfAllLegalValues(matchingRootAtomicConstraint);
+                    double relevantWeighting = getWeightOfAllPermittedLegalValues(matchingRootAtomicConstraint, optionAtomicConstraint);
 
                     return relevantWeighting / totalWeighting;
                 })
                 .orElse(1d))
             .sum();
 
-        if (applicabilityOfThisOption > 1){
+        if (applicabilityOfThisOption > 1) {
             double applicabilityFraction = applicabilityOfThisOption - (int) applicabilityOfThisOption;
             applicabilityOfThisOption = applicabilityFraction == 0
                 ? 1
@@ -137,6 +133,17 @@ public class RowSpecTreeSolver {
             treePruner.pruneConstraintNode(constraintNode, getFields(option)),
             applicabilityOfThisOption
         );
+    }
+
+    private static double getWeightOfAllLegalValues(InSetConstraint matchingRootAtomicConstraint){
+        return matchingRootAtomicConstraint.legalValues.stream()
+            .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
+    }
+
+    private static double getWeightOfAllPermittedLegalValues(InSetConstraint matchingRootAtomicConstraint, AtomicConstraint optionAtomicConstraint){
+        return matchingRootAtomicConstraint.legalValues.stream()
+            .filter(legalValue -> optionAtomicConstraint.toFieldSpec().canCombineWithLegalValue(legalValue.getElement()))
+            .mapToDouble(InSetRecord::getWeightValueOrDefault).sum();
     }
 
     private Map<Field, FieldSpec> getFields(ConstraintNode option) {
