@@ -16,7 +16,7 @@
 
 plugins {
     id "java"
-    id "de.gliderpilot.semantic-release" version "1.4.0"
+    id "de.gliderpilot.semantic-release" version "1.4.2"
     id "application"
     id "nebula.deb" version "8.0.3"
 }
@@ -30,33 +30,37 @@ repositories {
 }
 
 dependencies {
-    compile project(":profile")
-    compile project(":core")
-    compile project(":output")
-    compile project(":common")
-    compile project(":custom")
+    implementation project(":profile")
+    implementation project(":core")
+    implementation project(":output")
+    implementation project(":common")
+    implementation project(":custom")
 
-    compile group: "info.picocli", name: "picocli", version: "${PICOCLI_VERSION}"
-    compile group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"
+    implementation group: "info.picocli", name: "picocli", version: "${PICOCLI_VERSION}"
+    implementation group: "com.google.code.gson", name: "gson", version: "${GSON_VERSION}"
 
-    testCompile project(":common").sourceSets.test.output
-    testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
-    testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
-    testCompile "io.cucumber:cucumber-junit:${CUCUMBER_VERSION}"
-    testCompile "io.cucumber:cucumber-java:${CUCUMBER_VERSION}"
-    testCompile "io.cucumber:cucumber-java8:${CUCUMBER_VERSION}"
-    testCompile "io.cucumber:gherkin:${GHERKIN_VERSION}"
-    testCompile "io.cucumber:cucumber-picocontainer:${CUCUMBER_PICOCONTAINER_VERSION}"
-    testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
-    testCompile "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
-    testCompile group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
+    implementation group: "com.google.inject", name: "guice", version: "${GUICE_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
 
-    testCompile project(':core').sourceSets.test.output
-    testCompile project(':profile').sourceSets.test.output
+    testImplementation project(":common").sourceSets.test.output
+    testImplementation "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
+    testImplementation "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
+    testImplementation "io.cucumber:cucumber-junit:${CUCUMBER_VERSION}"
+    testImplementation "io.cucumber:cucumber-java:${CUCUMBER_VERSION}"
+    testImplementation "io.cucumber:cucumber-java8:${CUCUMBER_VERSION}"
+    testImplementation "io.cucumber:gherkin:${GHERKIN_VERSION}"
+    testImplementation "io.cucumber:cucumber-picocontainer:${CUCUMBER_PICOCONTAINER_VERSION}"
+    testImplementation "org.mockito:mockito-all:${MOCKITO_VERSION}"
+    testImplementation "com.shazam:shazamcrest:${SHAZAMCREST_VERSION}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation group: "junit", name: "junit", version: "${JUNIT_4_VERSION}"
+
+    testImplementation project(':core').sourceSets.test.output
+    testImplementation project(':profile').sourceSets.test.output
 
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
 
@@ -92,8 +96,9 @@ task fatJar(type: Jar) {
         attributes 'Main-Class': 'com.scottlogic.datahelix.generator.orchestrator.App'
     }
     baseName = 'datahelix'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
+    duplicatesStrategy = 'warn'
     archiveName = "${baseName}.${extension}"
 }
 
@@ -128,7 +133,7 @@ jar {
 }
 
 application {
-    mainClassName = 'com.scottlogic.datahelix.generator.orchestrator.App'
+    mainClass.set('com.scottlogic.datahelix.generator.orchestrator.App')
 }
 
 project.ext.ghToken = project.hasProperty('ghToken') ? project.getProperty('ghToken') : System.getenv('GH_TOKEN') ?: null

@@ -16,7 +16,6 @@
 
 package com.scottlogic.datahelix.generator.core.builders;
 
-import com.scottlogic.datahelix.generator.common.SetUtils;
 import com.scottlogic.datahelix.generator.common.profile.Field;
 import com.scottlogic.datahelix.generator.common.util.NumberUtils;
 import com.scottlogic.datahelix.generator.core.profile.constraints.Constraint;

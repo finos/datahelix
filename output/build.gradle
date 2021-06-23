@@ -15,29 +15,32 @@
  */
 
 dependencies {
-    compile project(':common')
+    implementation project(':common')
 
-    compile "org.apache.commons:commons-csv:${COMMONS_CSV_VERSION}"
-    compile "com.google.inject:guice:${GUICE_VERSION}"
+    implementation "org.apache.commons:commons-csv:${COMMONS_CSV_VERSION}"
+    implementation "com.google.inject:guice:${GUICE_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-core:${JACKSON_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:${JACKSON_VERSION}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${JACKSON_VERSION}"
 
     constraints {
-        compile('com.google.guava:guava:30.0-jre') {
+        implementation('com.google.guava:guava:30.0-jre') {
             because 'Versions prior to 30.0 are impacted by CVE-2020-8908'
         }
-        compile('com.google.guava:guava:30.0-android') {
+        implementation('com.google.guava:guava:30.0-android') {
             because 'Versions prior to 30.0 are impacted by CVE-2020-8908'
         }
     }
 
-    testCompile project(":common").sourceSets.test.output
-    testCompile "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
-    testCompile "junit:junit:${JUNIT_4_VERSION}"
-    testCompile "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
-    testCompile "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
-    testCompile "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
-    testCompile "org.mockito:mockito-all:${MOCKITO_VERSION}"
-    testCompile "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation project(":common").sourceSets.test.output
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${JUNIT_JUPITER_VERSION}"
+    testImplementation "junit:junit:${JUNIT_4_VERSION}"
+    testImplementation "org.junit.platform:junit-platform-runner:${JUNIT_PLATFORM_RUNNER_VERSION}"
+    testImplementation "org.junit.vintage:junit-vintage-engine:${JUNIT_JUPITER_VERSION}"
+    testImplementation "org.hamcrest:java-hamcrest:${HAMCREST_VERSION}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${JUNIT_JUPITER_VERSION}"
+    testImplementation "org.mockito:mockito-all:${MOCKITO_VERSION}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${JUNIT_JUPITER_VERSION}"
     testImplementation("org.junit.jupiter:junit-jupiter:${JUNIT_JUPITER_VERSION}")
 }
 
