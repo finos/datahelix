@@ -11,10 +11,10 @@ jobs:
       - checkout
       - run:
           name: Set header script priviledges
-          command: chmod +x license-check.sh
+          command: chmod +x check-file-headers.sh
       - run:
           name: Check commit messages
-          command: ./license-check.sh
+          command: ./check-file-headers.sh
 
   check_commit_message:
     docker:
