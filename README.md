@@ -1,4 +1,9 @@
-# DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
+[![FINOS - Archived](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-archived.svg)](https://community.finos.org/docs/governance/Software-Projects/stages/archived)
+
+This project is archived, which means that it's in read-only state. You can download and use this code, the project is entirely functional, and you are welcome to use it but please be aware of the risk of bugs and security vulnerabilities. If you're interested to restore development activities on this project, please email help@finos.org
+
+# DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix)
+
 
 ![DataHelix logo](docs/logo.png)
 
