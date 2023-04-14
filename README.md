@@ -1,3 +1,5 @@
+**NOTICE: This project is no longer actively maintained. The project is entirely functional, and you are welcome to use it, however, we managed to achieve significant adoption, or community contribution. For that reason, this project is being archived.**
+
 # DataHelix Generator [![CircleCI](https://circleci.com/gh/finos/datahelix.svg?style=svg)](https://circleci.com/gh/finos/datahelix) [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 
 ![DataHelix logo](docs/logo.png)
